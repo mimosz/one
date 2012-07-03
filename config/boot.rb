@@ -10,15 +10,20 @@ require 'bundler/setup'
 Bundler.require(:default, PADRINO_ENV)
 # 兼容 Rails
 module Rails
-  def self.root
-    PADRINO_ROOT
+  class << self
+    def root
+      PADRINO_ROOT
+    end
+
+    def logger
+      Padrino.logger
+    end
   end
 end
 ##
 # ## Enable devel logging
 #
-# Padrino::Logger::Config[:development][:log_level]  = :devel
-# Padrino::Logger::Config[:development][:log_static] = true
+# Padrino::Logger::Config[:development][:log_level]  = :devel# Padrino::Logger::Config[:development][:log_static] = true
 #
 # ## Configure your I18n
 #
@@ -55,3 +60,4 @@ Padrino.after_load do
 end
 
 Padrino.load!
+
