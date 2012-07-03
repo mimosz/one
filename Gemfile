@@ -23,3 +23,5 @@ gem 'resque-scheduler', '>= 2.0.0.e', require: 'resque_scheduler'
 # Padrino Stable Gem
 gem 'padrino', '0.10.7'
 gem 'padrino-rpm'
+
+gem 'mongoid_colored_logger'
