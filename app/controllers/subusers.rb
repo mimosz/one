@@ -1,0 +1,35 @@
+# -*- encoding: utf-8 -*-
+
+One.controllers :subusers, :parent => :users do
+  
+  before do
+    @start_at = params[:start_at] ? params[:start_at].to_date : Date.today
+    @end_at = params[:end_at] ? params[:end_at].to_date : Date.today
+    # 时间区间
+    @range = @start_at.beginning_of_day..@end_at.end_of_day
+  end
+  
+  get :index, :provides => [:html, :csv] do
+    @subusers = Subuser.where(seller_nick: user_id).distinct('nick')
+    unless @subusers.empty?
+      @wangwangs = Wangwang.excludes(online_times: 0).where(date: @range, seller_nick: user_id).also_in(nick: @subusers)  # 月评价
+      case content_type
+        when :html
+          render 'subusers/index'
+        when :csv
+          send_file export_wangwangs(@wangwangs, date_tag(@range), user_id)
+      end
+    else
+      flash[:error] = '没有收到小弟。'
+      redirect url(:users, :show, id:@user_id)
+    end
+  end
+  
+  get :show, :with => [:id, :date] do
+    @id = params[:id].force_encoding('utf-8') # 店铺ID
+    @date = params[:date].to_time
+    @chatpeers = Chatpeer.where(date: @date, seller_nick: user_id, nick: @id)
+    render 'subusers/show'
+  end
+
+end

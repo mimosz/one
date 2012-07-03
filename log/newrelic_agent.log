@@ -1,0 +1,41 @@
+# Logfile created on 2012-07-03 18:04:00 +0800 by logger.rb/31641
+[07/03/12 18:04:00 +0800 howl-FEIMING (7874)] INFO : Dispatcher: thin
+[07/03/12 18:04:00 +0800 howl-FEIMING (7874)] INFO : Application: One
+[07/03/12 18:04:00 +0800 howl-FEIMING (7874)] INFO : Resolved collector.newrelic.com to 204.93.223.153
+[07/03/12 18:04:01 +0800 howl-FEIMING (7874)] INFO : Resolved collector-7.newrelic.com to 204.93.223.141
+[07/03/12 18:04:01 +0800 howl-FEIMING (7874)] INFO : Connected to NewRelic Service at collector-7.newrelic.com:80
+[07/03/12 18:04:01 +0800 howl-FEIMING (7874)] INFO : New Relic Ruby Agent 3.1.2 Initialized: pid = 7874
+[07/03/12 18:04:01 +0800 howl-FEIMING (7874)] INFO : Reporting performance data every 60 seconds.
+[07/03/12 18:04:01 +0800 howl-FEIMING (7874)] INFO : Agent Log at /home/howl/one/log/newrelic_agent.log
+[07/03/12 18:05:06 +0800 howl-FEIMING (7910)] INFO : Dispatcher: thin
+[07/03/12 18:05:06 +0800 howl-FEIMING (7910)] INFO : Application: One
+[07/03/12 18:05:06 +0800 howl-FEIMING (7910)] INFO : Resolved collector.newrelic.com to 204.93.223.153
+[07/03/12 18:05:07 +0800 howl-FEIMING (7910)] INFO : Resolved collector-7.newrelic.com to 204.93.223.141
+[07/03/12 18:05:08 +0800 howl-FEIMING (7910)] INFO : Connected to NewRelic Service at collector-7.newrelic.com:80
+[07/03/12 18:05:08 +0800 howl-FEIMING (7910)] INFO : New Relic Ruby Agent 3.1.2 Initialized: pid = 7910
+[07/03/12 18:05:08 +0800 howl-FEIMING (7910)] INFO : Agent Log at /home/howl/one/log/newrelic_agent.log
+[07/03/12 18:05:08 +0800 howl-FEIMING (7910)] INFO : Reporting performance data every 60 seconds.
+[07/03/12 18:09:15 +0800 howl-FEIMING (8009)] INFO : Dispatcher: thin
+[07/03/12 18:09:15 +0800 howl-FEIMING (8009)] INFO : Application: One
+[07/03/12 18:09:15 +0800 howl-FEIMING (8009)] INFO : Resolved collector.newrelic.com to 204.93.223.153
+[07/03/12 18:09:16 +0800 howl-FEIMING (8009)] INFO : Resolved collector-7.newrelic.com to 204.93.223.141
+[07/03/12 18:09:17 +0800 howl-FEIMING (8009)] INFO : Connected to NewRelic Service at collector-7.newrelic.com:80
+[07/03/12 18:09:17 +0800 howl-FEIMING (8009)] INFO : New Relic Ruby Agent 3.1.2 Initialized: pid = 8009
+[07/03/12 18:09:17 +0800 howl-FEIMING (8009)] INFO : Agent Log at /home/howl/one/log/newrelic_agent.log
+[07/03/12 18:09:17 +0800 howl-FEIMING (8009)] INFO : Reporting performance data every 60 seconds.
+[07/03/12 18:11:04 +0800 howl-FEIMING (8070)] INFO : Dispatcher: thin
+[07/03/12 18:11:04 +0800 howl-FEIMING (8070)] INFO : Application: One
+[07/03/12 18:11:04 +0800 howl-FEIMING (8070)] INFO : Resolved collector.newrelic.com to 204.93.223.153
+[07/03/12 18:11:04 +0800 howl-FEIMING (8070)] INFO : Resolved collector-7.newrelic.com to 204.93.223.141
+[07/03/12 18:11:05 +0800 howl-FEIMING (8070)] INFO : Connected to NewRelic Service at collector-7.newrelic.com:80
+[07/03/12 18:11:05 +0800 howl-FEIMING (8070)] INFO : New Relic Ruby Agent 3.1.2 Initialized: pid = 8070
+[07/03/12 18:11:05 +0800 howl-FEIMING (8070)] INFO : Agent Log at /home/howl/one/log/newrelic_agent.log
+[07/03/12 18:11:05 +0800 howl-FEIMING (8070)] INFO : Reporting performance data every 60 seconds.
+[07/03/12 18:14:31 +0800 howl-FEIMING (8208)] INFO : Dispatcher: thin
+[07/03/12 18:14:31 +0800 howl-FEIMING (8208)] INFO : Application: One
+[07/03/12 18:14:31 +0800 howl-FEIMING (8208)] INFO : Resolved collector.newrelic.com to 204.93.223.153
+[07/03/12 18:14:33 +0800 howl-FEIMING (8208)] INFO : Resolved collector-7.newrelic.com to 204.93.223.141
+[07/03/12 18:14:34 +0800 howl-FEIMING (8208)] INFO : Connected to NewRelic Service at collector-7.newrelic.com:80
+[07/03/12 18:14:34 +0800 howl-FEIMING (8208)] INFO : New Relic Ruby Agent 3.1.2 Initialized: pid = 8208
+[07/03/12 18:14:34 +0800 howl-FEIMING (8208)] INFO : Agent Log at /home/howl/one/log/newrelic_agent.log
+[07/03/12 18:14:34 +0800 howl-FEIMING (8208)] INFO : Reporting performance data every 60 seconds.

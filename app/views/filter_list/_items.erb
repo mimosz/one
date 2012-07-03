@@ -1,0 +1,40 @@
+<% unless @items.empty? %>
+  <table id="items" class="table table-bordered">
+    <thead>
+        <tr>
+        <th>淘宝编码</th>    
+        <th>商家编码</th>
+        <th>价格</th>
+        <th>库存</th>
+        <th>状态</th>
+        <th>图</th>
+      </tr>
+    </thead>
+    <% @items.each do |item| %>
+      <tbody> 
+        <tr id="item-<%= item.num_iid %>">
+          <td><%= item.num_iid %></td>
+          <td>
+            <% if item.outer_id.blank? %>
+              <span class="label label-warning">二了吧~</span>
+            <% else %>
+              <%= item.outer_id %>
+            <% end %>
+          </td>
+          <td><span class="label <%= case when item.price > 500  then 'label-warning' when item.price > 100 then 'label-success' end %>"><%= item.price %></span></td>
+          <td><span class="badge <%= 'badge-warning' if item.num < 10 %> <%= 'badge-success' if item.num > 100 %>"><%= item.num %></span></td>    
+          <td>
+            <%= case item.approve_status
+            when 'onsale'
+              "<span class='label label-success'>上架</span>"
+            when 'instock'
+              "<span class='label label-warning'>下架</span>"
+            end
+            %>
+          </td>
+          <td><%= link_to image_tag(item.pic_url, width: '48px', height: '48px'), item.item_url, target: '_blank', rel: 'tooltip', title: item.title %></td>
+        </tr>
+      </tbody>
+    <% end %>
+  </table>
+<% end %>

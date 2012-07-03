@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/" lang="zh">
+	<head profile="http://www.w3.org/1999/xhtml/vocab">
+		<meta charset="utf-8">
+		<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="MobileOptimized" content="width">
+		<meta name="HandheldFriendly" content="true">
+		<title>店小二</title>
+		<%= stylesheet_link_tag 'bootstrap.min', 'bootstrap-responsive.min', 'chosen', 'datepicker', 'custom' %>
+		<!--[if lt IE 7]><link rel="stylesheet" href="/stylesheets/bootstrap-ie6.min.css"><![endif]-->
+		<!--[if lt IE 9]><script src="/javascripts/html5.js"></script><![endif]-->
+	</head>
+	<body data-spy="scroll" data-target=".subnav" data-offset="50">
+		<div id="navbar" class="navbar navbar-fixed-top">
+			<div class="navbar-inner">
+				<% form_tag url(:sessions, :destroy), class: 'form-delete', method: :delete do %>
+					<div class="container">
+						<%= link_to '店', url(:users, :index), class: 'brand' %>        
+						<div class='btn-toolbar pull-right' style='margin: 0;'>
+							<%= render_list class: 'nav' do |li|
+									li << [nil, class: 'divider-vertical']
+									li << content_tag(:a, '你好，' + current_account.name, style: 'color: white;')
+						    end
+							%>
+							<div id='user-toolbar' class="btn-group">
+								<% icon = content_tag(:i, nil, class: 'icon-edit') %>
+								<%= link_to( icon, url(:users, :new), class: 'btn', rel: 'popover', 'data-original-title' => '店铺绑定', 'data-content' => '授权管理，新淘宝店铺') %>
+								<% icon = content_tag(:i, nil, class: 'icon-cog') %>
+								<%= link_to( icon, url(:accounts, :show, id: current_account.id), class: 'btn', rel: 'popover', 'data-original-title' => '个人设置', 'data-content' => '修改个人信息') %>
+								<% icon = content_tag(:i, nil, class: 'icon-user') %>
+								<%= link_to( icon, url(:accounts, :new), class: 'btn', rel: 'popover', 'data-original-title' => '子账户管理', 'data-content' => '授权子帐号的访问权限') %>
+								<% icon = content_tag(:i, nil, class: 'icon-share') %>
+								<%= content_tag(:button, icon, class: 'btn', rel: 'popover', 'data-original-title' => '注销', 'data-content' => '退出或切换替他帐户登陆') %>
+		        	</div>
+	      		</div>
+					</div>
+					<%= hidden_field_tag :_method, value: :delete %>
+				<% end %>
+			</div>
+		</div>
+		<div class="container">
+			<header class="jumbotron subhead">
+				<% if user_id && current_account.user_ids.count > 1 %>
+						<% 
+							menu = render_list class: 'dropdown-menu' do |li|
+								current_account.user_ids.each do |uid|
+									li << link_to(uid, url(:users, :show, user_id: uid)) if user_id != uid
+								end
+					   	end
+					   	caret = content_tag(:b, nil, class: 'caret')
+						%>
+						<div class='btn-toolbar'>
+							<div class='btn-group'>
+								<%= content_tag(:button, user_id, class: 'btn') %>
+								<%= content_tag(:button, caret, class: 'btn dropdown-toggle', 'data-toggle' => 'dropdown') %>
+								<%= menu %>
+							</div>
+						</div>
+				<% end %>
+				<p class='lead'><%= yield_content :header %></p>
+				<%  if user_id %>
+					<div class='subnav'>
+						<%= render_list class: 'nav nav-pills' do |li|
+							li << link_to('货 品', url(:items, :index, user_id: user_id ))
+							li << link_to('销 售', url(:trades, :index, user_id: user_id ))
+							li << link_to('客 服', url(:subusers, :index, user_id: user_id ))
+							li << link_to('退 款', url(:refunds, :index, user_id: user_id ))
+							li << link_to('过滤器', url(:filter_list, :index, user_id: user_id ))
+							li << link_to('会员', url(:members, :index, user_id: user_id))
+					   end
+						%>
+					</div>
+				<% end %>
+				<%= [:error, :warning, :notice].map { |type| flash_tag(type, class: "alert alert-block #{type}") }.join %>  
+			</header>
+			<section>
+				<div class="row">
+					<%= yield %>
+					<%= yield_content :sidebar %>
+				</div>
+			</section>
+			<footer class="footer">
+				<p class="pull-right"><a href="#">升天啦～</a></p>
+				<p>&copy;当前时间： <%= Time.now.to_s %>， 基于 <a href="http://padrino.github.com" target="_blank">Padrino <%= Padrino.version %>版</a>开发.</p>
+			</footer>
+		</div>
+		<%= javascript_include_tag 'jquery', 'bootstrap.min', 'bootstrap-scrollspy-horizontal', 'jquery.graphup.pack',  'chosen.jquery.min',  'datepicker', 'application' %>
+		<script type="text/javascript">
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-9678883-6']);
+			_gaq.push(['_trackPageview']);
+			(function() {
+				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+		</script>
+		<script type="text/javascript" src="http://toptrace.taobao.com/assets/getAppKey.js" topappkey="12411633" defer="defer"></script>
+		<%= yield_content :footer %>
+	</body>
+</html>

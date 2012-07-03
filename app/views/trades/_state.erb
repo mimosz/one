@@ -1,0 +1,38 @@
+<% total = @trades[:total] %>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>&nbsp;</th>
+      <th><%= total[:price].round(2)%></th>
+      <th><%= total[:payment].round(2)%></th>
+      <th><%= total[:total_fee].round(2)%></th>
+      <th><%= total[:discount_fee].round(2)%></th>
+      <th><%= total[:adjust_fee].round(2)%></th>
+      <th><%= total[:num]%></th>
+    </tr>
+    <tr>
+      <th>名称</th>
+      <th>价格</th>
+      <th>实付</th>
+      <th>应付</th>
+      <th>折扣</th>
+      <th>调价</th>
+      <th>数量</th>
+    </tr>
+  </thead>
+<tbody>  
+<% @trades[:state].each do |id, state| # 循环货品 %>
+<% total = state[:total] %>
+    <tr class="odd">
+      <td><span class="label"><%= state[:name] %></span></td>
+      <td><%= total[:price].round(2)%></td>
+      <td><%= total[:payment].round(2)%></td>
+      <td><%= total[:total_fee].round(2)%></td>
+      <td><%= total[:discount_fee].round(2)%></td>
+      <td><%= total[:adjust_fee].round(2)%></td>
+      <td><%= total[:num]%></td>
+    </tr>
+<% end %> 
+</tbody>
+</table>
+<%= @trades %>

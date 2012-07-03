@@ -1,0 +1,31 @@
+<div class="span4 columns">
+	<% form_tag url(:trades, :index, user_id: user_id ), method:'get', class:'form-inline' do %>
+	<div class="control-group">
+		<div class="btn-group" >
+			<input type="radio" name="field" value="pay_time" id="pay_time" />
+			<label class="btn <%= 'active' if @field == 'pay_time' %>" for="pay_time">支付</label>
+			<input type="radio" name="field" value="consign_time" id="consign_time" />
+			<label class="btn <%= 'active' if @field == 'consign_time' %>" for="consign_time">发货</label>
+			<input type="radio" name="field" value="created" id="created" />
+			<label class="btn <%= 'active' if @field == 'created' %>" for="created">下单</label>
+			<input type="radio" name="field" value="modified" id="modified" />
+			<label class="btn <%= 'active' if @field == 'modified' %>" for="modified">更新</label>
+			<input type="radio" name="field" value="end_time" id="end_time" />
+			<label class="btn <%= 'active' if @field == 'end_time' %>" for="end_time">结束</label>
+		</div>
+	</div>
+	<div class="control-group">
+		<div class="controls">
+			<div class='calendar'></div>
+			<div class="input-append">
+				<input style='width: 160px;margin-left: 3px;' name="start_at" value='<%= @start_at %>' readonly='true' placeholder='开始时间' />
+				<span style='margin: 0 1px;'>～</span>
+				<input style='width: 160px;margin-left: 4px;' name="end_at" value='<%= @end_at %>' readonly='true' placeholder='结束时间' />
+			</div>
+		</div>
+	</div>
+	<div class="form-actions">
+		<%= submit_tag '筛选', class:'btn btn-primary' %>
+	</div>
+<% end %>
+</div>

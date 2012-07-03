@@ -1,0 +1,11 @@
+<div class="span6 columns">
+  <% form_tag url(:items, :skus, user_id: user_id ), method: 'post', multipart: true, class: 'form-horizontal' do %>
+    <div class="control-group">
+      <%= label_tag :csv_file, caption: 'CSV文件：', class: 'control-label' %>
+      <div class="controls">
+        <%= file_field_tag :csv_file, class: 'input-file' %>
+      </div>
+    </div>
+    <div class="form-actions"><%= submit_tag '铺货', class:'btn btn-primary' %></div>
+  <% end %>
+</div>

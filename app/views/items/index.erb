@@ -1,0 +1,79 @@
+<% content_for :header do %>
+  <p class="lead"> 当前货品数据（<%=link_to '导出', url(:items, :index, user_id: user_id, format: :csv), :target => '_blank' %>）</p>
+<% end %>
+<div class='columns'>
+<table id="items" class="table table-bordered">
+  <thead>
+  <% if @items.total_count > @page_size %>
+<tr>
+    <td style="text-align:right;" colspan='14'>
+     第 <%= @items.offset_value + 1 %> - <%= @items.offset_value + @page_size %>，共 <%= @items.total_count %>
+    </td>
+  </tr>
+  <% end %>
+	<tr>
+		<th>淘宝编码</th>    
+		<th>商家编码</th>
+	    <th>价格</th>
+	    <th>库存</th>
+		<th>周转<br />天数</th>
+    <th>周转<br />量</th>
+		<th>最高<br />售价</th>
+		<th>最低<br />售价</th>
+		<th>昨日<br />销售</th>
+		<th>最高<br />售价</th>
+		<th>最低<br />售价</th>
+		<th>上/下架</th>
+		<th>图</th>
+	 	<th>&nbsp;</th>
+  	</tr>
+  </thead>
+  <% unless @items.empty? %>
+    <% @items.each do |item| %>
+<tbody class="accordion-group"> 
+    <tr id="item-<%= item.num_iid %>" class="accordion-heading">
+      <td><%= item.num_iid %></td>
+	  <td>
+          <% if item.outer_id.blank? %>
+            <span class="label label-warning">可以吗？</span>
+          <% else %>
+            <%= item.outer_id %>
+          <% end %>
+      </td>
+     <td><span class="label <%= case when item.price > 500  then 'label-warning' when item.price > 100 then 'label-success' end %>"><%= item.price %></span></td>        
+      <td><span class="badge <%= 'badge-warning' if item.num < 10 %> <%= 'badge-success' if item.num > 100 %>"><%= item.num %></span></td>
+		<td><%= item.duration %></td>
+    <td><%= item.range_num %></td>
+        <td><%= item.range_max %></td> 
+        <td><%= item.range_min %></td> 
+		<td><%= item.prev_num %></td>
+		<td><%= item.prev_max %></td>
+        <td><%= item.prev_min %></td>     
+ <td>
+         <%= "<span class='label label-success'>#{time_ago_in_words(item.list_time)}</span>" if item.approve_status == 'onsale' %>
+         <%= "<span class='label label-warning'>#{time_ago_in_words(item.delist_time)}</span>" if item.approve_status == 'instock' %>
+      </td>
+	  <td><%= link_to image_tag(item.pic_url, width: '48px', height: '48px'), item.item_url, target: '_blank', rel: 'tooltip', title: item.title %></td>
+<td>
+	<% if item.skus.empty? %>
+		<span class='label label-warning'>无单品</span>
+	<% else %>
+	<a class="btn btn-mini" data-toggle="collapse" data-parent="#items" href="#skus-<%= item.num_iid %>">单品（<%= item.skus.count %>）</a>
+	<% end %>
+	</td>
+    </tr>
+<% unless item.skus.empty? %>
+    <tr>
+      <td colspan="14" style="height:0px;padding:0px;border-top:0px;">
+	     <div id="skus-<%= item.num_iid %>" class="accordion-body collapse">
+        <%= partial "items/skus", locals: { skus: item.skus } %>
+      </div>
+      </td>
+    </tr>
+<% end %>
+  <% end %>
+</tbody>
+ <% end %>
+</table>
+<%= paginate @items, theme: 'twitter_bootstrap', window: 4 %>
+</div>

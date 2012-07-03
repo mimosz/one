@@ -1,0 +1,33 @@
+<td class="first" title="<%= node[:title] %>">
+  <% if node[:name].blank? %>
+    <span class="status yellow">&nbsp;</span>
+  <% else %>
+    <span class="label"><%= node[:name] %></span>
+  <% end %>
+</td>
+<% unless node[:timelines].empty? %>
+  <% unless timelines.empty? %>
+    <% timelines.each do |timeline| # 循环时间轴 %>
+      <td>
+      <% if node[:timelines].has_key?(timeline) %>
+        <% item = node[:timelines][timeline] %>
+			<% if item.has_key?(:status) %>
+	          <ul class="list">
+	            <li title="待付款"><%= parse_status(item[:status], 'WAIT_BUYER_PAY')%></li>
+	            <li title="待发货"><%= parse_status(item[:status], 'WAIT_SELLER_SEND_GOODS')%></li>
+	            <li title="待收货"><%= parse_status(item[:status], 'WAIT_BUYER_CONFIRM_GOODS')%></li>
+	            <li title="交易成功"><%= parse_status(item[:status], 'TRADE_FINISHED')%></li>
+	            <li title="退款成功"><%= parse_status(item[:status], 'TRADE_CLOSED')%></li>
+	          </ul>
+		   <% else %>
+			<%= (item[:total_fee].to_f/item[:num].to_f).round(2) %>
+		   <% end %>
+      <% else %>
+        <span>&nbsp;</span>
+      <% end %>
+      </td>
+    <% end %>
+  <% end %>
+<% else %>
+  <td colspan="<%= timelines.count %>"><span class="status yellow">&nbsp;</span></td>
+<% end %>

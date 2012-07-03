@@ -1,0 +1,22 @@
+<div class="span4 columns">
+<% form_tag url(:filter_list, :show, user_id: user_id ), method:'get', class:'form-inline' do %>
+    <div class="control-group">
+        <div class="controls">
+            <div class='calendar'></div>
+            <div class="input-append">
+                <input style='width: 160px;margin-left: 3px;' name="start_at" value='<%= @start_at %>' readonly='readonly' required='required' placeholder='开始时间' />
+                <span style='margin: 0 1px;'>～</span>
+                <input style='width: 160px;margin-left: 4px;' name="end_at" value='<%= @end_at %>' readonly='readonly' required='required' placeholder='结束时间' />
+            </div>
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <%= select_tag(:filter_list, collection: @filter_list, fields: [:name, :_id], placeholder: '空值，即所有过滤器', multiple: true, class: 'chzn-select') %>
+        </div>
+    </div>
+    <div class="form-actions">
+        <%= submit_tag '筛选', class:'btn btn-primary' %>
+    </div>
+<% end %>
+</div>

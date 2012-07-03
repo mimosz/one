@@ -1,0 +1,20 @@
+<% divide  ||=  '' %>
+<% nodes.each do |id, node| # 循环 %>
+	<tr <%= "style='background-color: #F9F9F9;background-color: #F9F9F9; color: #F89406; font-weight: bold;'" if node.has_key?(:children) %>>
+		<td><%= divide + node[:name] %></td>
+		<% if node.has_key?(type) %>
+			<% filter = node[type] %>
+			<td><%= filter[:payment].round(2)%></td>
+			<td><%= (filter[:payment] / payment_total * 100).round(1)%></td>
+			<td><%= filter[:num] %></td>
+			<td><%= (filter[:num].to_f / num_total.to_f * 100).round(1) %></td>
+			<th><%= (filter[:payment] / filter[:price] * 100).round(1) %></th>
+			<th><%= (filter[:payment].to_f / filter[:fixed_price].to_f * 100).round(1) %></th>
+		<% else %>
+			<th colspan='6'>&nbsp;</th>
+		<% end %>
+	</tr>
+	<% if node.has_key?(:children) %>
+		<%= partial "filter_list/list", locals: { payment_total: payment_total, num_total: num_total, nodes: node[:children], type: type, divide: "#{divide}&nbsp;&nbsp;" } unless node[:children].empty? %>
+	<% end %>
+<% end %>

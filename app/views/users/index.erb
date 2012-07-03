@@ -1,0 +1,36 @@
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th>&nbsp;</th>
+			<th>名称</th>
+			<th>类型</th>
+			<th>位置</th>
+			<th>状态</th>
+			<th>仓库</th>
+			<th>卖家好评</th>
+			<th>&nbsp;</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% unless @users.empty? %>
+			<% @users.each do |user| %>
+				<tr>
+					<td><%= image_tag(user.avatar, width:48, height:48) %></td>
+					<td><%= user.nick %><%= link_to "<i class='icon-share'></i>", user.store_url, target:'_blank' %></td>
+					<td><%= user.type %></td>
+					<td><%= user.location.city if user.location %></td>
+					<td><%= user.status %></td>
+					<td><%= user.addresses.count %></td>
+					<td><%= user.seller_credit.good_num %><%= link_to "<i class='icon-share'></i>", user.rate_url, target:'_blank' %></td>
+					<td><%= link_to "查看", url(:users, :show, :user_id => user.id), :class => "btn btn-mini" %></td>
+				</tr>
+			<% end %>
+		<% else %>
+			<tr>
+				<td>&nbsp;</td>
+				<td colspan="6">还没有呢～～</td>
+				<td><%= link_to '绑定店铺', url(:users, :new), class:'btn btn-mini' %></td>
+			</tr>
+		<% end %>
+	</tbody>
+</table>

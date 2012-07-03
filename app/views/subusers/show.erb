@@ -1,0 +1,27 @@
+<% content_for :header do %>
+  <p class="lead"><%= short_date(@timeline) %>  <%= @id %>接待了<%= @chatpeers.count%>位客人。</p>
+<% end %>
+<div class="accordion" id="chatpeers">
+  <% @chatpeers.each do |chatpeer| %>
+    <div class="accordion-group">
+      <div class="accordion-heading">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#chatpeers" href="#msgs-<%= chatpeer.uid %>-<%= chatpeer.date.to_time.to_i %>"><%= chatpeer.uid %><span class="badge pull-right"><%= chatpeer.msgs.count %></span></a>
+      </div>
+      <div id="msgs-<%= chatpeer.uid %>-<%= chatpeer.date.to_time.to_i %>" class="accordion-body collapse">
+        <div class="accordion-inner">
+          <% chatpeer.msgs.each do |msg| %>
+            <div class="well">
+              <span class="pull-right"> <%= msg.talk_at %></span>
+              <% if msg.direction > 0 %>
+                <span class="label label-info">问</span>
+              <% else %>
+                <span class="label label-success">答</span>
+              <% end %>
+              <blockquote><%= msg.content %></blockquote>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,78 @@
+<table id="trades" class="table table-bordered">
+<thead>
+<tr>
+<th>&nbsp;</th>
+<th>&nbsp;</th>
+<% labels.each do |label| # 循环单品 %>
+	<% if timelines.has_key?(label) %>
+		<th><%= timelines[label][:total][:num] if timelines[label][:total] %></th>
+	<% else %>
+		<th></th>
+	<% end %>
+<% end %>
+<th><%= total[:num] %></th>
+<th><%= total[:payment].round(2) %></th>
+<th>想不出</th>
+</tr>
+<tr>
+<th>淘宝ID</th>
+<th>商家编码</th>
+<% labels.each do |label| # 循环单品 %>
+	<th><%= label%></th>
+<% end %>
+<th>数量</th>
+<th>金额</th>
+<th>库存</th>
+</tr>
+</thead>
+<% @items = get_items(items.keys.sort) %>
+<% unless @items.empty? %>
+<tbody>
+	<% @items.each do |item| # 循环单品 %>
+	<tr>
+		<td><%= item.num_iid %></td>
+		<td><%= item.outer_id %></td>
+		<% if items[item.num_iid].has_key?(:timelines) %>
+			<% timeline = items[item.num_iid][:timelines] %>
+			<% labels.each do |label| # 循环单品 %>
+				<% if timeline.has_key?(label) %>
+					<td><%= parse_sales(timeline[label]) %></td>
+				<% else %>
+					<td></td>
+				<% end %>
+			<% end %>
+		<% end %>
+		<td><%= parse_sales(items[item.num_iid]) %></td>
+		<td><%= parse_sales(items[item.num_iid], :payment, 2) %></td>
+		<td><%= item.num %></td>
+	</tr>
+	<% if items[item.num_iid].has_key?(:skus) %>
+		<% skus = items[item.num_iid][:skus] %>
+		<% skus.each do |id, sku| # 循环单品 %>
+			<tr>
+				<td><%= item.num_iid %></td>
+				<td><%= sku[:name] %></td>
+				<% if sku.has_key?(:timelines) %>
+					<% timeline = sku[:timelines] %>
+					<% labels.each do |label| # 循环单品 %>
+						<% if timeline.has_key?(label) %>
+						<td><%= parse_sales(timeline[label]) %></td>
+						<% else %>
+						<td></td>
+						<% end %>
+					<% end %>
+					<td><%= parse_sales(sku) %></td>
+					<td><%= parse_sales(sku, :payment, 2) %></td>
+					<td>
+						<% item.skus.each do | sku | %>
+							<%= sku.quantity if sku.sku_id == id.to_i %>
+						<% end %>
+					</td>
+				<% end %>
+			</tr>
+		<% end %>
+	<% end %>
+	<% end %>
+</tbody>
+<% end %>
+</table>

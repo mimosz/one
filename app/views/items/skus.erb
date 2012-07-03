@@ -1,0 +1,86 @@
+<% content_for :header do %>
+  <p class='lead'> 简易铺货</p>
+<% end %>
+<div class="tabbable">
+  <% form_tag url(:items, :skus, user_id: user_id ), method: 'put', class: 'form-horizontal' do %>
+<ul class="nav nav-tabs">
+<%  active = 'active' %>
+<% @items.each do |item| %>
+  <li class='<%= active %>'><a href="#item-<%= item.num_iid %>" data-toggle="tab"><%= image_tag item.pic_url, width: 48, height: 48 %></a></li>
+  <%  active = '' %>
+<% end %>
+</ul>
+<div class="tab-content">
+<%  active = 'active' %>
+<% @items.each do |item| %>
+<div class="tab-pane <%= active %>" id="item-<%= item.num_iid %>">
+<% active = '' %>
+<% skus = @skus[item._id] %>
+<h3><%= item.title %>&nbsp;<%= link_to "<i class='icon-share'></i>", item.item_url, target:'_blank' %></h3>
+ <table id='item-<%= item.num_iid %>-skus' class='table table-bordered span7'>
+      <thead>
+          <tr>
+            <th colspan='6'>数据更新对照表：</th>
+          </tr>
+          <tr>
+            <th>颜色</th>
+            <th>尺寸</th>
+            <th>SKU</th>
+            <th>SKU（新）</th>
+            <th>库存</th>
+            <th>库存（新）</th>
+          </tr>
+        </thead>
+      <% item.skus.each do |sku| %>
+        <% skus.each do |data| %>
+          <% props = sku.check_by_props(data)  %>
+          <% if props %>
+            <%= hidden_field_tag "items[#{item.num_iid}][][properties]", value: sku.properties %>
+            <tr>
+              <% props.each do |key, value| %>
+                <td><%= value %></td>
+              <% end %>
+              <td><%= sku.outer_id %></td>
+              <th><%= text_field_tag "items[#{item.num_iid}][][outer_id]", value: data[:outer_id], class: 'span2' %></th>
+              <td><%= sku.quantity %></td>
+              <th><%= text_field_tag "items[#{item.num_iid}][][quantity]", value: data[:quantity], class: 'span1' %></th>
+            </tr>
+            <% skus.delete(data) %>
+          <% end %>
+        <% end %>
+      <% end %>
+      </table>
+        <% if skus.empty? %>
+        <% @skus.delete(item.num_iid) %>
+      <% else %>
+       <table id='item-<%= item.num_iid %>-skus' class='table table-bordered span4'>
+        <thead>
+          <tr>
+            <th colspan='4'>未匹配到的SKU列表：</th>
+          </tr>
+          <tr>
+            <th>颜色</th>
+            <th>尺寸</th>
+            <td>SKU</td>
+            <td>库存</td>
+          </tr>
+        </thead>
+        <% skus.each do |data| %>
+          <tr style='color: #D14;'>
+            <td><%= data[:color] %></td>
+            <td><%= data[:size] %></td>
+            <td><%= data[:outer_id] %></td>
+            <td><%= data[:quantity] %></td>
+          </tr>
+        <% end %>
+         </table>
+      <% end %>
+</div>
+<% end %>
+</div>
+<div class="form-actions">
+  <%= submit_tag '确认，并铺货', class:'btn btn-primary pull-right' %>
+</div>
+<% end %>
+</div>
+</table>

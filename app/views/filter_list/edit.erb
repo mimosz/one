@@ -1,0 +1,13 @@
+<% form_for :filter_list, url(:filter_list, :update, user_id: user_id, :id => @filter_list.id), :method => :put, :class => :form do |f| %>
+	<%= partial "filter_list/form", :locals => { :f => f } %>
+	<% unless @filter_list.unknown_ids.empty? %>
+		<ul>
+			<% @filter_list.unknown_ids.each do |filter_list| %>
+				<li><%= filter_list %></li>
+			<% end %>
+		</ul>
+	<% end %>
+	<div class="form-actions">
+	<%= f.submit '修改', class:'btn btn-primary' %>
+	</div>
+<% end %>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="MobileOptimized" content="width">
+		<meta name="HandheldFriendly" content="true">
+		<title>登陆</title>
+		<%= stylesheet_link_tag 'bootstrap.min', 'bootstrap-responsive.min' %>
+	</head>
+	<body style="background-color: #888; border: none;">
+		<div class="container">
+			<div class="modal">
+				<% form_tag(url(:sessions, :create), :class => 'form-horizontal') do %>
+					<div class="modal-header">
+						<h3>洞口</h3>
+						<%= [:error, :warning, :notice].map { |type| flash_tag(type, :class => "alert alert-block #{type}") }.join %>
+					</div>
+					<div class="modal-body">
+						<div class="control-group">
+							<label class="control-label" for="email">主帐号</label>
+							<div class="controls">
+								<div class="input-prepend">
+									<span class="add-on">@</span>
+									<%= text_field_tag :email, :value => params[:email], :class => "input-medium", :placeholder => "管理员帐号。" %>
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="password">密码</label>
+							<div class="controls"><%= password_field_tag :password, :value => params[:password], :placeholder => "开门暗语。" %></div>
+						</div>
+					</div>
+					<div class="modal-footer"><%= submit_tag "砸门", :class => 'btn btn-primary' %></div>
+				<% end %>
+			</div>
+		</div>
+	</body>
+</html>

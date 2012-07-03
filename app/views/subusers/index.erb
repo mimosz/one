@@ -1,0 +1,58 @@
+<% content_for :header do %>
+  <p class="lead">
+    <%= date_tag(@range, ' ～ ') %> 客服数据（<%=link_to '导出', url(:subusers, :index, user_id: user_id, start_at: @start_at, end_at: @end_at, :format => :csv), target:'_blank' %>）
+  </p>
+<% end %>
+<div class="span8 columns" style="overflow: auto;">
+
+  <table id="subusers" class="table table-bordered">
+    <thead>
+      <tr>
+      <th>旺旺</th>
+      <th>购买</th>
+      <th>接待</th>
+      <th>转化率</th>
+      <th>销售额</th>
+      <th>商品数</th>
+      <th>客单价</th>
+      <th>未接待</th>
+      <th>平均等待</th>
+      <th>在线时间</th>
+      <th>#</th>
+    </tr>
+  </thead>
+    <% unless @wangwangs.empty? %>
+    <tbody>
+  <% divider_date = nil %>
+    <% @wangwangs.each do |wangwang| %>
+      <% unless divider_date == wangwang.date %>
+        <% divider_date = wangwang.date %>
+        <tr>
+          <th colspan="11">
+            <span class="badge badge-success"><%= short_date(divider_date.to_time) %></span>
+          </th>
+        </tr>
+      <% end %>
+      <tr>
+        <td><%= wangwang.nick %></td>
+        <td><%= wangwang.buyer_count %></td>
+        <td><%= wangwang.reply_num %></td>
+        <td><%= "#{wangwang.pay_rate}%" %></td>
+        <td class="payment"><%= wangwang.payment.round(2) %></td>
+        <td><%= wangwang.num %></td>
+        <td><%= wangwang.price_avg %></td>
+        <td><%= wangwang.non_reply_num %></td>
+        <td><%= wangwang.avg_waiting_times %></td>
+        <td><%= wangwang.online_hours %></td>
+        <td>
+          <%=link_to "聊天记录<i class='icon-share'></i>", url(:subusers, :show, user_id:@user_id, id:wangwang.nick, date:wangwang.date), :method => :get, :class => "btn btn-mini", :target => '_blank' %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+    <% else %>
+      <tr><td colspan='11'>时机未到，请耐心等待...</td></tr>
+    <% end %>
+  </table>
+</div>
+<% content_for :sidebar, partial("subusers/sidebar") %>

@@ -1,0 +1,22 @@
+<% unless @service[:values].empty? %>
+  <table id="service" class="table table-bordered">
+    <thead>
+      <tr>
+        <th></th>
+        <% @service[:timelines].each do |timeline| %>
+          <th><%= timeline %></th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+      <% @service[:labels].each do |key, label| %>
+        <tr id="<%= key %>">
+          <td><%= label %></td>
+          <% @service[:values][key].each do |daily| %>
+            <td><%= daily %></td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

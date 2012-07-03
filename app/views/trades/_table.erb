@@ -1,0 +1,25 @@
+<% unless @trades.empty? %>
+<ul class="nav nav-tabs" id="trades">
+  <li class="active"><a href="#total">交易</a></li>
+  <li><a href="#sale">品牌特卖</a></li>
+  <li><a href="#oversold">超卖</a></li>
+</ul>
+ 
+<div class="tab-content">
+  <div class="tab-pane active" id="total">
+  	<% if @trades.has_key?(:total) %>
+		<%= partial "trades/item", locals: { current_tab: :total, items: @trades[:items], total: @trades[:total] } %>
+		<% end %>
+  </div>
+  <div class="tab-pane" id="sale">
+  	<% if @trades.has_key?(:sale) %>
+		<%= partial "trades/item", locals: { current_tab: :sale, items: @trades[:items], total: @trades[:sale] } %>
+		<% end %>
+  </div>
+  <div class="tab-pane" id="oversold">
+  	<% if @trades.has_key?(:oversold) %>
+		<%= partial "trades/item", locals: { current_tab: :oversold, items: @trades[:items], total: @trades[:oversold] } %>
+		<% end %>
+  </div>
+</div>
+<% end %>

@@ -1,0 +1,75 @@
+<div class="span4 columns">
+    <% form_tag url(:members, :index, user_id: user_id ), method:'get', class: 'form-inline', target: '_blank' do %>
+    <div class="control-group">
+        <label class="control-label" for="level">等级：</label>
+        <div class="btn-group" >
+            <input type="radio" name="level" value="" id="level" />
+            <label class="btn <%= 'active' unless @level %>" for="level">不限</label>
+            <input type="radio" name="level" value="0" id="level0" />
+            <label class="btn <%= 'active' if @level == 0 %>" for="level0">无等级</label>
+            <input type="radio" name="level" value="1" id="level1" />
+            <label class="btn <%= 'active' if @level == 1 %>" for="level1">普通</label>
+            <input type="radio" name="level" value="2" id="level2" />
+            <label class="btn <%= 'active' if @level == 2 %>" for="level2">高级</label>
+            <input type="radio" name="level" value="3" id="level3" />
+            <label class="btn <%= 'active' if @level == 3 %>" for="level3">VIP</label>
+            <input type="radio" name="level" value="4" id="level4" />
+            <label class="btn <%= 'active' if @level == 4 %>" for="level4">至尊VIP</label>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="status">状态：</label>
+        <div class="btn-group" >
+            <input type="radio" name="status" value="" id="status" />
+            <label class="btn <%= 'active' unless @status %>" for="status">不限</label>
+            <input type="radio" name="status" value="normal" id="normal" />
+            <label class="btn <%= 'active' if @status == 'normal' %>" for="normal">正常</label>
+            <input type="radio" name="status" value="delete" id="delete" />
+            <label class="btn <%= 'active' if @status == 'delete' %>" for="delete">删除</label>
+            <input type="radio" name="status" value="blacklist" id="blacklist" />
+            <label class="btn <%= 'active' if @status == 'blacklist' %>" for="blacklist">黑名单</label>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="amount">消费区间：</label>
+        <div class="controls" id='amount'>
+              <div class="input-append">
+                <input class="input-mini" id="min_amount" type="text" name="min_amount" value="<%= @min_amount%>" placeholder='最小金额'><span class="add-on">.00</span>
+              </div> ~
+              <div class="input-append">
+                <input class="input-mini" id="max_amount" type="text" name="max_amount" value="<%= @max_amount%>" placeholder='最大金额'><span class="add-on">.00</span>
+              </div>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="count">订单区间：</label>
+        <div class="controls" id='count'>
+            <input class="input-small" id="min_count" type="text" name="min_count" value="<%= @min_count%>" placeholder='最小笔数'> ~
+            <input class="input-small" id="max_count" type="text" name="max_count" value="<%= @max_count%>" placeholder='最大笔数'>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="calendar">最近交易的日期：</label>
+        <div class="controls">
+            <div class='calendar'></div>
+            <div class="input-append">
+                <input style='width: 160px;margin-left: 3px;' name="start_at" value='<%= @start_at %>' readonly='true' placeholder='开始时间' />
+                <span style='margin: 0 1px;'>～</span>
+                <input style='width: 160px;margin-left: 4px;' name="end_at" value='<%= @end_at %>' readonly='true' placeholder='结束时间' />
+            </div>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="level">格式：</label>
+        <div class="btn-group" >
+            <input type="radio" name="format" value="html" id="html" />
+            <label class="btn active" for="html">页面</label>
+            <input type="radio" name="format" value="csv" id="csv" />
+            <label class="btn" for="csv">导出CSV</label>
+        </div>
+    </div>
+    <div class="form-actions">
+        <%= submit_tag '筛选', class:'btn btn-primary' %>
+    </div>
+<% end %>
+</div>

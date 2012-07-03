@@ -1,0 +1,70 @@
+<ul class="thumbnails">
+<% chartjs = "" %>
+<% @rates[:labels].each do |key, label| %>
+<li class="span4"><div id="rate-<%= key %>" class="thumbnail" style='height:180px; overflow: hidden;'></div></li>
+<%
+chartjs << <<SCRIPT
+  chart = new Highcharts.Chart({
+      chart: { renderTo: 'rate-#{key}' },
+      title: { text: '#{label}' },
+      subtitle: { text: '店铺半年内动态评分' },
+      legend: { enabled: false },
+      xAxis: {
+        categories: #{@rates[:timelines].to_s},
+        labels: {
+          rotation: 45, align: 'left', style: { font: 'normal 9px Verdana' }
+        }
+      },
+      yAxis: [{ // Primary yAxis
+         labels: {
+            align: 'left', x: 0, y: -2,
+            formatter: function() {
+               return this.value +'%';
+            },
+            style: { color: '#89A54E', font: 'normal 9px Verdana' }
+         },
+         showFirstLabel: false,
+         title: { text: null },
+      }, { // Secondary yAxis
+         labels: {
+            align: 'left', x: -8, y: -2,
+            formatter: function() {
+               return this.value +'分';
+            },
+            style: { color: '#4572A7', font: 'normal 9px Verdana' }
+         },
+        showFirstLabel: false, opposite: true,
+        title: { text: null }
+      }],
+      tooltip: {
+         formatter: function() {
+            return ''+
+               this.x +': '+ this.y +
+               (this.series.name == '同行业比' ? '%' : '分');
+         }
+      },
+      series: [{
+         name: '同行业比', color: '#89A54E', type: 'spline',
+         data: #{@rates[:data][key].to_s}
+      }, {
+         name: '评分', color: '#4572A7', type: 'spline',
+         yAxis: 1,
+         data: #{@rates[:values][key].to_s}
+      }],
+      credits: { enabled: false },
+   });
+SCRIPT
+%>
+<% end %>
+<% content_for :footer do %>
+<%= javascript_include_tag 'highcharts' %>
+<script type="text/javascript">
+  (function($){ // encapsulate jQuery
+    var chart;
+    $(document).ready(function() {
+      <%= chartjs %>
+    });
+  })(jQuery);
+</script>
+<% end %>
+</ul>

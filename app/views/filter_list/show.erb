@@ -1,0 +1,97 @@
+<% content_for :header do %>
+	<p class="lead"><%= date_tag(@range, ' ～ ') %> 交易汇总</p>
+<% end %>
+<div class="span8 columns" style="overflow: auto;">
+<%= partial('filter_list/items') if @items %>
+<% unless @trades.empty? %>
+	<dl class="dl-horizontal">
+		<dt>店铺（吊牌价）折扣率</dt>
+		<dd>&nbsp;</dd>
+		<dt>售价</dt>
+		<dd>
+		<%= 
+			case 
+				when @trades.has_key?(:sale) && @trades.has_key?(:total) 
+					((@trades[:total][:price] + @trades[:sale][:price] ) / ( @trades[:total][:fixed_price] + @trades[:sale][:fixed_price]) * 100).round(1)
+				when @trades.has_key?(:total)
+					(@trades[:total][:price] / @trades[:total][:fixed_price] * 100).round(1)
+				when @trades.has_key?(:sale) 
+					(@trades[:sale][:price]  / @trades[:sale][:fixed_price]  * 100).round(1)
+			end
+		%>
+		</dd>
+		<dt>实收</dt>
+		<dd>
+		<%= 
+			case 
+				when @trades.has_key?(:sale) && @trades.has_key?(:total) 
+					((@trades[:total][:payment] + @trades[:sale][:payment] ) / ( @trades[:total][:fixed_price] + @trades[:sale][:fixed_price]) * 100).round(1)
+				when @trades.has_key?(:total)
+					(@trades[:total][:payment] / @trades[:total][:fixed_price] * 100).round(1)
+				when @trades.has_key?(:sale) 
+					(@trades[:sale][:payment]  / @trades[:sale][:fixed_price]  * 100).round(1)
+			end
+		%>
+		</dd>
+	</dl>
+	<table class="table table-bordered">
+	  <thead>
+		<% if @trades.has_key?(:total) %>
+		<% total = @trades[:total] %>
+		<tr>
+		<th>&nbsp;</th>
+		<th><%= payment_total = total[:payment].round(2) %></th>
+		<th>&nbsp;</th>
+		<th><%= num_total = total[:num] %></th>
+		<th>&nbsp;</th>
+		<th><%= discount_total = (total[:payment] / total[:price] * 100).round(1) %></th>
+		<th><%= fixed_discount_total = (total[:payment] / total[:fixed_price] * 100 ).round(1) %></th>
+		</tr>
+		<% end %>
+		<tr>
+			<th>名称</th>
+			<th>实收</th>
+			<th>占比</th>
+			<th>数量</th>
+			<th>占比</th>
+			<th>淘宝折扣</th>
+			<th>吊牌折扣</th>
+		</tr>
+	  	</tr>
+	  </thead>
+	<% if @trades.has_key?(:filter_list) && !@trades[:filter_list].empty? %>
+		<%= partial "filter_list/list", locals: { payment_total: payment_total, num_total: num_total, nodes: @trades[:filter_list], type: :total } %>
+	<% end %>
+	<tr>
+		<th colspan='7'>品牌特买</th>
+	</tr>
+	  <thead>
+		<% if @trades.has_key?(:sale) %>
+			<% total = @trades[:sale] %>
+			<tr>
+			<th>&nbsp;</th>
+			<th><%= payment_total = total[:payment].round(2)%></th>
+			<th>&nbsp;</th>
+			<th><%= num_total = total[:num]%></th>
+			<th>&nbsp;</th>
+			<th><%= discount_total = (total[:payment] / total[:price] * 100).round(1)  %></th>
+			<th><%= fixed_discount_total = (total[:payment] / total[:fixed_price] * 100 ).round(1) %></th>
+			</tr>
+		<% end %>
+		<tr>
+			<th>名称</th>
+			<th>实付</th>
+			<th>占比</th>
+			<th>数量</th>
+			<th>占比</th>
+			<th>淘宝折扣</th>
+			<th>吊牌折扣</th>
+	  	</tr>
+	  </thead>
+	<% if @trades.has_key?(:filter_list) && !@trades[:filter_list].empty? %>
+		<%= partial "filter_list/list", locals: { payment_total: payment_total, num_total: num_total, nodes: @trades[:filter_list], type: :sale } %>
+	<% end %>
+	</table>
+<% end %>
+</div>
+<% content_for :sidebar, partial("filter_list/sidebar") %>

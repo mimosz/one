@@ -1,0 +1,63 @@
+<div class="span8 columns" style="overflow: auto;">
+<table id="filter_list" class="table table-bordered">
+  <thead>
+	<tr>
+	    <th>名称</th>
+	    <th colspan="2">价格区间</th>
+      <th colspan="2">折扣区间</th>
+	    <th>商家编码</th>
+  	</tr>
+  </thead>
+  <% unless @filter_list.empty? %>
+    <% @filter_list.each do |filter| %>
+<tbody class="accordion-group"> 
+    <tr class="accordion-heading">
+  <td><%= filter.name %></td>
+	 <td><%= filter.price_min %></td>
+	<td><%= filter.price_max %></td>
+  <td><%= filter.rate_min %></td>
+  <td><%= filter.rate_max %></td>
+<td>
+	<% if filter.outer_ids.empty? %>
+		<span class='label label-warning'>无码</span>
+	<% else %>
+		<a class="btn btn-mini" data-toggle="collapse" data-parent="#filter_list" href="#filter-<%= filter._id %>-items">编码（<%= filter.outer_ids.count %>）</a>
+	<% end %>
+  <% if filter.child_ids.empty? %>
+    <span class='label label-warning'>无子</span>
+  <% else %>
+    <a class="btn btn-mini" data-toggle="collapse" data-parent="#filter_list" href="#filter-<%= filter._id %>-children">子（<%= filter.child_ids.count %>）</a>
+  <% end %>
+	<%= link_to '调戏下', url(:filter_list, :edit, user_id: user_id, id: filter.id), class:'btn btn-mini' %>
+	</td>
+    </tr>
+<% unless filter.outer_ids.empty? %>
+    <tr>
+      <td colspan="6" style="height:0px;padding:0px;border-top:0px;">
+	<div id="filter-<%= filter._id %>-items" class="accordion-body collapse">
+        <div class="accordion-inner" style="line-height:25px;">
+          <% filter.outer_ids.each do |outer_id| # 循环 %>
+              <span class='label'><%= outer_id %></span>
+          <% end %>
+</div></div>
+      </td>
+    </tr>
+<% end %>
+<% unless filter.child_ids.empty? %>
+    <tr>
+      <td colspan="6" style="height:0px;padding:0px;border-top:0px;">
+  <div id="filter-<%= filter._id %>-children" class="accordion-body collapse">
+        <div class="accordion-inner" style="line-height:25px;">
+          <% filter.child_ids.each do |outer_id| # 循环 %>
+              <span class='label'><%= outer_id %></span>
+          <% end %>
+</div></div>
+      </td>
+    </tr>
+<% end %>
+  <% end %>
+</tbody>
+ <% end %>
+</table>
+</div>
+<% content_for :sidebar, partial("filter_list/sidebar") %>

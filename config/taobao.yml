@@ -1,0 +1,23 @@
+prod: &prod
+  api_key: 12411633
+  secret_key: 58b5b6b798d48854ddf997ad57252b20
+  auth_url: http://container.api.taobao.com/container
+  rest_url: http://gw.api.taobao.com/router/rest
+  callback_url: http://karasu.heroku.com/auth/taobao/callback
+  black_list: taobao.wangwang.eservice.receivenum.get, taobao.wangwang.eservice.noreplynum.get, taobao.wangwang.eservice.onlinetime.get, taobao.wangwang.eservice.loginlogs.get, taobao.wangwang.eservice.avgwaittime.get, taobao.wangwang.eservice.chatpeers.get, taobao.wangwang.eservice.chatlog.get,
+
+sandbox: &sandbox
+  <<: *prod
+  secret_key: sandbox9ffd79873a7ae0e01fefed97c
+  auth_url: http://container.api.tbsandbox.com/container
+  rest_url: http://gw.api.tbsandbox.com/router/rest
+  callback_url: http://0.0.0.0:3000/auth/callback
+
+development:
+  <<: *prod
+
+test:
+  <<: *sandbox
+
+production:
+  <<: *prod

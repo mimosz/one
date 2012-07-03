@@ -1,0 +1,52 @@
+<div class="control-group">
+	<%= f.label :name, caption: '名称', class: 'control-label' %>
+	<div class="controls">
+		<%= f.text_field :name %>
+		<span class="help-inline"><%= f.error_message_on :name %></span>
+	</div>
+</div>
+<div class="control-group">
+	<%= f.label :price_min, caption: '最低价', class: 'control-label' %>
+	<div class="controls">
+		<div class="input-append">
+		<%= f.text_field :price_min %><span class="add-on">.00</span>
+		</div>
+		<span class="help-inline"><%= f.error_message_on :price_min %></span>
+	</div>
+	<%= f.label :price_max, caption: '最高价', class: 'control-label' %>
+	<div class="controls">
+		<div class="input-append">
+		<%= f.text_field :price_max %><span class="add-on">.00</span>
+		</div>
+		<span class="help-inline"><%= f.error_message_on :price_max %></span>
+	</div>
+</div>
+<div class="control-group">
+	<%= f.label :rate_min, caption: '最低折扣率', class: 'control-label' %>
+	<div class="controls">
+		<div class="input-append">
+		<%= f.text_field :rate_min %><span class="add-on">%</span>
+		</div>
+		<span class="help-inline"><%= f.error_message_on :rate_min %></span>
+	</div>
+	<%= f.label :rate_max, caption: '最高折扣率', class: 'control-label' %>
+	<div class="controls">
+		<div class="input-append">
+		<%= f.text_field :rate_max %><span class="add-on">%</span>
+		</div>
+		<span class="help-inline"><%= f.error_message_on :rate_max %></span>
+	</div>
+</div>
+<div class="control-group">
+	<%= f.label :outer_ids, caption: '商家编码', class: 'control-label' %>
+	<div class="controls">
+		<%= f.text_area :outer_ids, value: @filter_list.outer_ids.join("\r\n") %>
+		<span class="help-inline"><%= f.error_message_on :outer_ids %></span>
+	</div>
+</div>
+<div class="control-group">
+        <div class="controls">
+            <%= f.select :child_ids, collection: FilterList.all, fields: [:name, :_id], multiple: true, class: 'chzn-select' %>
+            <span class="help-inline"><%= f.error_message_on :outer_ids %></span>
+        </div>
+</div>

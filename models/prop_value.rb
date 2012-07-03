@@ -1,0 +1,13 @@
+# -*- encoding: utf-8 -*-
+
+class PropValue
+  include Mongoid::Document
+  embedded_in :item_prop, class_name: 'ItemProp'
+
+  # Fields
+  field :vid,      type: Integer # 属性值ID
+  field :name,     type: String  # 属性值
+
+  key :vid
+  
+end

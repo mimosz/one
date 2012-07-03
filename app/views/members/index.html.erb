@@ -1,0 +1,47 @@
+<% content_for :header do %>
+  <p class="lead"> <%= date_tag(@range, ' ～ ') if @range %>店铺会员</p>
+<% end %>
+<div class="span8 columns" style="overflow: auto;">
+<table id="members" class="table table-bordered">
+    
+  <thead>
+<% if @members.total_count > @page_size %>
+<tr>
+    <td style="text-align:right;" colspan='9'>
+     第 <%= @members.offset_value + 1 %> - <%= @members.offset_value + @page_size %>，共 <%= @members.total_count %>
+    </td>
+  </tr>
+  <% end %>
+    <tr>
+        <th>会员昵称</th>
+        <th>交易笔数</th>
+        <th>消费金额</th>
+        <th>平均客单</th>
+        <th>未成交<br />笔数</th>
+        <th>未成交<br />金额</th>
+        <th>购买的<br />宝贝总数</th>
+        <th>最近一笔<br />交易时间</th>
+        <th>等级</th>
+    </tr>
+  </thead>
+  <% unless @members.empty? %>
+    <tbody> 
+    <% @members.each do |member| %>
+    <tr id="member-<%= member.buyer_id %>" class='<%= member.status %>'>
+      <td><%= ww_link(member.buyer_nick) %></td>
+      <td><%= member.trade_count %></td>        
+      <td><%= member.trade_amount %></td>
+      <td><%= member.trade_pre %></td>
+      <td><%= member.close_trade_count %></td>
+      <td><%= member.close_trade_amount %></td>
+      <td><%= member.item_num %></td>
+      <td><%= time_ago_in_words(member.last_trade_time) %></td>
+      <td><%= member.grade %></td>
+    </tr>
+  <% end %>
+</tbody>
+ <% end %>
+</table>
+<%= paginate @members, theme: 'twitter_bootstrap', window: 4 %>
+</div>
+<% content_for :sidebar, partial("members/sidebar") %>

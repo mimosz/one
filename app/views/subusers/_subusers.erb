@@ -1,0 +1,21 @@
+ <table id="subusers" class="table table-bordered">
+<thead> <tr>
+          <th class="first">用户名</th>
+          <th>否参与分流</th>
+          <th>状态</th>
+          <th class="last">姓名</th>
+        </tr>
+</thead>
+<tbody>
+        <% unless @wangwangs.empty? %>
+          <% @subusers.each do |subuser| %>
+          <tr id="subuser-<%= subuser.sub_id %>">
+            <td><%= ww_link(subuser.nick) %><%= subuser.nick %></td>
+            <td><%= ww_online(subuser.is_online) %></td>
+            <td><%= ww_status(subuser.status) %></td>
+            <td><%= subuser.full_name %></td>
+          </tr>
+        <% end %>
+       <% end %> 
+</tbody>
+</table>

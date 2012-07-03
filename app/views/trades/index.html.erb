@@ -1,0 +1,21 @@
+<% content_for :header do %>
+	<p class="lead"><%= date_tag(@range, ' ～ ') %> 交易数据（<%=link_to '导出', url(:trades, :index, :user_id => user_id, :start_at => @start_at,  :end_at => @end_at, :field => @field, :format => :csv), :target => '_blank' %>）</p>
+<% end %>
+<div class="span8 columns" style="overflow: auto;">
+<% if @trades.has_key?(:filter_list) %>
+<% filter_list = @trades[:filter_list] %>
+<% filter_list.each do |id, filter| # 循环货品 %>
+<%= filter[:name]%>
+<% timelines = filter[:timelines]%>
+<%= partial "trades/timeline", locals: { labels: timelines.keys.sort, timelines: timelines, items: filter[:items], total: filter[:total] } %>
+<% end %>
+<% elsif @trades.has_key?(:timelines) %>
+<% timelines = @trades[:timelines] %>
+<%= partial "trades/timeline", locals: { labels: timelines.keys.sort, timelines: timelines, items: @trades[:items], total: @trades[:total] } %>
+<% elsif @trades.has_key?(:state) %>
+<%= partial "trades/state" %>
+<% else %>
+<%= partial "trades/table" %>
+<% end %>
+</div>
+<% content_for :sidebar, partial("trades/sidebar") %>

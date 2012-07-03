@@ -1,0 +1,48 @@
+<table id="accounts" class="table table-bordered">
+	<thead>
+		<tr>
+			<th>姓名</th>
+			<th>电邮</th>
+			<th>手机</th>
+			<th>腾讯QQ</th>
+			<th>阿里旺旺</th>
+			<th>角色</th>
+			<th>店铺</th>
+			<th>&nbsp;</th>
+		</tr>
+	<thead>
+	<% unless @accounts.empty? %>
+		<tbody>
+		<% @accounts.each do |account| %>
+				<tr class="nav">
+					<td><%= account.name %></td>
+					<td><%= account.email %></td>
+					<td><%= account.mobile %></td>
+					<td><%= account.tencent_qq %></td>
+					<td><%= account.ali_wangwang %></td>
+					<td><%= account.role %></td>
+					<td class="dropdown">
+						<% if account.user_ids.empty? %>
+							<span class='label label-warning'>闲人</span>
+						<% else %>
+						    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+						      <%= account.user_ids.count %><b class="caret"></b>
+						    </a>
+						    <ul class="dropdown-menu">
+							  <% account.user_ids.each do |uid| %>
+					            <li><%= link_to uid, url(:users, :show, user_id: uid) %></li>
+					          <% end %>
+						    </ul>
+						<% end %>
+					</td>
+					<td><%= link_to '调戏下', url(:accounts, :edit, id: account.id), class:'btn btn-mini' %></td>
+				</tr>
+			<% end %>
+		</tbody>
+	<% else %>
+		<tr>
+			<td colspan="7">没小弟～～</td>
+			<td><%= link_to '收一个', url(:accounts, :new), class:'btn btn-mini' %></td>
+		</tr>
+	<% end %>
+</table>

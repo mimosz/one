@@ -1,0 +1,33 @@
+<table id="addresses" class="table table-bordered">
+	<thead>
+	<tr>
+		<th>地址</th>
+		<th>公司</th>
+		<th>联系人</th>
+		<th>电话</th>
+		<th>职能</th>
+	</tr>
+	</thead>
+	<tbody>
+	<% unless @addresses.empty? %>
+		<% @addresses.each do |address| %>
+			<tr id="address-<%= address.contact_id %>">
+				<td><%= "#{address.province}#{address.city}#{address.country}" %>（<%= address.zip_code %>）<br /><%= address.addr %></td> 
+				<td><%= address.seller_company %></td>
+				<td><%= address.contact_name %></td>
+				<td><%= address.mobile_phone %><br /><%= address.phone %></td>
+				<td>
+					<%= "<span class='label label-info'>发货</span>" if address.send_def %>
+					<%= "<span class='label label-info'>取货</span>" if address.get_def %>
+					<%= "<span class='label label-info'>退货</span>" if address.cancel_def %>
+				</td>
+			</tr>
+			<% unless address.memo.nil? %>
+				<tr>
+					<td colspan="7"><%= address.memo %></td>
+				</tr>
+			<% end %>
+		<% end %>
+	<% end %>
+	</tbody>
+</table>
