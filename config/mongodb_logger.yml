@@ -1,8 +1,0 @@
-production:
-  database: one_development
-  capsize: <%= 500.megabytes %>
-  host: mongoc2.grandcloud.cn
-  port: 10005
-  username: 'howl'
-  password: 800622
-  replica_set: true
