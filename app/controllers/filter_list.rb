@@ -7,7 +7,11 @@ One.controllers :filter_list, :parent => :users do
   end
 
   get :index do
-    @filter_list = FilterList.where(@conditions)
+    filter_list = {}
+    FilterList.where(@conditions).each do |filters|
+      filter_list[filters.id.to_s] = filters
+    end
+    @filter_list = filter_list
     render 'filter_list/index'
   end
   
@@ -24,7 +28,7 @@ One.controllers :filter_list, :parent => :users do
     @trades = Trade.where( @conditions.merge( pay_time: @range ) )
     @list = []
     if params[:filter_list].blank?
-      @filter_list = FilterList.where( @conditions )
+      @filter_list = FilterList.where( @conditions.merge( parent_ids: [] ) )
     else
       @list = params[:filter_list]
       @filter_list = FilterList.where( @conditions ).also_in(_id: @list)
@@ -64,9 +68,14 @@ One.controllers :filter_list, :parent => :users do
     @filter_list = FilterList.where(seller_nick: user_id, _id: params[:id]).last
     params[:filter_list]['outer_ids'] = params[:filter_list]['outer_ids'].split("\r\n")
     params[:filter_list]['child_ids'] ||= []
+    current_child_ids = @filter_list.child_ids
     if @filter_list.update_attributes(params[:filter_list])
+      remove = current_child_ids - @filter_list.child_ids
+      @filter_list.cache_parents(remove, :remove) if remove.count > 0
+      add = @filter_list.child_ids - current_child_ids
+      @filter_list.cache_parents(add, :add) if add.count > 0
       flash[:notice] = '过滤器，准备就绪～'
-      redirect url(:filter_list, :edit, user_id: user_id, id: @filter_list.id)
+      redirect url(:filter_list, :index, user_id: user_id)
     else
       render 'filter_list/edit'
     end

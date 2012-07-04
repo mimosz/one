@@ -10,21 +10,17 @@ require 'bundler/setup'
 Bundler.require(:default, PADRINO_ENV)
 # 兼容 Rails
 module Rails
-  class << self
-    def root
+    def self.root
       PADRINO_ROOT
     end
-
-    def logger
-      Padrino.logger
+    def self.logger
+    	Padrino.logger
     end
-  end
 end
 ##
 # ## Enable devel logging
 #
-# Padrino::Logger::Config[:development][:log_level]  = :devel# Padrino::Logger::Config[:development][:log_static] = true
-#
+Rails.logger.colorize!
 # ## Configure your I18n
 #
 I18n.default_locale = :zh_cn

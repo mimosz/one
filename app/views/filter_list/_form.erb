@@ -46,7 +46,7 @@
 </div>
 <div class="control-group">
         <div class="controls">
-            <%= f.select :child_ids, collection: FilterList.all, fields: [:name, :_id], multiple: true, class: 'chzn-select' %>
+            <%= f.select :child_ids, collection: FilterList.excludes(_id: (params[:id] || nil)), fields: [:name, :_id], multiple: true, class: 'chzn-select' %>
             <span class="help-inline"><%= f.error_message_on :outer_ids %></span>
         </div>
 </div>

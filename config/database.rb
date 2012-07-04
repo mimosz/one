@@ -15,7 +15,7 @@ Mongoid.configure do |config|
   config.use_utc = false
   config.skip_version_check = true
   config.persist_in_safe_mode = true
-  db = Mongo::Connection.new(host, port).db(database)
+  db = Mongo::Connection.new(host, port, logger: Padrino.logger).db(database)
   db.authenticate(username, password) unless username.nil?
   config.master = db
 end

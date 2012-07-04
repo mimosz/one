@@ -94,4 +94,4 @@
 	</table>
 <% end %>
 </div>
-<% content_for :sidebar, partial("filter_list/sidebar") %>
+<% content_for :sidebar, partial('filter_list/sidebar', locals: { filters: @filter_list})  %>

@@ -14,12 +14,11 @@ class FilterList
   field :rate_min,        type: Integer, default: 0
   field :rate_max,        type: Integer, default: 0
 
-  field :parents_count,  type: Integer, default: 0
-
-  field :child_ids,        type: Array,   default: []
-  field :outer_ids,        type: Array,   default: []
-  field :item_ids,         type: Array,   default: []
-  field :unknown_ids,      type: Array,   default: []
+  field :parent_ids,   type: Array,   default: []
+  field :child_ids,     type: Array,   default: []
+  field :outer_ids,     type: Array,   default: []
+  field :item_ids,      type: Array,   default: []
+  field :unknown_ids,  type: Array,   default: []
   
   field :seller_nick,      type: String
   field :name,             type: String
@@ -29,17 +28,37 @@ class FilterList
 
   # Callbacks
   before_save :check_item
-  before_create :parents_count_cache
+  after_create :cache_parents
+  before_destroy :clean_child
+
+  def cache_parents(ids = [], method = :add)
+    ids ||= child_ids
+    unless ids.empty?
+    FilterList.where(seller_nick: seller_nick).also_in(_id: ids).each do |child|
+         unless child.parent_ids.include?(id.to_s)
+          case method
+          when :add
+            child.parent_ids.push(id.to_s)
+          when :remove
+            child.parent_ids.delete(id.to_s)
+          end
+          child.save
+         end
+      end
+    end
+  end
 
   protected
 
-  def parents_count_cache(ids=nil, count=1)
-    ids ||=  child_ids
-    unless ids.empty?
-      FilterList.where(seller_nick: seller_nick).also_in(_id: ids).each do |child|
-        child.inc(:parents_count, count)
+  def clean_child
+    unless parent_ids.empty?
+        FilterList.where(seller_nick: seller_nick).also_in(_id: parent_ids).each do |parent|
+           unless parent.child_ids.include?(id.to_s)
+            parent.child_ids.delete(id.to_s) 
+            parent.save
+           end
+        end
       end
-    end
   end
   
   def check_item # 检查商品编码

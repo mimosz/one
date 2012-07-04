@@ -1,0 +1,51 @@
+<tbody class="accordion-group"> 
+  <tr class="accordion-heading">
+  <td><%= filter.name %></td>
+  <td><%= filter.price_min %></td>
+  <td><%= filter.price_max %></td>
+  <td><%= filter.rate_min %></td>
+  <td><%= filter.rate_max %></td>
+  <td>
+  <% if filter.outer_ids.empty? %>
+    <span class='label label-warning'>无码</span>
+  <% else %>
+    <a class="btn btn-mini" data-toggle="collapse" data-parent="#filter_list" href="#filter-<%= filter._id %>-items">编码（<%= filter.outer_ids.count %>）</a>
+  <% end %>
+  <% if filter.child_ids.empty? %>
+    <span class='label label-warning'>无子</span>
+  <% else %>
+    <a class="btn btn-mini" data-toggle="collapse" data-parent="#filter_list" href="#filter-<%= filter._id %>-children">子（<%= filter.child_ids.count %>）</a>
+  <% end %>
+  <%= link_to '调戏下', url(:filter_list, :edit, user_id: user_id, id: filter.id), class:'btn btn-mini' %>
+  </td>
+  </tr>
+  <% unless filter.outer_ids.empty? %>
+    <tr>
+    <td colspan="6" style="height:0px;padding:0px;border-top:0px;">
+      <div id="filter-<%= filter._id %>-items" class="accordion-body collapse">
+        <div class="accordion-inner" style="line-height:25px;">
+          <% filter.outer_ids.each do |outer_id| # 循环 %>
+            <span class='label'><%= outer_id %></span>
+          <% end %>
+        </div>
+      </div>
+    </td>
+    </tr>
+  <% end %>
+  <% unless filter.child_ids.empty? %>
+  <tr>
+  <td colspan="6" style="height:0px;padding:0px;border-top:0px;">
+    <div id="filter-<%= filter._id %>-children" class="accordion-body collapse">
+    <div class="accordion-inner" style="line-height:25px;">
+    <table class="table table-bordered" style="margin-bottom:0px;">
+      <% filter.child_ids.each do |child_id| # 循环 %>
+      
+        <%= partial("filter_list/filter", locals: { filter: @filter_list[child_id]}) %>
+      
+    <% end %></table>
+    </div>
+  </div>
+  </td>
+  </tr>
+  <% end %>
+</tbody>
