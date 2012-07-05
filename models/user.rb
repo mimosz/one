@@ -186,7 +186,7 @@ class User
     start_at = 3.months.ago.beginning_of_day
     unless trades.empty?
       if refunds.empty?
-        trades = trades.excludes('orders.refund_id' => nil) # 有退款的交易
+        trades = self.trades.excludes('orders.refund_id' => nil) # 有退款的交易
         start_at = trades.last.created
       else
         start_at = refunds.first.modified

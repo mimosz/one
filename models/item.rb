@@ -92,10 +92,14 @@ class Item # 商品
       # 预处理，商品起始值
       items.each do |item|
         items_res[item.num_iid] = metadata unless items_res.has_key?(item.num_iid)
-        onsale_at = item.list_time.to_date # 上架
-        start_at = onsale_at if onsale_at > start_at # 时差
-        instock_at = item.delist_time.to_date # 下架
-        end_at = instock_at if instock_at < end_at # 时差
+        unless item.list_time.nil?
+          onsale_at = item.list_time.to_date # 上架
+          start_at = onsale_at if onsale_at > start_at # 时差
+        end
+        unless item.delist_time.nil?
+          instock_at = item.delist_time.to_date # 下架
+          end_at = instock_at if instock_at < end_at # 时差
+        end
         items_res[item.num_iid][:range] = start_at..end_at
         # 单品
         item.skus.each do |sku|
