@@ -89,17 +89,14 @@ class Item # 商品
       skus_res = {}
       unknown_items = [] # 未知产品
       range_time = start_at.beginning_of_day..end_at.end_of_day # 近7天
-      range_date = start_at..end_at
       # 预处理，商品起始值
       items.each do |item|
         items_res[item.num_iid] = metadata unless items_res.has_key?(item.num_iid)
-        items_res[item.num_iid][:range] = range_date
-        unless item.list_time.nil?  # 最后上架时间
-          onsale_at = item.list_time.to_date
-          if onsale_at > start_at # 时差
-            items_res[item.num_iid][:range] = onsale_at..end_at
-          end
-        end
+        onsale_at = item.list_time.to_date # 上架
+        start_at = onsale_at if onsale_at > start_at # 时差
+        instock_at = item.delist_time.to_date # 下架
+        end_at = instock_at if instock_at < end_at # 时差
+        items_res[item.num_iid][:range] = start_at..end_at
         # 单品
         item.skus.each do |sku|
           skus_res[sku.sku_id] = metadata unless skus_res.has_key?(sku.sku_id)
@@ -110,11 +107,11 @@ class Item # 商品
       trades = user.trades.where(pay_time: range_time)
       trades.each do |trade| # 交易集合
         paid_at = trade.pay_time.to_date # 支付日期
-        is_prev = (end_at == paid_at) # 是否，昨日交易
         trade.orders.each do |order| # 订单集合
           if items_res.has_key?(order.num_iid)
             item = items_res[order.num_iid]
             if item[:range].cover?(paid_at)
+              is_prev = (item[:range].last == paid_at) # 是否，昨日交易
               # 商品
               trade_sum(item, order.num, order.payment_avg, is_prev)
               # 单品

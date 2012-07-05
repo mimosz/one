@@ -8,16 +8,7 @@
             <label class="btn <%= 'active' if @field == 'created' %>" for="created">创建时间</label>
         </div>
     </div>
-    <div class="control-group">
-        <div class="controls">
-            <div class='calendar'></div>
-            <div class="input-append">
-                <input style='width: 160px;margin-left: 3px;' name="start_at" value='<%= @start_at %>' readonly='true' placeholder='开始时间' />
-                <span style='margin: 0 1px;'>～</span>
-                <input style='width: 160px;margin-left: 4px;' name="end_at" value='<%= @end_at %>' readonly='true' placeholder='结束时间' />
-            </div>
-        </div>
-    </div>
+    <%= partial('shared/form_calendar') %>
     <div class="form-actions">
         <%= submit_tag '筛选', class:'btn btn-primary' %>
     </div>

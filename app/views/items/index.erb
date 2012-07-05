@@ -2,6 +2,16 @@
   <p class="lead"> 当前货品数据（<%=link_to '导出', url(:items, :index, user_id: user_id, format: :csv), :target => '_blank' %>）</p>
 <% end %>
 <div class='columns'>
+<dl class='dl-horizontal'>
+  <dt>商品周转</dt>
+  <dd>根据７日内，上架天数，计算销量、售价区间。</dd>
+  <dt>价格</dt>
+  <dd><span class='label label-success'>&gt; 100</span>，<span class='label label-warning'>&gt; 500</span></dd>
+  <dt>库存</dt>
+  <dd><span class='label label-success'>&gt; 100</span>，<span class='label label-warning'>&lt; 10</span></dd>
+  <dt>上/下架</dt>
+  <dd><span class='label label-success'>在售</span>，<span class='label label-warning'>下架</span></dd>
+</dl>
 <table id="items" class="table table-bordered">
   <thead>
   <% if @items.total_count > @page_size %>
