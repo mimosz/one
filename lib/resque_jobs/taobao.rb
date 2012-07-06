@@ -38,7 +38,6 @@ module ResqueJobs
     def self.perform(user_id)
       puts "=================开始同步#{user_id}货品信息=================="
         User.find(user_id).items_sync  # 货品
-        User.find(user_id).skus_sync   # 单品
       puts "=================结束同步#{user_id}货品信息=================="
     end
   end

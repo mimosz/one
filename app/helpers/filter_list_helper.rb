@@ -35,8 +35,9 @@ One.helpers do
   end
 
   def filter_by_price(node, trade, order, options = {})
-    if node[:price_max] > 0 || node[:price_min] > 0 # 价格过滤
-      if order.price >= node[:price_min] && order.price <= node[:price_max]
+    price_range = node[:price_min]..node[:price_max]
+    if price_range > 1 # 价格过滤
+      if price_range.cover?(order.price)
         filter_by_rate(node, trade, order, options)
       end
     else
@@ -45,10 +46,11 @@ One.helpers do
   end
 
   def filter_by_rate(node, trade, order, options = {})
-    if node[:rate_max] > 0 || node[:rate_min] > 0 # 折扣过滤
+    rate_range = node[:rate_min]..node[:rate_max]
+    if rate_range.count > 1 # 折扣过滤
       if fixed_price[order.num_iid]
         rate = ( (order.total_fee/order.num).round(1) / fixed_price[order.num_iid].to_f * 100).round(1)
-        if rate >= node[:rate_min]  && rate <= node[:rate_max]
+        if rate_range.cover?(rate)
           process_filtered(node, trade, order, options)
         end
         puts "二了吧：#{order.num_iid}，#{order.price}大于#{fixed_price[order.num_iid]}？？？" if rate > 100

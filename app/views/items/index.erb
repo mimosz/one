@@ -16,7 +16,7 @@
   <thead>
   <% if @items.total_count > @page_size %>
 <tr>
-    <td style="text-align:right;" colspan='14'>
+    <td style="text-align:right;" colspan='15'>
      第 <%= @items.offset_value + 1 %> - <%= @items.offset_value + @page_size %>，共 <%= @items.total_count %>
     </td>
   </tr>
@@ -33,7 +33,8 @@
 		<th>昨日<br />销售</th>
 		<th>最高<br />售价</th>
 		<th>最低<br />售价</th>
-		<th>上/下架</th>
+		<th>上架</th>
+    <th>下架</th>
 		<th>图</th>
 	 	<th>&nbsp;</th>
   	</tr>
@@ -58,11 +59,9 @@
         <td><%= item.range_min %></td> 
 		<td><%= item.prev_num %></td>
 		<td><%= item.prev_max %></td>
-        <td><%= item.prev_min %></td>     
- <td>
-         <%= "<span class='label label-success'>#{time_ago_in_words(item.list_time)}</span>" if item.approve_status == 'onsale' %>
-         <%= "<span class='label label-warning'>#{time_ago_in_words(item.delist_time)}</span>" if item.approve_status == 'instock' %>
-      </td>
+        <td><%= item.prev_min %></td>
+    <td><%= item.list_time.strftime("%m-%d") unless item.list_time.nil? %></td>     
+    <td><%= item.delist_time.strftime("%m-%d") unless item.delist_time.nil? %></td>
 	  <td><%= link_to image_tag(item.pic_url, width: '48px', height: '48px'), item.item_url, target: '_blank', rel: 'tooltip', title: item.title %></td>
 <td>
 	<% if item.skus.empty? %>
@@ -74,7 +73,7 @@
     </tr>
 <% unless item.skus.empty? %>
     <tr>
-      <td colspan="14" style="height:0px;padding:0px;border-top:0px;">
+      <td colspan="15" style="height:0px;padding:0px;border-top:0px;">
 	     <div id="skus-<%= item.num_iid %>" class="accordion-body collapse">
         <%= partial "items/skus", locals: { skus: item.skus } %>
       </div>

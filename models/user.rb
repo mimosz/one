@@ -163,10 +163,7 @@ class User
   def items_sync # 商品
     Item.sync_create(session, :onsale)
     Item.sync_create(session, :inventory)
-  end
-
-  def skus_sync # 为商品，同步SKU
-    Sku.sync_create(session, item_ids)
+    Item.sync_items(session, item_ids)
   end
   
   def addresses_sync # 卖家地址
@@ -243,7 +240,7 @@ class User
   end
 
   def item_ids
-    items.distinct('num_iid')
+    items.where(synced_at: nil).distinct('num_iid')
   end
   
   # 暂时没用
