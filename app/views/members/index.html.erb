@@ -22,12 +22,13 @@
         <th>购买的<br />宝贝总数</th>
         <th>最近一笔<br />交易时间</th>
         <th>等级</th>
+        <th>购买记录</th>
     </tr>
   </thead>
   <% unless @members.empty? %>
-    <tbody> 
+    <tbody class="accordion-group"> 
     <% @members.each do |member| %>
-    <tr id="member-<%= member.buyer_id %>" class='<%= member.status %>'>
+    <tr id="member-<%= member.buyer_id %>" class='accordion-heading <%= member.status %>'>
       <td><%= ww_link(member.buyer_nick) %></td>
       <td><%= member.trade_count %></td>        
       <td><%= member.trade_amount %></td>
@@ -37,7 +38,51 @@
       <td><%= member.item_num %></td>
       <td><%= time_ago_in_words(member.last_trade_time) %></td>
       <td><%= member.grade %></td>
+      <td>
+        <% if member.receivers.empty? %>
+          <span class='label label-warning'>暂无</span>
+        <% else %>
+          <a class="btn btn-mini" data-toggle="collapse" data-parent="#members" href="#member-<%= member._id %>-receivers"><%= member.receivers.count %>笔</a>
+        <% end %>
+      </td>
     </tr>
+    <% unless member.receivers.empty? %>
+    <tr>
+    <td colspan="10" style="height:0px;padding:0px;border-top:0px;">
+      <div id="member-<%= member._id %>-receivers" class="accordion-body collapse">
+        <div class="accordion-inner" style="line-height:25px;">
+           <table class='table table-bordered'>
+        <thead>
+          <tr>
+            <th>订单</th>
+            <th>宝贝</th>
+            <th>数量</th>
+            <th>省</th>
+            <th>市</th>
+            <th>收货人</th>
+            <th>手机</th>
+          </tr>
+        </thead>
+        <tbody>
+<% member.receivers.each do |receiver| # 循环 %>
+       <tr>   
+<td><%= receiver.tid %></td>
+<td><%= receiver.num_iid %></td>
+<td><%= receiver.num %></td>
+<td><%= receiver.receiver_state %></td>
+<td><%= receiver.receiver_city %></td>
+<td><%= receiver.receiver_name %></td>
+<td><%= receiver.receiver_mobile %></td>
+</tr>
+<% end %>
+</tbody>
+      </table>
+
+   </div>
+      </div>
+    </td>
+    </tr>
+  <% end %>
   <% end %>
 </tbody>
  <% end %>

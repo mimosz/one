@@ -6,32 +6,59 @@ class Member
   # Referenced
   belongs_to :trade,  foreign_key: 'biz_order_id' # 交易
   belongs_to :user,   foreign_key: 'seller_nick'  # 店铺
+  # Embedded
+  embeds_many :receivers
 
   # Fields
-  field :grade,              type: Integer,  default: 0
-  field :trade_count,        type: Integer
-  field :close_trade_count,  type: Integer
-  field :item_num,           type: Integer
-  field :relation_source,    type: Integer
+  field :grade,             type: Integer,  default: 0
+  field :trade_count,       type: Integer
+  field :close_trade_count, type: Integer
+  field :item_num,          type: Integer
+  field :relation_source,   type: Integer
   
-  field :buyer_id,           type: Integer
-  field :seller_id,          type: Integer
+  field :buyer_id,          type: Integer
+  field :seller_id,         type: Integer
 
-  field :trade_amount,        type: Float,  default: 0 
-  field :close_trade_amount,  type: Float,  default: 0 
+  field :trade_amount,       type: Float,  default: 0 
+  field :close_trade_amount, type: Float,  default: 0 
 
-  field :group_ids,           type: Array,  default: []
+  field :group_ids,          type: Array,  default: []
 
-  field :biz_order_id,        type: String
-  field :buyer_nick,          type: String
-  field :seller_nick,         type: String
-  field :status,              type: String
+  field :biz_order_id,      type: String
+  field :buyer_nick,        type: String
+  field :seller_nick,       type: String
+  field :status,            type: String
 
-  field :last_trade_time,     type: DateTime
+  field :last_trade_time,   type: DateTime
+  field :synced_at,         type: DateTime
 
   key :seller_id, :buyer_id
 
   default_scope desc(:last_trade_time) # 默认排序
+
+  after_save :cache_receivers
+
+  def cache_receivers
+    if synced_at.nil?
+      trade = Trade.where(tid: biz_order_id).last
+      if trade
+        self.synced_at = Time.now
+        self.receivers << Receiver.new({
+          num: trade.num,
+          num_iid: trade.num_iid,
+          tid: trade.tid,
+          receiver_address: trade.receiver_address,
+          receiver_city: trade.receiver_city,
+          receiver_district: trade.receiver_district,
+          receiver_mobile: trade.receiver_mobile,
+          receiver_name: trade.receiver_name,
+          receiver_state: trade.receiver_state, 
+          receiver_zip: trade.receiver_zip,
+        })
+        self.save
+      end
+    end
+  end
 
   def trade_pre
     avg = (trade_amount.to_f / trade_count.to_f)
@@ -104,6 +131,7 @@ class Member
                   Member.create(member)        
                elsif member['last_trade_time'].to_time > current_member.last_trade_time
                   result << member
+                  member['synced_at'] = nil
                   current_member.update_attributes(member)
                end
              end

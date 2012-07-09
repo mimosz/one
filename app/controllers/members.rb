@@ -1,12 +1,16 @@
 # -*- encoding: utf-8 -*-
 
-One.controllers :members, :parent => :users do
+One.controllers :members, parent: :users do
+  
   before do
     @page = 1 
     @page_size = 20
     @page = params[:page].to_i unless params[:page].blank?
     @page_size = params[:page_size].to_i unless params[:page_size].blank?
     @conditions = {seller_nick: user_id}
+  end
+
+  get :index, provides: [:html, :csv] do
     # 时间区间
     unless ( params[:start_at].blank? && params[:end_at].blank? )
       @start_at = params[:start_at].to_date
@@ -32,19 +36,22 @@ One.controllers :members, :parent => :users do
       @status = params[:status] if %w(normal delete blacklist).include?(params[:status])
       @conditions.merge!(status: @status)
     end
-  end
-  
-  get :index, provides: [:html, :csv] do
     case content_type
-      when :html
-        @members = Member.where(@conditions).page(@page).per(@page_size)
-        render 'members/index'
-      when :csv
-        @members = Member.where(@conditions)
-        unless @members.empty?
-          file_csv = export_members(@members, user_id)
-          send_file file_csv, type: 'text/csv', filename: File.basename(file_csv)
-        end
+    when :html
+      @members = Member.where(@conditions).page(@page).per(@page_size)
+      render 'members/index'
+    when :csv
+      @members = Member.where(@conditions)
+      unless @members.empty?
+        file_csv = export_members(@members, user_id)
+        send_file file_csv, type: 'text/csv', filename: File.basename(file_csv)
       end
+    end
+  end
+
+  get :show, with: :id do
+    @member = Member.where(@conditions.merge!(_id: params[:id])).last
+    @trade = @member.trade
+    render 'members/show'
   end
 end
