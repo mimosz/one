@@ -93,22 +93,23 @@ class Item # 商品
       items.each do |item| 
         items_res[item.num_iid] = metadata unless items_res.has_key?(item.num_iid)
         date_range = start_at..end_at
-        unless item.list_time.nil? # 上架
+        if item.list_time.nil? || item.delist_time.nil?
+          date_range = nil
+        else
           onsale_at = item.list_time.to_date
+          instock_at = item.delist_time.to_date
           case
           when date_range.cover?(onsale_at)
             date_range = onsale_at..date_range.last
           when onsale_at > end_at
-            date_range = "新上架"
+            date_range = nil
+            break
           end
-        end
-
-        unless item.delist_time.nil? # 下架
-          instock_at = item.delist_time.to_date
-          if date_range.is_a?(Range) && date_range.cover?(instock_at) # 时差
+          case
+          when date_range.cover?(instock_at) # 时差
             date_range = date_range.first..instock_at
-          elsif instock_at < start_at
-            date_range = "已下架"
+          when instock_at < start_at
+            date_range = nil
           end
         end
 
@@ -118,6 +119,7 @@ class Item # 商品
           skus_res[sku.sku_id] = metadata unless skus_res.has_key?(sku.sku_id)
         end
       end
+
       # 计算商品交易数
       trades = user.trades.where(pay_time: start_at.beginning_of_day..end_at.end_of_day) # 近7天
       trades.each do |trade| # 交易集合
@@ -125,7 +127,7 @@ class Item # 商品
         trade.orders.each do |order| # 订单集合
           if items_res.has_key?(order.num_iid)
             item = items_res[order.num_iid]
-            if item[:range].is_a?(Range) && item[:range].cover?(paid_at)
+            if item[:range] && item[:range].cover?(paid_at)
               is_prev = (item[:range].last == paid_at) # 是否，昨日交易
               # 商品
               trade_sum(item, order.num, order.payment_avg, is_prev)
@@ -152,7 +154,7 @@ class Item # 商品
         if items_res.has_key?(item.num_iid)
           item_res = items_res[item.num_iid]
           item_res[:duration] = if item_res[:range].is_a?(Range)
-            (item_res[:range].count - 1)
+            item_res[:range].count
           else
             item_res[:range]
           end

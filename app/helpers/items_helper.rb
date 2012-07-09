@@ -2,6 +2,16 @@
 require 'csv'
 
 One.helpers do
+
+  def parse_item_status(item)
+    case item.approve_status
+    when 'onsale'
+      content_tag(:span, time_ago_in_words(item.list_time), class: 'label label-success')
+    when 'instock'
+      content_tag(:span, time_ago_in_words(item.delist_time), class: 'label')
+    end
+  end
+
   def items_import(csv_file)
     items = CSV.read(csv_file, 'rb:GB18030:UTF-8', headers: true, header_converters: :symbol, col_sep: ',')
       skus = {}

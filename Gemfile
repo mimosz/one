@@ -5,7 +5,8 @@ gem 'thin'
 
 # Project requirements
 gem 'rake'
-gem 'sinatra-flash', :require => 'sinatra/flash'
+gem 'sinatra-flash', require: 'sinatra/flash'
+gem 'yajl-ruby', require: 'yajl'
 gem 'nestful'
 gem 'nokogiri'
 gem 'topsdk', '~> 0.0.9'

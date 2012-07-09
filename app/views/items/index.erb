@@ -6,17 +6,17 @@
   <dt>商品周转</dt>
   <dd>根据７日内，上架天数，计算销量、售价区间。</dd>
   <dt>价格</dt>
-  <dd><span class='label label-success'>&gt; 100</span>，<span class='label label-warning'>&gt; 500</span></dd>
+  <dd><span class='label label-success'>&gt; 200</span>，<span class='label label-warning'>&gt; 600</span></dd>
   <dt>库存</dt>
-  <dd><span class='label label-success'>&gt; 100</span>，<span class='label label-warning'>&lt; 10</span></dd>
+  <dd><span class='label label-success'>&gt; 100</span>，<span class='label label-warning'>&gt; 10</span></dd>
   <dt>上/下架</dt>
-  <dd><span class='label label-success'>在售</span>，<span class='label label-warning'>下架</span></dd>
+  <dd><span class='label label-success'>在售</span>，<span class='label'>下架</span></dd>
 </dl>
 <table id="items" class="table table-bordered">
   <thead>
   <% if @items.total_count > @page_size %>
 <tr>
-    <td style="text-align:right;" colspan='15'>
+    <td style="text-align:right;" colspan='14'>
      第 <%= @items.offset_value + 1 %> - <%= @items.offset_value + @page_size %>，共 <%= @items.total_count %>
     </td>
   </tr>
@@ -28,13 +28,10 @@
 	    <th>库存</th>
 		<th>周转<br />天数</th>
     <th>周转<br />量</th>
-		<th>最高<br />售价</th>
-		<th>最低<br />售价</th>
+		<th colspan="2">最高/低<br />售价</th>
 		<th>昨日<br />销售</th>
-		<th>最高<br />售价</th>
-		<th>最低<br />售价</th>
-		<th>上架</th>
-    <th>下架</th>
+		<th colspan="2">最高/低<br />售价</th>
+		<th>上/下架</th>
 		<th>图</th>
 	 	<th>&nbsp;</th>
   	</tr>
@@ -51,17 +48,24 @@
             <%= item.outer_id %>
           <% end %>
       </td>
-     <td><span class="label <%= case when item.price > 500  then 'label-warning' when item.price > 100 then 'label-success' end %>"><%= item.price %></span></td>        
-      <td><span class="badge <%= 'badge-warning' if item.num < 10 %> <%= 'badge-success' if item.num > 100 %>"><%= item.num %></span></td>
+     <td><span class="label <%= case when item.price > 600  then 'label-warning' when item.price > 200 then 'label-success' end %>"><%= item.price %></span></td>        
+      <td><span class="badge <%= 'badge-warning' if item.num > 10 %> <%= 'badge-success' if item.num > 100 %>"><%= item.num %></span></td>
 		<td><%= item.duration %></td>
     <td><%= item.range_num %></td>
+    <% if item.range_max == item.range_min %>
+      <td colspan="2" ><%= item.range_max %></td>
+      <% else %>
         <td><%= item.range_max %></td> 
         <td><%= item.range_min %></td> 
+    <% end %>
 		<td><%= item.prev_num %></td>
-		<td><%= item.prev_max %></td>
-        <td><%= item.prev_min %></td>
-    <td><%= item.list_time.strftime("%m-%d") unless item.list_time.nil? %></td>     
-    <td><%= item.delist_time.strftime("%m-%d") unless item.delist_time.nil? %></td>
+    <% if item.prev_max == item.prev_min %>
+      <td colspan="2" ><%= item.prev_max %></td>
+      <% else %>
+        <td><%= item.prev_max %></td> 
+        <td><%= item.prev_min %></td> 
+    <% end %>
+    <td><%= parse_item_status(item) %></td>
 	  <td><%= link_to image_tag(item.pic_url, width: '48px', height: '48px'), item.item_url, target: '_blank', rel: 'tooltip', title: item.title %></td>
 <td>
 	<% if item.skus.empty? %>
@@ -73,7 +77,7 @@
     </tr>
 <% unless item.skus.empty? %>
     <tr>
-      <td colspan="15" style="height:0px;padding:0px;border-top:0px;">
+      <td colspan="14" style="height:0px;padding:0px;border-top:0px;">
 	     <div id="skus-<%= item.num_iid %>" class="accordion-body collapse">
         <%= partial "items/skus", locals: { skus: item.skus } %>
       </div>
