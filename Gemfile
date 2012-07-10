@@ -13,7 +13,7 @@ gem 'topsdk', '~> 0.0.9'
 
 # Component requirements
 gem 'erubis', '~> 2.7.0'
-gem 'mongoid'
+gem 'mongoid', '~> 2.4.11'
 gem 'bson_ext', require: 'mongo'
 gem 'kaminari', git: 'git://github.com/mimosa/kaminari.git', require: 'kaminari/sinatra'
 

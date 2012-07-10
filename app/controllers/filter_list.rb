@@ -37,7 +37,14 @@ One.controllers :filter_list, :parent => :users do
     @options.merge!( filter_list: @filter_list ) unless @filter_list.empty?
     @trades = group_by(@trades, @options)
     if @trades.has_key?(:unknown_ids)
-      @items = Item.find(@trades[:unknown_ids]) unless @trades[:unknown_ids].empty?
+      unless @trades[:unknown_ids].empty?
+        @items = Item.any_in(num_iid: @trades[:unknown_ids]) 
+        if @items.empty?
+          session = User.find(user_id).session
+          Item.sync_items(session, @trades[:unknown_ids])
+          @items = Item.any_in(num_iid: @trades[:unknown_ids]) 
+        end
+      end
     end
     render 'filter_list/show'
   end

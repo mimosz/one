@@ -36,7 +36,7 @@ One.helpers do
 
   def filter_by_price(node, trade, order, options = {})
     price_range = node[:price_min]..node[:price_max]
-    if price_range > 1 # 价格过滤
+    if price_range.count > 1 # 价格过滤
       if price_range.cover?(order.price)
         filter_by_rate(node, trade, order, options)
       end
