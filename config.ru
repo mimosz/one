@@ -10,4 +10,5 @@ use NewRelic::Rack::DeveloperMode
 
 run Rack::URLMap.new \
   '/'       => Padrino.application,
-  '/resque' => Resque::Server.new
+  '/resque' => Resque::Server.new,
+  '/redmon' => Redmon::App.new
