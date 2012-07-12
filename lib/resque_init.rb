@@ -2,11 +2,12 @@
 
 # 加载配置
 resque_conf = YAML.load_file(Padrino.root('config/resque.yml'))[Padrino.env.to_s]
-# 数据库
-Resque.redis = Redis.new(resque_conf)
-Redmon.opts[:redis_url] = "redis://#{resque_conf['host']}:#{resque_conf['port']}"
+redis_url = "redis://#{resque_conf['host']}:#{resque_conf['port']}"
 # 加载计划的配置
 Resque::Scheduler.dynamic = true
+# 数据库
+Resque.redis = redis_url
+Redmon.opts[:redis_url] = redis_url
 # Resque.schedule = YAML.load_file(Padrino.root('config/resque_schedule.yml'))
 =begin
 # 添加任务

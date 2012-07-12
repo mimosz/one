@@ -3,8 +3,9 @@
 One.controllers :subusers, :parent => :users do
   
   before do
-    @start_at = params[:start_at] ? params[:start_at].to_date : Date.today
-    @end_at = params[:end_at] ? params[:end_at].to_date : Date.today
+    default_at = Date.yesterday
+    @start_at = params[:start_at] ? params[:start_at].to_date : default_at
+    @end_at = params[:end_at] ? params[:end_at].to_date : default_at
     # 时间区间
     @range = @start_at.beginning_of_day..@end_at.end_of_day
   end

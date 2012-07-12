@@ -20,8 +20,8 @@ gem 'kaminari', git: 'git://github.com/mimosa/kaminari.git', require: 'kaminari/
 # Jobs requirements
 gem 'resque', require: 'resque/server'
 gem 'resque-scheduler', '>= 2.0.0.e', require: 'resque_scheduler'
-gem 'redmon', git: 'git://github.com/mimosa/redmon.git', require: 'redmon'
 
 # Padrino Stable Gem
 gem 'padrino', '0.10.7'
 gem 'padrino-rpm'
+gem 'redmon', git: 'git://github.com/mimosa/redmon.git', require: 'redmon'

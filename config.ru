@@ -6,6 +6,7 @@
 
 require File.expand_path("../config/boot.rb", __FILE__)
 require 'new_relic/rack/developer_mode'
+require 'resque_scheduler/server'
 use NewRelic::Rack::DeveloperMode
 
 run Rack::URLMap.new \
