@@ -2,6 +2,7 @@
 
 class Item # 商品
   include Mongoid::Document
+  include Redis::Objects
   # Referenced
   belongs_to :user, foreign_key: 'nick'
   has_many :item_props, foreign_key: 'cid'  # 商品属性

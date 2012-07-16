@@ -2,6 +2,7 @@
 
 class Trade
   include Mongoid::Document
+  include Redis::Objects
   # Referenced
   belongs_to :user, foreign_key: 'seller_nick'
   belongs_to :item, foreign_key: 'num_iid'

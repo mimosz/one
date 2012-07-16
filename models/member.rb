@@ -2,6 +2,7 @@
 
 class Member 
   include Mongoid::Document
+  include Redis::Objects
 
   # Referenced
   belongs_to :trade,  foreign_key: 'biz_order_id' # 交易
