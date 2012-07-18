@@ -11,9 +11,18 @@ class Chatpeer # 聊天对象
   field :uid,         type: String  # 聊天对象用户ID
   field :date,        type: Date    # 聊天日期
   field :sub_id,      type: Integer
-  field :nick,        type: Integer
+
+  field :questions_count,   type: Integer
+  field :answers_count,     type: Integer
+  field :avg_waiting_times, type: Integer
+
+  field :nick,        type: String
   field :seller_nick, type: String
-  
+
+  def qna_rate
+   (answers.to_f/questions.to_f * 100).round(1) if questions > 0 # 未捕捉到，客人提问
+  end
+
   class << self
     
     def sync_create(session, subusers, start_at, end_at) # 賣家
@@ -25,7 +34,7 @@ class Chatpeer # 聊天对象
       }
       subusers.each do |subuser| # 客服
         wangwang_id = subuser.wangwang_id.to_s
-        new_chatpeer = {
+        current_chatpeer = {
           seller_nick: subuser.seller_nick.to_s,
           nick: subuser.nick.to_s,
           sub_id: subuser.id.to_i,
@@ -35,16 +44,10 @@ class Chatpeer # 聊天对象
           total_results = chatpeers['count'].to_i # 总数
           if total_results > 0
             chatpeers = chatpeers['chatpeers']['chatpeer']
-             if chatpeers.is_a?(Array) # 多记录
-               chatpeers.each do |chatpeer| # 聊天对象
-                  chatpeer = chatpeer.merge!(new_chatpeer)
-                  Msg.sync_create(chatpeer, options.clone)
-               end
-             end
-             if chatpeers.is_a?(Hash) # 单记录
-                chatpeer = chatpeers.merge!(new_chatpeer)
-                Msg.sync_create(chatpeer, options.clone)
-             end
+            chatpeers = [chatpeers] if chatpeers.is_a?(Hash) # 单记录
+            chatpeers.each do |chatpeer| # 聊天对象
+              Msg.sync_create( current_chatpeer.merge(chatpeer), options.clone )
+            end
           else
             puts "================================请求"
             puts options

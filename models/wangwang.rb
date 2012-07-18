@@ -47,8 +47,8 @@ class Wangwang # 客服
       puts "==========================================="
       options = { 
         session:user.session,  
-        start_date:start_at.strftime("%Y-%m-%d %H:%M:%S"),
-        end_date:end_at.strftime("%Y-%m-%d %H:%M:%S"),
+        start_date: start_at.strftime("%Y-%m-%d %H:%M:%S"),
+        end_date: end_at.strftime("%Y-%m-%d %H:%M:%S"),
       }
       user.subuser_nicks.each_slice(limit).to_a.each do |subusers| # 分组
         # 淘宝数据

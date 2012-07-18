@@ -35,7 +35,9 @@ class Msg # 聊天消息内容
         if msgs.is_a?(Hash) && msgs.has_key?('count')
           total_results = msgs['count'].to_i # 总数
           if total_results > 0
-             msgs = total_results > 1 ? msgs['msgs']['msg'] : [msgs['msgs']['msg']]
+             msgs = msgs['msgs']['msg']
+             msgs = [msgs] if msgs.is_a?(Hash) # 单记录
+             chatpeer.merge!(parse_msgs(msgs)) unless msgs.empty?
              Chatpeer.create(chatpeer.merge!(_id: chatpeer_id, msgs: msgs)) #
           else
             puts "Msg.sync_create============================请求"
@@ -50,6 +52,35 @@ class Msg # 聊天消息内容
           puts msgs
         end
       end
+    end
+
+    private
+
+    def parse_msgs(msgs)
+      # 定义基础变量
+      questions = 0 # 提问数
+      answers = 0 # 答复数
+
+      avg_waiting_times = 0 # 平均,等待时间
+      asked_at = 0 # 发起，提问时间
+
+      msgs.each do |msg|
+        talked_at = msg['time'].to_time.to_i
+        case msg['direction']
+        when 1
+          if asked_at == 0 || asked_at > talked_at
+            asked_at = talked_at   
+          end
+          questions += 1 # 累加，提问数
+        when 0
+          if asked_at > 0
+            avg_waiting_times += (talked_at - asked_at)
+            asked_at = 0 # 清除，提问时间
+          end
+          answers += 1 # 累加，答复数
+        end
+      end
+      { questions_count: questions, answers_count: answers, avg_waiting_times: avg_waiting_times }
     end
   end
 end

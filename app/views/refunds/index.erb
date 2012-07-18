@@ -20,7 +20,7 @@
 						<%= refund.title %>
 						<%= link_to "<i class='icon-share'></i>", "http://buy.tmall.com/detail/orderDetail.htm?bizOrderId=#{refund.oid}", :target => '_blank' %>
 					</td>
-					<td><%= ww_link(refund.buyer_nick) %><%= refund.buyer_nick %></td>
+					<td><%= ww_link(refund.buyer_nick) %></td>
 					<td><%= refund.num %></td>
 					<td><%= refund.refund_fee.round(2) %></td>
 					<td><%= refund_status(refund.status) %></td>
