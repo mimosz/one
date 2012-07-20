@@ -8,11 +8,21 @@ class One < Padrino::Application
   register Kaminari::Helpers::SinatraHelpers
 
   enable :sessions
-  set :login_page, "/sessions/new"
+  
+
+  set :login_page, '/sessions/new'
+  
+  configure :production do
+    register Padrino::CSRF
+    enable :prevent_request_forgery
+
+    disable :raise_errors
+    disable :show_exceptions
+  end
 
   access_control.roles_for :any do |role|
-    role.protect "/"
-    role.allow "/sessions"
+    role.protect '/'
+    role.allow '/sessions'
   end
 
   access_control.roles_for :admin do |role|
@@ -62,12 +72,12 @@ class One < Padrino::Application
   ##
   # You can manage errors like:
   #
-  #   error 404 do
-  #     render 'errors/404'
-  #   end
+  error 404 do
+    render 'errors/404'
+  end
   #
-  #   error 505 do
-  #     render 'errors/505'
-  #   end
+  error 505 do
+    render 'errors/505'
+  end
   #
 end

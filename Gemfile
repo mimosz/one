@@ -1,7 +1,14 @@
 source 'http://ruby.taobao.org/'
 
 # Server requirements
-gem 'puma'
+group :development do
+  gem 'puma'
+end
+
+group :production do
+  gem 'thin'
+  gem 'padrino-csrf'
+end
 
 # Project requirements
 gem 'rake'
@@ -21,6 +28,12 @@ gem 'kaminari', git: 'git://github.com/mimosa/kaminari.git', require: 'kaminari/
 gem 'resque', require: 'resque/server'
 gem 'resque-scheduler', '>= 2.0.0.e', require: 'resque_scheduler'
 gem 'redis-objects', require: 'redis/objects'
+
+# Test requirements
+group :test do
+  gem 'minitest', '~>2.6.0', require: 'minitest/autorun'
+  gem 'rack-test', require: 'rack/test'
+end
 
 # Padrino Stable Gem
 gem 'padrino', '0.10.7'

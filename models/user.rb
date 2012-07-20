@@ -94,7 +94,7 @@ class User
       end
     end
     duration = (end_at - start_at).to_i # 时差
-    users = subusers.where(status:1)
+    users = subusers.where(status: 1)
     case 
       when duration >= limit # 多日
         range = start_at..end_at # 时间区间

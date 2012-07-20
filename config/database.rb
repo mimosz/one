@@ -7,7 +7,7 @@ password = 800622
 
 database = case Padrino.env
   when :development then 'one_development'
-  when :production  then 'one_production'
+  when :production  then 'one_development'
   when :test        then 'one_test'
 end
 
