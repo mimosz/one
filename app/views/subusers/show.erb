@@ -1,27 +1,38 @@
 <% content_for :header do %>
   <p class="lead"><%= short_date(@timeline) %>  <%= @id %>接待了<%= @chatpeers.count%>位客人。</p>
 <% end %>
-<div class="accordion" id="chatpeers">
-  <% @chatpeers.each do |chatpeer| %>
-    <div class="accordion-group">
-      <div class="accordion-heading">
-        <a class="accordion-toggle" data-toggle="collapse" data-parent="#chatpeers" href="#msgs-<%= chatpeer.uid %>-<%= chatpeer.date.to_time.to_i %>"><%= chatpeer.uid %><span class="badge pull-right"><%= chatpeer.msgs.count %></span></a>
+<table id="chatpeers" class="table table-bordered">
+  <thead>
+  <tr>
+    <th>旺旺</th>
+      <th>提问</th>
+      <th>答复</th>
+      <th>答复率</th>
+      <th>平均等待</th>
+    </tr>
+  </thead>
+  <% unless @chatpeers.empty? %>
+    <% @chatpeers.each do |chatpeer| %>
+<tbody class="accordion-group"> 
+    <tr id="chatpeer-<%= chatpeer.id %>" class="accordion-heading">
+      <td><%= chatpeer.uid %></td>
+    <td><%= chatpeer.questions_count %></td>
+    <td><%= chatpeer.answers_count %></td>
+    <td><%= chatpeer.qna_rate %></td>
+<td>
+  <a class="btn btn-mini" data-toggle="collapse" data-parent="#chatpeers" href="#msgs-<%= chatpeer.id %>"><%= chatpeer.avg_waiting_times %></a>
+  </td>
+    </tr>
+<% unless chatpeer.msgs.empty? %>
+    <tr>
+      <td colspan="5" style="height:0px;padding:0px;border-top:0px;">
+       <div id="msgs-<%= chatpeer.id %>" class="accordion-body collapse">
+        <%= partial "subusers/msgs", locals: { msgs: chatpeer.msgs } %>
       </div>
-      <div id="msgs-<%= chatpeer.uid %>-<%= chatpeer.date.to_time.to_i %>" class="accordion-body collapse">
-        <div class="accordion-inner">
-          <% chatpeer.msgs.each do |msg| %>
-            <div class="well">
-              <span class="pull-right"> <%= msg.talk_at %></span>
-              <% if msg.direction > 0 %>
-                <span class="label label-info">问</span>
-              <% else %>
-                <span class="label label-success">答</span>
-              <% end %>
-              <blockquote><%= msg.content %></blockquote>
-            </div>
-          <% end %>
-        </div>
-      </div>
-    </div>
+      </td>
+    </tr>
+<% end %>
   <% end %>
-</div>
+</tbody>
+ <% end %>
+</table>

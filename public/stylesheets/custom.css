@@ -830,3 +830,7 @@ padding-top: 19px;
 text-align: right;
 background: url('http://a.tbcdn.cn/apps/tmall/mui/page/img/page.png') no-repeat right 0;
 }
+
+.table thead tr td{
+  text-align: center;
+}

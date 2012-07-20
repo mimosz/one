@@ -7,18 +7,26 @@
 
   <table id="subusers" class="table table-bordered">
     <thead>
-      <tr>
-      <th>旺旺</th>
-      <th>购买</th>
+    <tr>
+      <th rowspan='2'>旺旺</th>
+      <td colspan='4'>转化</td>
+      <td colspan='3'>业绩</td>
+      <td colspan='5'>压力</td>
+      <th rowspan='2'>#</th>
+    </tr>
+    <tr>
+      <th>未</th>
       <th>接待</th>
-      <th>转化率</th>
-      <th>销售额</th>
-      <th>商品数</th>
-      <th>客单价</th>
-      <th>未接待</th>
-      <th>平均等待</th>
-      <th>在线时间</th>
-      <th>#</th>
+      <th>买</th>
+      <th>率</th>
+      <th>钱</th>
+      <th>量</th>
+      <th>客单</th>
+      <th>问</th>
+      <th>答</th>
+      <th>率</th>
+      <th>平均<br />等待</th>
+      <th>在线<br />时间</th>
     </tr>
   </thead>
     <% unless @wangwangs.empty? %>
@@ -28,20 +36,23 @@
       <% unless divider_date == wangwang.date %>
         <% divider_date = wangwang.date %>
         <tr>
-          <th colspan="11">
+          <th colspan='14'>
             <span class="badge badge-success"><%= short_date(divider_date.to_time) %></span>
           </th>
         </tr>
       <% end %>
       <tr>
         <td><%= wangwang.nick %></td>
-        <td><%= wangwang.buyer_count %></td>
+        <td><%= wangwang.non_reply_num %></td>
         <td><%= wangwang.reply_num %></td>
+        <td><%= wangwang.buyer_count %></td>
         <td><%= "#{wangwang.pay_rate}%" %></td>
         <td class="payment"><%= wangwang.payment.round(2) %></td>
         <td><%= wangwang.num %></td>
         <td><%= wangwang.price_avg %></td>
-        <td><%= wangwang.non_reply_num %></td>
+        <td><%= wangwang.questions_count %></td>
+        <td><%= wangwang.answers_count %></td>
+        <td><%= "#{wangwang.qna_rate}%" %></td>
         <td><%= wangwang.avg_waiting_times %></td>
         <td><%= wangwang.online_hours %></td>
         <td>

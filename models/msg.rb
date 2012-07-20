@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 require 'digest/sha1'
+require 'digest/bubblebabble'
 
 class Msg # 聊天消息内容
   include Mongoid::Document
@@ -18,7 +19,8 @@ class Msg # 聊天消息内容
   
   class << self
     def sync_create(chatpeer, options) # 賣家
-      chatpeer_id = Digest::SHA1.hexdigest("--#{chatpeer['sub_id']}--#{chatpeer['uid']}--#{chatpeer['date']}--")
+      chatpeer_id = "#{chatpeer[:sub_id]}-#{chatpeer['uid']}-#{chatpeer['date'].to_time.to_i}"
+      chatpeer_id = Digest.bubblebabble(Digest::SHA1::hexdigest(chatpeer_id)[8..12]) 
       if Chatpeer.where(_id: chatpeer_id).last
         puts "Msg.sync_create============================提示"
         puts chatpeer
@@ -37,7 +39,7 @@ class Msg # 聊天消息内容
           if total_results > 0
              msgs = msgs['msgs']['msg']
              msgs = [msgs] if msgs.is_a?(Hash) # 单记录
-             chatpeer.merge!(parse_msgs(msgs)) unless msgs.empty?
+             chatpeer.merge!(parse_msgs(msgs))
              Chatpeer.create(chatpeer.merge!(_id: chatpeer_id, msgs: msgs)) #
           else
             puts "Msg.sync_create============================请求"
@@ -63,10 +65,9 @@ class Msg # 聊天消息内容
 
       avg_waiting_times = 0 # 平均,等待时间
       asked_at = 0 # 发起，提问时间
-
       msgs.each do |msg|
         talked_at = msg['time'].to_time.to_i
-        case msg['direction']
+        case msg['direction'].to_i
         when 1
           if asked_at == 0 || asked_at > talked_at
             asked_at = talked_at   

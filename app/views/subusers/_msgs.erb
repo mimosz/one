@@ -1,0 +1,13 @@
+<div class="accordion-inner">
+  <% msgs.each do |msg| %>
+    <div class="well">
+      <span class="pull-right"> <%= msg.talk_at %></span>
+      <% if msg.direction > 0 %>
+        <span class="label label-info">问</span>
+      <% else %>
+        <span class="label label-success">答</span>
+      <% end %>
+      <blockquote><%= msg.content %></blockquote>
+    </div>
+  <% end %>
+</div>

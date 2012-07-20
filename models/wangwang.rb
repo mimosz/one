@@ -12,6 +12,8 @@ class Wangwang # 客服
   field :avg_waiting_times,  type: Integer, default: 0
   field :online_times,       type: Integer, default: 0
   field :loginlogs_count,    type: Integer, default: 0
+  field :questions_count,    type: Integer, default: 0
+  field :answers_count,      type: Integer, default: 0
   field :num,                type: Integer, default: 0
   field :price,              type: Float,   default: 0
   field :payment,            type: Float,   default: 0
@@ -26,17 +28,21 @@ class Wangwang # 客服
   def buyer_count
     buyer_nicks.count
   end
+
+  def qna_rate
+   (answers_count.to_f/questions_count.to_f * 100).round(1) if questions_count > 0 # 未捕捉到，客人提问
+  end
   
   def pay_rate
     (buyer_count/reply_num.to_f*100).round(2) if buyer_count > 0
   end
 
   def price_avg
-    (payment.to_f/num.to_f).round(2)
+    (payment.to_f/num.to_f).round(2) if payment > 0
   end
 	
 	def online_hours
-	  (online_times.to_f/60/60).round(1)
+	  (online_times.to_f/60/60).round(1) if online_times > 0
 	end
   
   class << self
@@ -54,7 +60,7 @@ class Wangwang # 客服
         # 淘宝数据
         wangwang_ids = nick_to_wws(subusers, user.nick).join(',') # 转换格式
         methods.each do |method|
-          puts "==============#{method}================="
+          puts "Wangwang。sync_create============================#{method}"
           results = Topsdk.get_with(options.merge!({method: method, service_staff_id: wangwang_ids}))
           results = get_data(results)
           if results.is_a?(Array) # 多记录
@@ -71,15 +77,48 @@ class Wangwang # 客服
        wangwangs = where(date: start_at, seller_nick: user.nick).also_in(nick:subusers) # 已有记录
        unless wangwangs.empty?
         wangwangs.each do |wangwang|
+          # 元数据
+          meta = {
+            non_reply_nicks: [],
+            reply_nicks: [],
+            questions_count: 0,
+            answers_count: 0,
+            avg_waiting_times: 0,
+            reply_num: 0,
+            non_reply_num: 0
+          }
+          # 交易记录
+          trades = []
           # 聊天对象
-          chatpeers = Chatpeer.where(date: start_at, nick: wangwang.nick).distinct('uid')
-          non_reply_nicks = []
-          non_reply_nicks = ww_to_nicks(wangwang.non_reply_customId.split(',')) unless wangwang.non_reply_customId.nil?
-          reply_nicks = ww_to_nicks(chatpeers) - non_reply_nicks
-          reply_nicks.uniq!
-          trades = user.trades.where({pay_time:start_at..end_at}).also_in(buyer_nick:reply_nicks)
-          buyers = trades_sum(trades) # 买家信息
-          wangwang.update_attributes(buyers.merge({non_reply_nicks:non_reply_nicks, reply_nicks:reply_nicks}))
+          chatpeers = Chatpeer.where(date: start_at, seller_nick: wangwang.seller_nick, nick: wangwang.nick)
+          unless chatpeers.empty?
+            chatpeers.each do |chatpeer|
+              meta[:answers_count] += chatpeer.answers_count
+              meta[:questions_count] += chatpeer.questions_count
+              meta[:avg_waiting_times] += chatpeer.avg_waiting_times
+              if chatpeer.answers_count > 0 # 答复数
+                meta[:reply_nicks] << chatpeer.uid
+              else
+                meta[:non_reply_nicks] << chatpeer.uid
+              end
+            end
+            # 未接待的客人
+            unless meta[:non_reply_nicks].empty?
+              meta[:non_reply_nicks] = ww_to_nicks(meta[:non_reply_nicks]).uniq
+              meta[:non_reply_num] = meta[:non_reply_nicks].count
+            end
+            # 接待的客人
+            unless meta[:reply_nicks].empty?
+              meta[:reply_nicks] = ww_to_nicks(meta[:reply_nicks]).uniq
+              meta[:reply_num] = meta[:reply_nicks].count
+              # 加权平均
+              meta[:avg_waiting_times] = (meta[:avg_waiting_times] / meta[:reply_num].to_f).round
+              # 通过接待的客人昵称，获取交易记录
+              trades = user.trades.where({pay_time:start_at..end_at}).also_in(buyer_nick: meta[:reply_nicks])
+            end
+            buyers = trades_sum(trades) # 买家信息
+            wangwang.update_attributes(buyers.merge(meta))
+          end
         end
        end
       end
@@ -159,9 +198,9 @@ class Wangwang # 客服
     
     def methods
       [
-        'taobao.wangwang.eservice.receivenum.get', # 接待
-        'taobao.wangwang.eservice.noreplynum.get', # 未回复
-        'taobao.wangwang.eservice.avgwaittime.get', # 平均响应时间
+        # 'taobao.wangwang.eservice.receivenum.get', # 接待
+        # 'taobao.wangwang.eservice.noreplynum.get', # 未回复
+        # 'taobao.wangwang.eservice.avgwaittime.get', # 平均响应时间
         'taobao.wangwang.eservice.onlinetime.get', # 在线时长
       ]
     end
