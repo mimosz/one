@@ -22,17 +22,16 @@
   </thead>
 <tbody>  
 <% @trades[:state].each do |id, state| # 循环货品 %>
-<% total = state[:total] %>
+<% total = state[:total] || state[:sale] %>
     <tr class="odd">
       <td><span class="label"><%= state[:name] %></span></td>
-      <td><%= total[:price].round(2)%></td>
-      <td><%= total[:payment].round(2)%></td>
-      <td><%= total[:total_fee].round(2)%></td>
-      <td><%= total[:discount_fee].round(2)%></td>
-      <td><%= total[:adjust_fee].round(2)%></td>
-      <td><%= total[:num]%></td>
+      <td><%= parse_sales(state, :price, 2) %></td>
+      <td><%= parse_sales(state, :payment, 2) %></td>
+      <td><%= parse_sales(state, :total_fee, 2) %></td>
+      <td><%= parse_sales(state, :discount_fee, 2) %></td>
+      <td><%= parse_sales(state, :adjust_fee, 2) %></td>
+      <td><%= parse_sales(state) %></td>
     </tr>
 <% end %> 
 </tbody>
 </table>
-<%= @trades %>

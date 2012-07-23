@@ -14,6 +14,16 @@
 			<label class="btn <%= 'active' if @field == 'end_time' %>" for="end_time">结束</label>
 		</div>
 	</div>
+	<div class="control-group">
+		<div class="btn-group" >
+			<input type="radio" name="timeline" id="timeline" <%= 'checked' if @timeline %>  />
+			<label class="btn <%= 'active' if @timeline %>" for="timeline">时间轴</label>
+			<input type="radio" name="sku" id="sku" <%= 'checked' if @sku %>  />
+			<label class="btn <%= 'active' if @sku %>" for="sku">SKU</label>
+			<input type="radio" name="state" id="state" <%= 'checked' if @state %>  />
+			<label class="btn <%= 'active' if @state %>" for="state">区域</label>
+		</div>
+	</div>
 	<%= partial('shared/form_calendar', locals: {label: '销售区间：'}) %>
 	<div class="form-actions">
 		<%= submit_tag '筛选', class:'btn btn-primary' %>

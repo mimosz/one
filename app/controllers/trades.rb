@@ -2,6 +2,8 @@
 
 One.controllers :trades, parent: :users do
   before do
+    @conditions = { seller_nick: user_id }
+    @options = { item: true }
     # 发货、创建
     @field = 'pay_time' # 按支付（默认）
     unless params[:field].blank?
@@ -17,22 +19,35 @@ One.controllers :trades, parent: :users do
       @end_at = params[:end_at].to_date
     end
     @range = @start_at.beginning_of_day..@end_at.end_of_day
-    @trades = Trade.where(seller_nick: user_id, @field.to_sym => @range)
+    @trades = Trade.where( @conditions.merge( @field.to_sym => @range) )
+    unless params[:timeline].blank?
+      @timeline = { field: @field, unit: 'week'}
+      @options.merge!(timeline: @timeline)
+    end
+    unless params[:sku].blank?
+      @sku = true
+      @options.merge!(sku: @sku)
+    end
+    unless params[:status].blank?
+      @status = true
+      @options.merge!(status: @status)
+    end
+    unless params[:state].blank?
+      @state = true
+      @options.merge!(state: @state)
+    end
   end
 
   get :index, provides: [:html, :csv] do
     case content_type
       when :html
-        @filter_list = FilterList.where(seller_nick: user_id, _id: '4f8120bf7d7baa025d000020')
-        options = {
-          item: true,
-          sku: true,
-          # status: true,
-          # state: true,
-          # timeline: { field: @field, unit: 'week'},
-          # filter_list: @filter_list,
-        }
-        @trades = group_by(@trades, options)
+        # item: true,
+        # sku: true,
+        # status: true,
+        # state: true,
+        # timeline: { field: @field, unit: 'week'},
+        # filter_list: @filter_list,
+        @trades = group_by(@trades, @options)
         render 'trades/index'
       when :csv
         if @trades.empty?

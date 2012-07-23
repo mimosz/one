@@ -48,7 +48,7 @@ One.helpers do
     total = data[:total][field].round(round) if data.has_key?(:total)
     case
      when (sale && total)
-      content_tag(:a, (sale + total), rel: 'tooltip', title: "#{total} + 特买（#{sale}）")
+      content_tag(:a, (sale + total).round(round), rel: 'tooltip', title: "#{total} + 特买（#{sale}）")
      when sale
       sale_tag
      else
@@ -204,11 +204,11 @@ end
     item = items[order.num_iid] # 货品
     trade_sum(item, trade, order, options)
     case
-    when node.has_key?(:timeline)
+    when options.has_key?(:timeline)
       timeline_by(item, trade, order, options) 
-    when node.has_key?(:state)
+    when options.has_key?(:state)
       state_by(item, trade, order, options)
-    when node.has_key?(:sku)
+    when options.has_key?(:sku)
       sku_by(item, trade, order, options)
     end
   end
@@ -220,9 +220,9 @@ end
     sku = skus[order.sku_id]
     trade_sum(sku, trade, order, options)
     case
-    when node.has_key?(:timeline)
+    when options.has_key?(:timeline)
       timeline_by(sku, trade, order, options) 
-    when node.has_key?(:state)
+    when options.has_key?(:state)
       state_by(sku, trade, order, options)
     end
   end
