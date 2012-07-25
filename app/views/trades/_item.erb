@@ -2,12 +2,25 @@
   <thead>
     <tr>
       <th colspan="2"></th>
-      <th><%= total[:price].round(2)%></th>
-      <th><%= total[:payment].round(2)%></th>
-      <th><%= total[:total_fee].round(2)%></th>
-      <th><%= total[:discount_fee].round(2)%></th>
+      <% price = total[:price].round(2) %>
+      <% payment = total[:payment].round(2) %>
+      <% total_fee = total[:total_fee].round(2) %>
+      <% discount_fee = total[:discount_fee].round(2)%>
+      <% payment_rate = (payment/total_fee*100).round(1) %>
+      <% discount_rate = (discount_fee/price*100).round(1) %>
+      <th><%= price %></th>
+      <th><%= add_tooltip(payment, "付款率：#{payment_rate}%") %></th>
+      <th><%= total_fee %></th>
+      <th><%= add_tooltip(discount_fee, "折扣率：#{discount_rate}%") %></th>
       <th><%= total[:adjust_fee].round(2)%></th>
-      <th><%= total[:num]%></th>
+      <% num = total[:num] %>
+      <% refund_num = total[:refund_num] %>
+      <% refund_rate = (refund_num.to_f/num*100).round(1) %>
+      <th><%= num %></th>
+      <th><%= add_tooltip(refund_num, "退货率：#{refund_rate}%")%></th>
+      <% refund_fee = total[:refund_fee].round(2) %>
+      <% refund_rate = (refund_fee/payment*100).round(1) %>
+      <th><%= add_tooltip(refund_fee, "退款率：#{refund_rate}%")%></th>
     </tr>
     <tr>
       <th>编号</th>
@@ -18,6 +31,8 @@
       <th>折扣</th>
       <th>调价</th>
       <th>数量</th>
+      <th>退货</th>
+      <th>退款</th>
     </tr>
   </thead>
 <tbody>  
@@ -33,6 +48,8 @@
       <td><%= total[:discount_fee].round(2)%></td>
       <td><%= total[:adjust_fee].round(2)%></td>
       <td><%= total[:num]%></td>
+      <td><%= total[:refund_num]%></td>
+      <td><%= total[:refund_fee].round(2)%></td>
     </tr>
     <% if item.has_key?(:skus) && !item[:skus].empty? %>
       <% item[:skus].each do |id, sku| # 循环单品 %>
@@ -47,6 +64,8 @@
             <td><%= total[:discount_fee].round(2)%></td>
             <td><%= total[:adjust_fee].round(2)%></td>
             <td><%= total[:num]%></td>
+            <td><%= total[:refund_num]%></td>
+            <td><%= total[:refund_fee].round(2)%></td>
           </tr>
         <% end %>
       <% end %>

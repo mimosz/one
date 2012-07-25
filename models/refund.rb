@@ -37,9 +37,25 @@ class Refund
   key :refund_id
   
   default_scope desc(:created, :modified) # 默认排序
+
+  after_save :order_update
   
   def modified_at
     modified.in_time_zone.strftime("%Y-%m-%d %H:%M:%S")
+  end
+
+  def order_update
+      if trade
+        order = trade.orders.where(_id: oid).last
+        if status == 'CLOSED'
+          order.refund_num = 0
+          order.refund_fee = 0
+        else
+          order.refund_num = num if has_good_return
+          order.refund_fee = refund_fee
+        end
+        order.save
+      end
   end
   
   class << self

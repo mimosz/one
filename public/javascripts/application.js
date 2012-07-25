@@ -29,6 +29,7 @@
 				colorMap: [[145,89,117], [102,0,51]]
 			});
 		 $('[rel=popover]').popover({placement: 'bottom'});
+		 $('[rel=tooltip]').tooltip({});
 		 $('label.btn.active').each(function() {
 		        var label = $(this), inputId = label.attr('for');
 				$('#' + inputId).prop('checked', true);

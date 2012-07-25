@@ -11,7 +11,9 @@ class Order # 訂單
   field :num_iid,             type: Integer
   field :oid,                 type: Integer
   field :refund_id,           type: Integer
+  field :refund_num,          type: Integer, default: 0
   
+  field :refund_fee,          type: Float, default: 0
   field :adjust_fee,          type: Float
   field :discount_fee,        type: Float
   field :payment,             type: Float

@@ -9,7 +9,7 @@ One.helpers do
     return file_csv if File.exist?(file_csv)
     unless trades.empty?
       require 'csv'
-      header_row = ['订单号', '品牌特卖', '超卖', '支付时间', '货号', 'SKU', '属性', '数量', '单价', '价格', '折扣', '实付', '折扣率', '付款率', '买家', '发货时间']
+      header_row = ['订单号', '品牌特卖', '超卖', '支付时间', '货号', 'SKU', '属性', '数量', '单价', '价格', '折扣', '实付', '折扣率', '付款率', '买家', '发货时间', '退货数', '退款']
       CSV.open(file_csv, "wb:GB18030", :col_sep=>',') do |csv|
         csv << header_row
         trades.each do |t|
@@ -30,13 +30,19 @@ One.helpers do
               o.discount_rate,
               o.payment_rate,
               "=HYPERLINK(\"http://www.taobao.com/webww/ww.php?ver=3&touid=#{t.buyer_nick}&siteid=cntaobao\",\"#{t.buyer_nick}\")",
-              full_date(t.consign_time)
+              full_date(t.consign_time),
+              o.refund_num,
+              o.refund_fee,
             ]
           end
         end
       end
       return file_csv
     end
+  end
+
+  def add_tooltip(content, title)
+    content_tag(:a, content, rel: 'tooltip', title: title)
   end
 
   def parse_sales(data, field = :num, round = 0)
@@ -48,7 +54,7 @@ One.helpers do
     total = data[:total][field].round(round) if data.has_key?(:total)
     case
      when (sale && total)
-      content_tag(:a, (sale + total).round(round), rel: 'tooltip', title: "#{total} + 特买（#{sale}）")
+      add_tooltip((sale + total).round(round), "#{total} + #{sale}（特买）")
      when sale
       sale_tag
      else
@@ -270,6 +276,8 @@ end
     set[:total_fee] += order.total_fee
     set[:adjust_fee] += order.adjust_fee
     set[:discount_fee] += order.discount_fee
+    set[:refund_num] += order.refund_num
+    set[:refund_fee] += order.refund_fee
     if fixed_price[order.num_iid]
       set[:fixed_price] += (fixed_price[order.num_iid] * order.num).to_f 
     end
@@ -278,7 +286,7 @@ end
   end
   
   def trade_meta
-    { price:0, payment:0, total_fee:0, discount_fee:0, adjust_fee:0, num:0, fixed_price:0 }
+    { price:0, payment:0, total_fee:0, discount_fee:0, adjust_fee:0, num:0, fixed_price:0, refund_num:0, refund_fee:0 }
   end
 
   def fixed_price(item_ids=nil) # 吊牌价
