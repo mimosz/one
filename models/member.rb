@@ -43,21 +43,62 @@ class Member
     if synced_at.nil?
       trade = Trade.where(tid: biz_order_id).last
       if trade
+        current_receiver = nil
         self.synced_at = Time.now
-        self.receivers << Receiver.new({
-          num: trade.num,
-          num_iid: trade.num_iid,
-          tid: trade.tid,
-          receiver_address: trade.receiver_address,
-          receiver_city: trade.receiver_city,
-          receiver_district: trade.receiver_district,
-          receiver_mobile: trade.receiver_mobile,
-          receiver_name: trade.receiver_name,
-          receiver_state: trade.receiver_state, 
-          receiver_zip: trade.receiver_zip,
-        })
+        unless self.receivers.empty?
+          current_receiver = self.receivers.where(_id: trade.tid).last
+        end
+        if current_receiver.nil?
+          specs = mobile_specs(trade.receiver_mobile)
+          self.receivers << Receiver.new({
+            num: trade.num,
+            num_iid: trade.num_iid,
+            tid: trade.tid,
+            receiver_address: trade.receiver_address,
+            receiver_city: trade.receiver_city,
+            receiver_district: trade.receiver_district,
+            receiver_mobile: trade.receiver_mobile,
+            receiver_name: trade.receiver_name,
+            receiver_state: trade.receiver_state, 
+            receiver_zip: trade.receiver_zip,
+            mobile_carrier: specs[:carrier],
+            mobile_network: specs[:network],
+          })
+        end
         self.save
       end
+    end
+  end
+
+  def mobile_specs(mobile)
+    mobile = mobile.to_s[0..2].to_i # 号段
+    china_mobile = { 
+      '2G' => [134, 135, 136, 137, 138, 139, 150, 151, 152, 157, 158, 159, 182], 
+      '3G' => [187, 188]
+    }
+    china_unicom = { 
+      '2G' => [130, 131, 132, 155, 156], 
+      '3G' => [185, 186]
+    }
+    china_telecom = { 
+      '2G' => [133, 153], 
+      '3G' => [180, 189]
+    }
+    case
+    when china_mobile['2G'].include?(mobile)
+      { carrier: '中国移动', network: '2G' }
+    when china_mobile['3G'].include?(mobile)
+      { carrier: '中国移动', network: '3G' }
+    when china_unicom['2G'].include?(mobile)
+      { carrier: '中国联通', network: '2G' }
+    when china_unicom['3G'].include?(mobile)
+      { carrier: '中国联通', network: '3G' }
+    when china_telecom['2G'].include?(mobile)
+      { carrier: '中国电信', network: '2G' }
+    when china_telecom['3G'].include?(mobile)
+      { carrier: '中国电信', network: '3G' }
+    else
+      { carrier: mobile, network: mobile }
     end
   end
 

@@ -15,6 +15,8 @@ class Receiver
   field :receiver_name,     type: String
   field :receiver_state,    type: String 
   field :receiver_zip,      type: String
+  field :mobile_carrier,    type: String
+  field :mobile_network,    type: String
 
   key :tid
 
