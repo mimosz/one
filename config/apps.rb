@@ -34,3 +34,5 @@ end
 
 # Mounts the core application for this project
 Padrino.mount("One").to('/')
+# The line added to make Padrino add the Grape API as a subapp
+Padrino.mount("API", :app_class => "APIS::API").to('/api')

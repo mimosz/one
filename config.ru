@@ -13,3 +13,6 @@ run Rack::URLMap.new \
   '/'       => Padrino.application,
   '/resque' => Resque::Server.new,
   '/redmon' => Redmon::App.new
+
+memory_usage = (`ps -o rss= -p #{$$}`.to_i / 1024.00).round(2)
+puts "=> Memory usage: #{memory_usage} Mb"

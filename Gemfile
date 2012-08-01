@@ -38,4 +38,5 @@ end
 # Padrino Stable Gem
 gem 'padrino', '0.10.7'
 gem 'padrino-rpm'
+gem 'grape'
 gem 'redmon', git: 'git://github.com/mimosa/redmon.git', require: 'redmon'

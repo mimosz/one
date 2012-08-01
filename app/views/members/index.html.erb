@@ -61,6 +61,8 @@
             <th>市</th>
             <th>收货人</th>
             <th>手机</th>
+            <th>运营商</th>
+            <th>网络</th>
           </tr>
         </thead>
         <tbody>
@@ -73,6 +75,8 @@
 <td><%= receiver.receiver_city %></td>
 <td><%= receiver.receiver_name %></td>
 <td><%= receiver.receiver_mobile %></td>
+<td><%= receiver.mobile_carrier %></td>
+<td><%= receiver.mobile_network %></td>
 </tr>
 <% end %>
 </tbody>
