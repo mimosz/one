@@ -25,12 +25,4 @@ One.controllers :subusers, :parent => :users do
       redirect url(:users, :show, id:@user_id)
     end
   end
-  
-  get :show, :with => [:id, :date] do
-    @id = params[:id].force_encoding('utf-8') # 店铺ID
-    @date = params[:date].to_time
-    @chatpeers = Chatpeer.where(date: @date, seller_nick: user_id, nick: @id)
-    render 'subusers/show'
-  end
-
 end

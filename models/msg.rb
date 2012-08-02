@@ -14,7 +14,7 @@ class Msg # 聊天消息内容
   # default_scope desc(:time) # 默认排序
 
   def talk_at
-   time.in_time_zone.strftime("%m月%d日 %H时%M分%S秒") if time
+   time.in_time_zone.strftime("%H时%M分") if time
   end
   
   class << self

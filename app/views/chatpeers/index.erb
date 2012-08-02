@@ -5,24 +5,24 @@
   <% unless @chatpeers.empty? %>
     <% date = nil %>
       <% @chatpeers.each do |chatpeer| %>
-        <% if chatpeer.date.strftime("%Y年%m月%d日") != date %>
+        <% if chatpeer.talk_at != date %>
         <%= '</div>' unless date.nil? %>
-        <% date = chatpeer.date.strftime("%Y年%m月%d日") %>
+        <% date = chatpeer.talk_at %>
         <%= content_tag(:div, date, class: 'alert alert-success', style: 'text-align: center;') %>
         <div class='well'>
         <% end %>
         <% unless chatpeer.msgs.empty? %>
           <% time = nil %>
           <% chatpeer.msgs.each do |msg| %>
-            <% if msg.time.strftime("%H时%M分") != time %>
-              <% time = msg.time.strftime("%H时%M分") %>
+            <% if msg.talk_at != time %>
+              <% time = msg.talk_at %>
               <%= content_tag(:div, time, class: 'code', style: 'text-align: center;') %>
             <% end %>
           <div class='box' style='background-color: #fff;'>
             <% if msg.direction > 0 %>
               <blockquote style='margin: 0px;'>
                 <p><%= msg.content %></p>
-                <small><%= @uid %></small>
+                <small><%= ww_link(chatpeer.buyer_nick) %> <%= chatlog_link(chatpeer.buyer_nick) %></small>
               </blockquote>
             <% else %>
               <blockquote class="pull-right" style='margin: 0px;'>

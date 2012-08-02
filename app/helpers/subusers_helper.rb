@@ -5,8 +5,8 @@ One.helpers do
     link_to( ww_image(nick) + nick, "http://www.taobao.com/webww/ww.php?ver=3&touid=#{nick}&siteid=cntaobao&status=2&charset=utf-8", target: '_blank')
   end
 
-  def chatlog_link(nick)
-    link_to( "<i class='icon-comment'></i>聊天记录", url(:chatpeers, :show, :user_id => user_id, :uid => nick), class: 'btn btn-mini', target: '_blank')
+  def chatlog_link(nick, title='聊天记录')
+    link_to( title + "<i class='icon-comment'></i>" , url( :chatpeers, :show, user_id: user_id, uid: nick ), class: 'btn btn-mini', target: '_blank')
   end
   
   def ww_image(nick)

@@ -23,6 +23,14 @@ class Chatpeer # 聊天对象
    (answers_count.to_f/questions_count.to_f * 100).round(1) if questions_count > 0 # 未捕捉到，客人提问
   end
 
+  def talk_at
+   date.to_time.in_time_zone.strftime("%Y年%m月%d日") if date
+  end
+
+  def buyer_nick
+    uid.gsub('cntaobao','')
+  end
+
   class << self
     
     def sync_create(session, subusers, start_at, end_at) # 賣家

@@ -55,8 +55,7 @@
         <td><%= "#{wangwang.qna_rate}%" %></td>
         <td><%= wangwang.avg_waiting_times %></td>
         <td><%= wangwang.online_hours %></td>
-        <td>
-          <%=link_to "聊天记录<i class='icon-share'></i>", url(:subusers, :show, user_id:@user_id, id:wangwang.nick, date:wangwang.date), :method => :get, :class => "btn btn-mini", :target => '_blank' %>
+        <td><%= link_to( "聊天记录" , url( :chatpeers, :show, user_id: user_id, uid: wangwang.nick, start_at: wangwang.talk_at ), class: 'btn btn-mini', target: '_blank') %>
         </td>
       </tr>
     <% end %>

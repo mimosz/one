@@ -44,6 +44,10 @@ class Wangwang # 客服
 	def online_hours
 	  (online_times.to_f/60/60).round(1) if online_times > 0
 	end
+
+  def talk_at
+   date.to_time.in_time_zone.strftime("%Y-%m-%d") if date
+  end
   
   class << self
     
