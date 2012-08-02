@@ -6,7 +6,7 @@
 	<thead>
 		<tr>
 			<th>货品</th>
-			<th>买家</th>
+			<th colspan="2">买家</th>
 			<th>数量</th>
 			<th>价格</th>
 			<th>状态</th>
@@ -21,19 +21,19 @@
 						<%= link_to "<i class='icon-share'></i>", "http://buy.tmall.com/detail/orderDetail.htm?bizOrderId=#{refund.oid}", :target => '_blank' %>
 					</td>
 					<td><%= ww_link(refund.buyer_nick) %></td>
+					<td><%= chatlog_link(refund.buyer_nick) %></td>
 					<td><%= refund.num %></td>
 					<td><%= refund.refund_fee.round(2) %></td>
-					<td><%= refund_status(refund.status) %></td>
+					<td><%= refund_status(refund.status, refund.has_good_return) %></td>
 				</tr>
-				<% if refund.has_good_return && refund.status == 'WAIT_SELLER_CONFIRM_GOODS' %>
-					<tr>
-						<td colspan="5"><span class='label label-important'><%= refund.company_name %></span><code><%= refund.sid %></code></td>
-					</tr>
-				<% elsif refund.reason != '七天无理由退换货' %>
-					<tr>
-						<td colspan="5"><span class='label'><%= refund.reason %></span><blockquote><%= refund.desc %></blockquote></td>
-					</tr>
-				<% end %>
+				<tr>
+						<td colspan="6">
+							<% if refund.status == 'WAIT_SELLER_CONFIRM_GOODS' %>
+								<span class='label label-important'><%= refund.company_name %></span><code><%= refund.sid %></code><hr />
+							<% end %>
+							<span class='label'><%= refund.reason %></span><blockquote><%= refund.desc %></blockquote><br />
+						</td>
+				</tr>
 			</tbody>
 		<% end %>
 	<% end %> 

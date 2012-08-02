@@ -33,10 +33,14 @@ One.helpers do
     end
   end
 
-  def refund_status(status)
+  def refund_status(status, has_good_return)
     case status
       when /WAIT_SELLER_AGREE/
-        '待确认'
+        if has_good_return
+          content_tag(:span, '待确认', {class: 'label label-success'})
+        else
+          '待确认'
+        end
       when /WAIT_BUYER_RETURN_GOODS/
         '待退货'
       when /WAIT_SELLER_CONFIRM_GOODS/

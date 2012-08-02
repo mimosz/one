@@ -1,3 +1,4 @@
+
 /* Body and structure
 -------------------------------------------------- */
 body {
@@ -833,4 +834,18 @@ background: url('http://a.tbcdn.cn/apps/tmall/mui/page/img/page.png') no-repeat 
 
 .table thead tr td{
   text-align: center;
+}
+.box {
+  width: 100%;
+  clear: both;
+  display: inline-table;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 9px;
+}
+.box {
+  border: 1px solid #ddd;
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
 }

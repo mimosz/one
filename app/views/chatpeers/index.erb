@@ -1,0 +1,38 @@
+<% content_for :header do %>
+  <p class="lead">聊天记录</p>
+<% end %>
+<div class='span12' id='chatpeers'>
+  <% unless @chatpeers.empty? %>
+    <% date = nil %>
+      <% @chatpeers.each do |chatpeer| %>
+        <% if chatpeer.date.strftime("%Y年%m月%d日") != date %>
+        <%= '</div>' unless date.nil? %>
+        <% date = chatpeer.date.strftime("%Y年%m月%d日") %>
+        <%= content_tag(:div, date, class: 'alert alert-success', style: 'text-align: center;') %>
+        <div class='well'>
+        <% end %>
+        <% unless chatpeer.msgs.empty? %>
+          <% time = nil %>
+          <% chatpeer.msgs.each do |msg| %>
+            <% if msg.time.strftime("%H时%M分") != time %>
+              <% time = msg.time.strftime("%H时%M分") %>
+              <%= content_tag(:div, time, class: 'code', style: 'text-align: center;') %>
+            <% end %>
+          <div class='box' style='background-color: #fff;'>
+            <% if msg.direction > 0 %>
+              <blockquote style='margin: 0px;'>
+                <p><%= msg.content %></p>
+                <small><%= @uid %></small>
+              </blockquote>
+            <% else %>
+              <blockquote class="pull-right" style='margin: 0px;'>
+                <p><%= msg.content %></p>
+                <small><%= chatpeer.nick %></small>
+              </blockquote>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>

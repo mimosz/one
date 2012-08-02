@@ -36,8 +36,8 @@ module APIS
           end
         end
         
-        desc "API接口说明。"
-        get :doc do
+        desc "API欢迎页，接口说明。"
+        get do
           {
             versions: APIS::Vendors::Global::API_v1.versions,
             routes: APIS::Vendors::Global::API_v1.routes.map do |route|
