@@ -35,9 +35,11 @@ class Member
 
   key :seller_id, :buyer_id
 
+  index :last_trade_time, Mongo::DESCENDING
+
   default_scope desc(:last_trade_time) # 默认排序
 
-  after_save :cache_receivers
+  # after_save :cache_receivers
 
   def cache_receivers
     if synced_at.nil?
@@ -45,15 +47,17 @@ class Member
       if trade
         current_receiver = nil
         self.synced_at = Time.now
-        unless self.receivers.empty?
-          current_receiver = self.receivers.where(_id: trade.tid).last
+        unless receivers.empty?
+          current_receiver = receivers.where(
+            receiver_mobile: trade.receiver_mobile,
+            receiver_name: trade.receiver_name,
+            receiver_address: trade.receiver_address,
+          ).last
         end
+        # 检测：手机号、姓名、地址，是否存在。
         if current_receiver.nil?
           specs = mobile_specs(trade.receiver_mobile)
           self.receivers << Receiver.new({
-            num: trade.num,
-            num_iid: trade.num_iid,
-            tid: trade.tid,
             receiver_address: trade.receiver_address,
             receiver_city: trade.receiver_city,
             receiver_district: trade.receiver_district,

@@ -61,7 +61,7 @@ class Trade
   
   key :tid
   
-  index [:seller_nick, :tid]
+  index [:seller_nick, :tid], unique: true
   
   default_scope desc(:created, :modified) # 默认排序
   

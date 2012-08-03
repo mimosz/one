@@ -54,27 +54,19 @@
            <table class='table table-bordered'>
         <thead>
           <tr>
-            <th>订单</th>
-            <th>宝贝</th>
-            <th>数量</th>
             <th>省</th>
             <th>市</th>
             <th>收货人</th>
-            <th>手机</th>
             <th>运营商</th>
             <th>网络</th>
           </tr>
         </thead>
         <tbody>
 <% member.receivers.each do |receiver| # 循环 %>
-       <tr>   
-<td><%= receiver.tid %></td>
-<td><%= receiver.num_iid %></td>
-<td><%= receiver.num %></td>
+<tr id="receiver-<%= receiver._id %>">   
 <td><%= receiver.receiver_state %></td>
 <td><%= receiver.receiver_city %></td>
 <td><%= receiver.receiver_name %></td>
-<td><%= receiver.receiver_mobile %></td>
 <td><%= receiver.mobile_carrier %></td>
 <td><%= receiver.mobile_network %></td>
 </tr>

@@ -5,9 +5,6 @@ class Receiver
   embedded_in :member
 
   # Fields
-  field :num,               type: Integer
-  field :num_iid,           type: Integer
-  field :tid,               type: Integer
   field :receiver_address,  type: String
   field :receiver_city,     type: String
   field :receiver_district, type: String
@@ -18,6 +15,6 @@ class Receiver
   field :mobile_carrier,    type: String
   field :mobile_network,    type: String
 
-  key :tid
+  key :receiver_mobile
 
 end
