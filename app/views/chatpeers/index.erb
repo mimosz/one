@@ -22,7 +22,8 @@
             <% if msg.direction > 0 %>
               <blockquote style='margin: 0px;'>
                 <p><%= msg.content %></p>
-                <small><%= ww_link(chatpeer.buyer_nick) %> <%= chatlog_link(chatpeer.buyer_nick) %></small>
+                <% buyer_nick = chatpeer.buyer_nick %>
+                <small><%= ww_link(buyer_nick) %> <%= chatlog_link(buyer_nick) if @uid != buyer_nick %></small>
               </blockquote>
             <% else %>
               <blockquote class="pull-right" style='margin: 0px;'>
