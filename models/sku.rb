@@ -39,6 +39,7 @@ class Sku # 产品
   end
   
   def to_hash
+    return nil if properties_name.nil?
     	properties_map = {}
     	properties_name.split(';').each do |prop|
     	  prop = prop.split(':') # 切割

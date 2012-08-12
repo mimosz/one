@@ -40,6 +40,23 @@ class Refund
 
   after_save :order_update
 
+  def parse_status
+    case status
+      when /WAIT_SELLER_AGREE/
+        '待确认'
+      when /WAIT_BUYER_RETURN_GOODS/
+        '待退货'
+      when /WAIT_SELLER_CONFIRM_GOODS/
+        '待收货'
+      when /SELLER_REFUSE_BUYER/
+        '拒绝'
+      when /CLOSED/
+        '关闭'
+      when /SUCCESS/
+        '完结'
+    end
+  end
+
   def member # 会员
     Member.where(seller_nick: seller_nick, buyer_nick: buyer_nick).last 
   end

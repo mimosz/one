@@ -27,7 +27,7 @@
 					</td>
 					<td><%= refund.num %></td>
 					<td><%= refund.refund_fee.round(2) %></td>
-					<td><%= refund_status(refund) %></td>
+					<td><%= refund.parse_status %></td>
 				</tr>
 				<tr>
 						<td colspan="5">

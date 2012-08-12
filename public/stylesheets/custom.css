@@ -849,11 +849,21 @@ background: url('http://a.tbcdn.cn/apps/tmall/mui/page/img/page.png') no-repeat 
      -moz-border-radius: 6px;
           border-radius: 6px;
 }
+.badge code{
+  color: #666;
+  background-color: #DFF0D8;
+  border: 0px none;
+  margin-left: 6px;
+  margin-right: 6px;
+}
 .badge-success code{
   color: #468847;
   background-color: #DFF0D8;
-  border-color: #D6E9C6;
 }
 .badge-inverse code{
   color: #333;
+}
+.badge-info code{
+  color: #3A87AD;
+  background-color: #D9EDF7;
 }

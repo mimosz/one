@@ -3,7 +3,8 @@
 One.helpers do
   def progress_bar(trade)
     date = content_tag(:code, progress_date(trade.created))
-    content = content_tag(:span, '下单' + date, class: 'badge badge-success')
+    created = content_tag(:span, '下单' + date, class: 'badge badge-success')
+    content = ''
     unless trade.pay_time.nil?
       date = content_tag(:code, progress_date(trade.pay_time))
       content << content_tag(:span, '付款' + date, class: 'badge badge-success')
@@ -16,7 +17,8 @@ One.helpers do
       date = content_tag(:code, progress_date(trade.consign_time))
       content << content_tag(:span, '完成' + date, class: 'badge badge-success')
     else
-      content << content_tag(:span, trade.parse_status, class: 'badge badge-warning')
+      content << content_tag(:span, trade.parse_status, class: 'badge badge-warning pull-right')
+      created + content
     end
   end
 

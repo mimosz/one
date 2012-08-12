@@ -37,6 +37,7 @@ class Order # 訂單
   key :oid
 
   def to_hash
+    return nil if sku_properties_name.nil?
       properties_map = {}
       sku_properties_name.split(';').each do |prop|
         prop = prop.split(':') # 切割
@@ -44,7 +45,6 @@ class Order # 訂單
          properties_map[prop[0]] = prop[1]
         end
       end
-      properties_map
   end
 
   def item_url

@@ -18,6 +18,7 @@ class Trade
   field :tid,               type: Integer
   field :seller_flag,       type: Integer
 
+  field :has_post_fee,      type: Boolean # 是否包含邮费
   field :buyer_rate,        type: Boolean
   field :is_lgtype,         type: Boolean # 是否需要物流宝发货
   field :is_brand_sale,     type: Boolean # 品牌特卖订单
