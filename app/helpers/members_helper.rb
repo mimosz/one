@@ -1,6 +1,29 @@
 # -*- encoding: utf-8 -*-
 
 One.helpers do
+  def progress_bar(trade)
+    date = content_tag(:code, progress_date(trade.created))
+    content = content_tag(:span, '下单' + date, class: 'badge badge-success')
+    unless trade.pay_time.nil?
+      date = content_tag(:code, progress_date(trade.pay_time))
+      content << content_tag(:span, '付款' + date, class: 'badge badge-success')
+    end
+    unless trade.consign_time.nil?
+      date = content_tag(:code, progress_date(trade.consign_time))
+      content << content_tag(:span, '发货' + date, class: 'badge badge-success')
+    end
+    unless trade.end_time.nil?
+      date = content_tag(:code, progress_date(trade.consign_time))
+      content << content_tag(:span, '完成' + date, class: 'badge badge-success')
+    else
+      content << content_tag(:span, trade.parse_status, class: 'badge badge-warning')
+    end
+  end
+
+  def progress_date(date)
+    date.strftime("%m月%d日 %H时") unless date.nil?
+  end
+
   def export_members(members, file_tag)
     file_csv = File.join(PADRINO_ROOT, "public/files/members/#{Time.now.strftime('%y%m%d-%H')}-#{file_tag}.csv")
      return file_csv if File.exist?(file_csv)

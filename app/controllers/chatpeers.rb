@@ -17,7 +17,7 @@ One.controllers :chatpeers, :parent => :users do
     
   end
 
-  get :show, :with => :uid do
+  get :show, with: :uid do
     @uid = params[:uid].force_encoding('utf-8').gsub('cntaobao','')
     @chatpeers = Chatpeer.where( @conditions ).any_of({uid: "cntaobao#{@uid}"}, {nick: @uid}).asc(:date)
     render 'chatpeers/index'

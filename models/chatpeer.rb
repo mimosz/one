@@ -4,6 +4,7 @@ class Chatpeer # 聊天对象
   include Mongoid::Document
   belongs_to :subuser, foreign_key: 'sub_id' # 客服账号
   belongs_to :user, foreign_key: 'seller_nick'
+  belongs_to :member, foreign_key: 'uid'
   embeds_many :msgs # 聊天记录
 
   # Fields
@@ -18,6 +19,10 @@ class Chatpeer # 聊天对象
 
   field :nick,        type: String
   field :seller_nick, type: String
+
+  def member # 会员
+    Member.where(seller_nick: seller_nick, buyer_nick: buyer_nick).last 
+  end
 
   def qna_rate
    (answers_count.to_f/questions_count.to_f * 100).round(1) if questions_count > 0 # 未捕捉到，客人提问

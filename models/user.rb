@@ -147,11 +147,23 @@ class User
     duration = (end_at - start_at).to_i # 时差
     case 
       when duration >= limit # 多日
-        Trade.sync_create(self, start_at.beginning_of_day, end_at.end_of_day)
+        Trade.sync_create(session, start_at.beginning_of_day, end_at.end_of_day)
       when duration == 0 # 单日
-        Trade.sync_update(self, start_at.beginning_of_day, end_at.end_of_day)
+        Trade.sync_update(session, start_at.beginning_of_day, end_at.end_of_day)
       else
        puts "从#{start_at}到#{end_at}。"
+    end
+  end
+
+  def shippings_sync
+    send = trades.excludes(consign_time: nil)
+    unless send.empty?
+      start_at = 3.months.ago.beginning_of_day
+      sent = send.excludes(shipping: nil)
+      unless sent.empty?
+        start_at = sent.last.shipping.modified
+      end
+      Shipping.sync_create(session, start_at, Time.now)
     end
   end
   

@@ -33,12 +33,16 @@ One.helpers do
     end
   end
   
-  def full_date(time)
-    time.strftime("%Y年%m月%d日%H时%M分") unless time.nil?
+  def full_date(date, divider = ' ')
+    date.strftime("%Y年") +  divider + short_date(date) + divider + full_time(date) unless date.nil?
   end
   
-  def short_date(time)
-    time.strftime("%m月%d日") unless time.nil?
+  def short_date(date)
+    date.strftime("%m月%d日") unless date.nil?
+  end
+
+  def full_time(time, divider = ' ')
+    time.strftime("%H时#{divider}%M分:%S秒") unless time.nil?
   end
   
   def short_time(time)

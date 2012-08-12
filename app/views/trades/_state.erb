@@ -1,15 +1,42 @@
-<% total = @trades[:total] %>
+
+
+
+
 <table class="table table-bordered">
   <thead>
-    <tr>
-      <th>&nbsp;</th>
-      <th><%= total[:price].round(2)%></th>
-      <th><%= total[:payment].round(2)%></th>
-      <th><%= total[:total_fee].round(2)%></th>
-      <th><%= total[:discount_fee].round(2)%></th>
-      <th><%= total[:adjust_fee].round(2)%></th>
-      <th><%= total[:num]%></th>
-    </tr>
+    <% if @trades.has_key?(:total) %>
+      <tr>
+        <th><% total = @trades[:total] %></th>
+        <th><%= total[:price].round(2)%></th>
+        <th><%= total[:payment].round(2)%></th>
+        <th><%= total[:total_fee].round(2)%></th>
+        <th><%= total[:discount_fee].round(2)%></th>
+        <th><%= total[:adjust_fee].round(2)%></th>
+        <th><%= total[:num]%></th>
+      </tr>
+    <% end %>
+    <% if @trades.has_key?(:total) %>
+      <tr>
+        <th><% sale = @trades[:sale] %>品牌特卖</th>
+        <th><%= sale[:price].round(2)%></th>
+        <th><%= sale[:payment].round(2)%></th>
+        <th><%= sale[:total_fee].round(2)%></th>
+        <th><%= sale[:discount_fee].round(2)%></th>
+        <th><%= sale[:adjust_fee].round(2)%></th>
+        <th><%= sale[:num]%></th>
+      </tr>
+    <% end %>
+    <% if @trades.has_key?(:oversold) %>
+      <tr>
+        <th><% oversold = @trades[:oversold] %>超卖</th>
+        <th><%= oversold[:price].round(2)%></th>
+        <th><%= oversold[:payment].round(2)%></th>
+        <th><%= oversold[:total_fee].round(2)%></th>
+        <th><%= oversold[:discount_fee].round(2)%></th>
+        <th><%= oversold[:adjust_fee].round(2)%></th>
+        <th><%= oversold[:num]%></th>
+      </tr>
+    <% end %>
     <tr>
       <th>名称</th>
       <th>价格</th>

@@ -49,7 +49,7 @@ One.helpers do
     if data.has_key?(:sale) # 品牌特买
      sale = data[:sale][field].round(round)
      sale_tag = content_tag(:font, sale, style: 'color: #F89406;')
-    end 
+    end
     # 普通订单
     total = data[:total][field].round(round) if data.has_key?(:total)
     case

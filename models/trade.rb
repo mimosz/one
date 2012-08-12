@@ -7,7 +7,6 @@ class Trade
   belongs_to :user, foreign_key: 'seller_nick'
   belongs_to :item, foreign_key: 'num_iid'
   has_one :refund, foreign_key: 'tid'  # 退款
-  has_one :member, foreign_key: 'biz_order_id'  # 退款
   # Embedded
   embeds_many :orders   # 订单
   embeds_one  :shipping # 快递
@@ -63,7 +62,11 @@ class Trade
   
   index [:seller_nick, :tid], unique: true
   
-  default_scope desc(:created, :modified) # 默认排序
+  # default_scope desc(:created, :modified) # 默认排序
+
+  def member # 会员
+    Member.where(seller_nick: seller_nick, buyer_nick: buyer_nick).last 
+  end
   
   def wangwang_url # 旺旺
     "http://www.taobao.com/webww/ww.php?ver=3&amp;touid=#{buyer_nick}&amp;siteid=cntaobao&amp;charset=utf-8"
@@ -76,12 +79,35 @@ class Trade
   def paid_at
     pay_time.in_time_zone
   end
+
+  def parse_status
+    case status
+      when 'TRADE_NO_CREATE_PAY'
+       '没有创建支付宝交易'
+      when 'WAIT_BUYER_PAY'
+       '待付款'
+      when 'WAIT_SELLER_SEND_GOODS'
+       '待发货'
+      when 'WAIT_BUYER_CONFIRM_GOODS'
+       '待收货'
+      when 'TRADE_BUYER_SIGNED'
+       '已签收'
+      when 'TRADE_FINISHED'
+       '交易成功'
+      when 'TRADE_CLOSED'
+       '退款成功'
+      when 'TRADE_CLOSED_BY_TAOBAO'
+       '交易关闭'
+      else
+       status
+    end
+  end
   
   class << self
     
-    def sync_update(user, start_at, end_at, page_no=1, page_size=100) # 賣家
+    def sync_update(session, start_at, end_at, page_no=1, page_size=100) # 賣家
         options = { # 基础参数
-          session: user.session, 
+          session: session, 
           method: 'taobao.trades.sold.increment.get', 
           start_modified: start_at.strftime("%Y-%m-%d %H:%M:%S"), 
           end_modified: end_at.strftime("%Y-%m-%d %H:%M:%S"), 
@@ -89,12 +115,12 @@ class Trade
           page_no: page_no,
           page_size: page_size
         }
-        process_sync(user, options)
+        process_sync(options)
     end
     
-    def sync_create(user, start_at, end_at, page_no = 1, page_size = 100) # 賣家
+    def sync_create(session, start_at, end_at, page_no = 1, page_size = 100) # 賣家
         options = { # 基础参数
-          session: user.session, 
+          session: session, 
           method: 'taobao.trades.sold.get', 
           start_created: start_at.strftime("%Y-%m-%d %H:%M:%S"), 
           end_created: end_at.strftime("%Y-%m-%d %H:%M:%S"),
@@ -102,7 +128,7 @@ class Trade
           page_no: page_no,
           page_size: page_size, 
         }
-        process_sync(user, options)
+        process_sync(options)
     end
     
     def sync_orders(session, tids)
@@ -116,25 +142,25 @@ class Trade
       puts "本次同步， #{tids.count} 单"
       tids.each do |trade_id| 
        # 已有交易
-       current_trade = where(_id: trade_id.to_s).last
-       if current_trade.nil?
-          puts "Trade.sync_orders============================错误"
-          puts "怎么会没有 #{trade_id} 呢？"
-       else
-         trade = Topsdk.get_with(options.merge!(tid: trade_id))
-         if trade.is_a?(Hash) && trade.has_key?('trade')
-           trade = trade['trade']
-           trade['synced_at'] = Time.now
-           trade['orders'] = trade['orders']['order']
-           current_trade.update_attributes(trade)
-           result << trade_id
+       trade = Topsdk.get_with(options.merge!(tid: trade_id))
+       if trade.is_a?(Hash) && trade.has_key?('trade')
+         trade = trade['trade']
+         trade['synced_at'] = Time.now
+         trade['orders'] = trade['orders']['order']
+         current_trade = where(_id: trade_id.to_s).last
+         if current_trade.nil?
+            current_trade = create(trade)
+            return current_trade if tids.count == 1 # 补漏
          else
-           puts "Trade.sync_orders============================错误"
-           puts "======请======求======"
-           puts options
-           puts "======结======果======"
-           puts trade
+           current_trade.update_attributes(trade)
          end
+         result << trade_id
+       else
+         puts "Trade.sync_orders============================错误"
+         puts "======请======求======"
+         puts options
+         puts "======结======果======"
+         puts trade
        end
       end
       if tids.count != result.count
@@ -145,7 +171,7 @@ class Trade
 
     private
   
-    def process_sync(user, options, total_page = 0)
+    def process_sync(options, total_page = 0)
       created   = [] # 新增
       updated   = [] # 更新
       unchanged = [] # 无变化
@@ -173,7 +199,7 @@ class Trade
                case
                when current_trade.nil?
                   created << trade['tid'] # 新增
-                  user.trades.create(trade)        
+                  create(trade)        
                when trade['modified'] > current_trade.modified_at
                   updated << trade['tid'] # 更新
                   # 未付款，不更新订单
@@ -187,11 +213,11 @@ class Trade
            puts "Trade.process_sync==============（#{page_no}/#{total_page}页）==============提示"
            puts "本次同步，共获取 #{trades.count} 单，其中 新增 #{created.count}，更新 #{updated.count}，无变化 #{unchanged.count} 单"
            # 循环
-           process_sync(user, options.merge!(page_no: (page_no + 1)), total_page) if total_page > page_no
+           process_sync(options.merge!(page_no: (page_no + 1)), total_page) if total_page > page_no
         else
           if total_page > 0
              puts "Trade.process_sync============================重试"
-             process_sync(user, options, total_page)
+             process_sync(options, total_page)
            else
              puts "Trade.process_sync============================错误"
              puts "======请======求======"
@@ -203,7 +229,7 @@ class Trade
       else
         if total_page > 0
            puts "Trade.process_sync============================重试"
-           process_sync(user, options, total_page)
+           process_sync(options, total_page)
          else
            puts "Trade.process_sync============================错误"
            puts "======请======求======"

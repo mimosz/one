@@ -53,5 +53,17 @@ module ResqueJobs
       end
     end
   end
-  
+
+  class SyncShipping < ResqueJob
+    @queue = :shippings
+      
+    def self.perform(user_id)
+      user = find_by_nick(user_id)
+      if user
+        puts "=================开始同步#{user_id}物流信息=================="
+          user.shippings_sync  # 物流
+        puts "=================结束同步#{user_id}物流信息=================="
+      end
+    end
+  end
 end

@@ -39,6 +39,10 @@ class Refund
   default_scope desc(:created, :modified) # 默认排序
 
   after_save :order_update
+
+  def member # 会员
+    Member.where(seller_nick: seller_nick, buyer_nick: buyer_nick).last 
+  end
   
   def modified_at
     modified.in_time_zone.strftime("%Y-%m-%d %H:%M:%S")

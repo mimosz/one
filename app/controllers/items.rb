@@ -52,7 +52,7 @@ One.controllers :items, :parent => :users do
 
     case content_type
       when :html
-        @items = Item.where(nick: user_id).page(@page).per(@page_size)
+        @items = Item.where(nick: user_id).desc(:duration).page(@page).per(@page_size)
         render 'items/index'
       when :csv
         @items = Item.where(nick: user_id)

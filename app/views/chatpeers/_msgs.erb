@@ -1,0 +1,32 @@
+<% date = nil %>
+<% chatpeers.each do |chatpeer| %>
+    <% if chatpeer.talk_at != date %>
+    <%= '</div>' unless date.nil? %>
+    <% date = chatpeer.talk_at %>
+    <%= content_tag(:div, date, class: 'alert alert-success', style: 'text-align: center;') %>
+    <div class='well'>
+    <% end %>
+    <% unless chatpeer.msgs.empty? %>
+      <% time = nil %>
+      <% chatpeer.msgs.each do |msg| %>
+        <% if msg.talk_at != time %>
+          <% time = msg.talk_at %>
+          <%= content_tag(:div, time, class: 'code', style: 'text-align: center;') %>
+        <% end %>
+      <div class='box' style='background-color: #fff;'>
+        <% if msg.direction > 0 %>
+          <blockquote style='margin: 0px;'>
+            <p style='font-size: 12px;'><%= msg.content %></p>
+            <% buyer_nick = chatpeer.buyer_nick %>
+            <small><%= ww_link(buyer_nick) %> <%= chatlog_link(buyer_nick) if @uid != buyer_nick %></small>
+          </blockquote>
+        <% else %>
+          <blockquote class="pull-right" style='margin: 0px;'>
+            <p style='font-size: 12px;'><%= msg.content %></p>
+            <small><%= chatpeer.nick %></small>
+          </blockquote>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

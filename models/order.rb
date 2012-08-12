@@ -35,6 +35,25 @@ class Order # 訂單
   field :seller_rate,         type: Boolean, default: false
   
   key :oid
+
+  def to_hash
+      properties_map = {}
+      sku_properties_name.split(';').each do |prop|
+        prop = prop.split(':') # 切割
+        if prop.count == 2
+         properties_map[prop[0]] = prop[1]
+        end
+      end
+      properties_map
+  end
+
+  def item_url
+    "http://item.taobao.com/item.htm?id=#{num_iid}"
+  end
+
+  def refund
+   Refund.where(_id: refund_id.to_s).last if refund_id
+  end
   
   def price_total
     ( price.to_f / num.to_f ).round(2)

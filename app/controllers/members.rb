@@ -49,9 +49,17 @@ One.controllers :members, parent: :users do
     end
   end
 
-  get :show, with: :id do
-    @member = Member.where(@conditions.merge!(_id: params[:id])).last
-    @trade = @member.trade
+  get :show, with: :uid do
+    @uid = params[:uid].force_encoding('utf-8').gsub('cntaobao','')
+
+    @member = Member.where(@conditions.merge!(buyer_nick: @uid)).last
+    if @member.nil?
+      @trades = Trade.where( @conditions.merge( buyer_nick: @uid) ).desc(:created, :modified)
+      @chatpeers = Chatpeer.where( @conditions.merge( uid: "cntaobao#{@uid}")  ).desc(:date)
+    else
+      @trades = @member.trades
+      @chatpeers = @member.chatpeers
+    end
     render 'members/show'
   end
 end

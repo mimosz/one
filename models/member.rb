@@ -5,7 +5,6 @@ class Member
   include Redis::Objects
 
   # Referenced
-  belongs_to :trade,  foreign_key: 'biz_order_id' # 交易
   belongs_to :user,   foreign_key: 'seller_nick'  # 店铺
   # Embedded
   embeds_many :receivers
@@ -109,6 +108,36 @@ class Member
   def trade_pre
     avg = (trade_amount.to_f / trade_count.to_f)
     avg > 0 ? avg.round(2) : nil
+  end
+
+  def trades # 交易
+    conditions = { seller_nick: seller_nick, buyer_nick: buyer_nick }
+    Trade.where( conditions ).desc(:created, :modified)
+  end
+  
+  def chatpeers # 聊天记录
+    conditions = { seller_nick: seller_nick, uid: "cntaobao#{buyer_nick}" }
+    Chatpeer.where( conditions ).desc(:date)
+  end
+
+  def refunds # 退款
+    conditions = { seller_nick: seller_nick, buyer_nick: buyer_nick }
+    Refund.where( conditions ).desc(:created, :modified)
+  end
+
+  def level
+    case grade
+      when 0
+       '无会员等级'
+      when 1
+       '普通会员'
+      when 2
+       '高级会员'
+      when 3
+       'VIP会员'
+      when 4
+       '至尊VIP会员'
+    end
   end
 
   class << self

@@ -1,0 +1,85 @@
+<% content_for :header do %>
+  <p class="lead"></p>
+<% end %>
+<div class="span6 columns" style="overflow: auto;">
+  <% unless @member.nil? %>
+    <table id='member-<%= @member.buyer_id %>' class='table table-bordered'>
+      <thead>
+        <tr>
+          <th><%= @member.trade_count %></th>        
+          <th><%= @member.trade_amount %></th>
+          <th><%= @member.item_num %></th>
+          <th><%= @member.trade_pre %></th>
+          <th><%= time_ago_in_words(@member.last_trade_time) %></th>
+          <th><%= @member.close_trade_count %></th>
+          <th><%= @member.close_trade_amount %></th>
+        </tr>
+      </thead>
+      <tbody> 
+      <tr>
+        <td>交易笔数</td>
+        <td>消费金额</td>
+        <td>购买的<br />宝贝数</td>
+        <td>平均客单</td>
+        <td>最近一笔<br />交易时间</td>
+        <td>未成交<br />笔&nbsp;&nbsp;&nbsp;数</td>
+        <td>未成交<br />金&nbsp;&nbsp;&nbsp;额</td>
+      </tr>
+    </tbody> 
+    </table>
+  <% end %>
+  <% unless @trades.empty? %>
+  <div  id='trades'>
+    <% @trades.each do |trade| %>
+    <code class='pull-right'><%= trade.tid %></code>
+    <table id='trade-<%= trade.tid %>' class='table table-bordered'>
+    <tbody> 
+    <tr>
+        <td colspan='6'>
+          <%= progress_bar(trade) %>
+        </td>
+      </tr>
+    <tr>       
+      <td><span class="label label-info"><%= trade.receiver_name %></span></td>
+      <td colspan='3'><%= trade.receiver_address %></td>
+      <td><%= trade.receiver_mobile %></td>
+      <td><%= trade.payment %></td>
+    </tr>
+    <% unless trade.shipping.nil? %>
+      <% shipping = trade.shipping %>
+      <tr>
+        <td colspan='6'><span class='badge badge-inverse'><%= shipping.parse_status %><code><%= shipping.out_sid %></code><%= shipping.company_name %></span></td>
+      </tr>
+    <% end %>
+    <% unless trade.orders.empty? %>
+      <% trade.orders.each do |order| %>
+        <tr>
+          <td><span class='label <%= 'label-important' if order.is_oversold %>'><%= order.num_iid %></span></td>
+          <td colspan='2'><%= order.outer_iid %><%= content_tag(:span, order.num, class: 'badge') %><br /><%= order.outer_sku_id %></td>
+          <td><%= link_to image_tag(order.pic_path, width: '48px', height: '48px'), order.item_url, target: '_blank', rel: 'tooltip', title: order.title %></td>
+          <% order.to_hash.each do |key, value| %>
+            <%= content_tag(:td, value, rel: 'tooltip', title: key) %>
+          <% end %>          
+        </tr>
+        <% refund = order.refund %>
+        <% unless refund.nil? %>
+          <tr><td colspan='6'><span class='label'><%= refund.reason %></span><blockquote><%= refund.desc %></blockquote></td></tr>
+        <% end %>  
+      <% end %>
+    <% end %>
+    </tbody> 
+    </table>
+<% end %>
+</div>
+  <% else %> 
+    <div class="alert alert-block">
+      <h4 class="alert-heading">重要！</h4>
+      新客人~要小心伺候着!
+    </div>
+  <% end %>
+</div>
+<div class="span6 columns">
+  <% unless @chatpeers.empty? %>
+    <%= partial "chatpeers/msgs", locals: { chatpeers: @chatpeers } %>
+  <% end %>
+</div>
