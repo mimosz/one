@@ -14,7 +14,7 @@ One.helpers do
       content << content_tag(:span, '发货' + date, class: 'badge badge-success')
     end
     unless trade.end_time.nil?
-      date = content_tag(:code, progress_date(trade.consign_time))
+      date = content_tag(:code, progress_date(trade.end_time))
       content << content_tag(:span, '完成' + date, class: 'badge badge-success')
     else
       content << content_tag(:span, trade.parse_status, class: 'badge badge-warning pull-right')

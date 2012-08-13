@@ -45,6 +45,7 @@ class Order # 訂單
          properties_map[prop[0]] = prop[1]
         end
       end
+    return properties_map unless properties_map.empty?
   end
 
   def item_url

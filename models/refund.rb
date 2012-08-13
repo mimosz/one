@@ -67,15 +67,21 @@ class Refund
 
   def order_update
       if trade
-        order = trade.orders.where(_id: oid).last
-        if status == 'CLOSED'
-          order.refund_num = 0
-          order.refund_fee = 0
+        order = if tid == oid
+          trade.orders.last
         else
-          order.refund_num = num if has_good_return
-          order.refund_fee = refund_fee
+          trade.orders.where(_id: oid).last
         end
-        order.save
+        unless order.nil?
+          order.update_attributes(
+            refund_id: refund_id,
+            refund_num: num,
+            refund_fee: refund_fee,
+            refund_status: status,
+          )
+        else
+          puts "警告：无 #{oid} 订单"
+        end
       end
   end
   
@@ -118,7 +124,7 @@ class Refund
             puts "此次抓取：共#{total_results}单。\n正在执行：#{page_no}/#{total_page}。"
             refunds = refunds['refunds']['refund'] # 退款
             refunds.each do |refund| # 循环交易
-              current_refund = Refund.where(refund_id:refund['refund_id'].to_i).last
+              current_refund = Refund.where(_id: refund['refund_id'].to_s).last
               if current_refund.nil?
                 Refund.create(refund)
               elsif refund['modified'] > current_refund.modified_at

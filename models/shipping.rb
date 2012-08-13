@@ -34,7 +34,7 @@ class Shipping # 訂單
   def parse_status
     case status
       when 'CREATED'
-       '订单已创建'
+       '待发货'
       when 'RECREATED'
        '订单重新创建'
       when 'CANCELLED'

@@ -18,7 +18,8 @@
 				<tr>
 					<td class="span5">
 						<%= refund.title %>
-						<%= link_to "<i class='icon-share'></i>", "http://buy.tmall.com/detail/orderDetail.htm?bizOrderId=#{refund.oid}", :target => '_blank' %>
+						<%= link_to "<i class='icon-share'></i>", "http://buy.tmall.com/detail/orderDetail.htm?bizOrderId=#{refund.oid}", :target => '_blank' %><br />
+						<code><%= refund.oid %></code>
 					</td>
 					<td>
 						<%= ww_link(refund.buyer_nick) %>
