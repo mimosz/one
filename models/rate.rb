@@ -24,9 +24,11 @@ class Rate # 日店铺评价
 
   field :seller_nick,      type: String
   field :date,             type: Date
+
+  index seller_nick: 1, date: 1
   
   default_scope asc(:date)
-  scope :date_at, ->(date) { where(:date => date) }
+
   class << self
 
     def sync_create(user) # 评价，每日更新
@@ -37,7 +39,7 @@ class Rate # 日店铺评价
       return false if Rate.where(conditions).last
       rates = seller_rate(user.uid) 
       services = seller_serv(user.user_id) 
-      conditions.merge!(rates)
+      conditions.merge!(rates) unless rates.nil?
       conditions.merge!(services)
       Rate.create(conditions)
     end
@@ -48,19 +50,21 @@ class Rate # 日店铺评价
       url = "http://rate.taobao.com/user-rate-#{uid}.htm"
       html =  Nestful.get(url).force_encoding("GBK").encode("UTF-8")
       dom = Nokogiri::HTML(html).at('div#sixmonth') # 解析成XPath
-      rates = dom.css('em.count')
-      percents = dom.css('strong.percent')
-      return {
-        # 宝贝与描述相符
-        item_rate: get_rate(rates[0]),  
-        item_diff: get_rate_diff(percents[0]),  
-        # 服务态度
-        service_rate: get_rate(rates[1]),  
-        service_diff: get_rate_diff(percents[1]),  
-        # 发货速度
-        speed_rate: get_rate(rates[2]),  
-        speed_diff: get_rate_diff(percents[2]),  
-      }
+      unless dom.nil?
+        rates = dom.css('em.count')
+        percents = dom.css('strong.percent')
+        return {
+          # 宝贝与描述相符
+          item_rate: get_rate(rates[0]),  
+          item_diff: get_rate_diff(percents[0]),  
+          # 服务态度
+          service_rate: get_rate(rates[1]),  
+          service_diff: get_rate_diff(percents[1]),  
+          # 发货速度
+          speed_rate: get_rate(rates[2]),  
+          speed_diff: get_rate_diff(percents[2]),  
+        }
+      end
     end
 
     def seller_serv(user_id) # 店铺服务

@@ -10,7 +10,7 @@ class ItemProp # 商品属性
   field :pid,      type: Integer # 属性ID
   field :name,     type: String  # 属性名
 
-  key :pid
+  field :_id, type: String, default: -> { pid }
 
   class << self
 

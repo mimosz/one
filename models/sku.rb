@@ -28,7 +28,7 @@ class Sku # 产品
   field :created,          type: DateTime  # sku创建日期
   field :modified,         type: DateTime  # sku最后修改日期
   
-  key :sku_id
+  field :_id, type: String, default: -> { sku_id }
   
   def range_rate
     (range_num.to_f / duration.to_f).round(1) if range_num > 0

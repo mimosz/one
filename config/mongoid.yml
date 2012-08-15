@@ -1,0 +1,11 @@
+development:
+  sessions:
+    default:
+      database: one-development
+      username: howl
+      password: '800622'
+      hosts: 
+        - 58.215.164.51:10002
+        - 58.215.160.191:10001
+  options:
+      skip_version_check: true

@@ -15,6 +15,4 @@ class Receiver
   field :mobile_carrier,    type: String
   field :mobile_network,    type: String
 
-  key :receiver_mobile
-
 end

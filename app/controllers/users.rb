@@ -13,7 +13,7 @@ One.controllers :users do
     @end_at = params[:end_at] ? params[:end_at].to_date : Date.today
     # 时间区间
     @range = @start_at.beginning_of_day..@end_at.end_of_day
-    rates = @user.rates.date_at(@range)
+    rates = @user.rates.where(date: @range)
     # 解析评价
     @rates = parse_rates(rates)
     @service = parse_rates(rates, 'service')

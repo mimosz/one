@@ -7,7 +7,6 @@ class PropValue
   # Fields
   field :vid,      type: Integer # 属性值ID
   field :name,     type: String  # 属性值
-
-  key :vid
+  field :_id, type: String, default: -> { vid }
   
 end

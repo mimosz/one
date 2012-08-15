@@ -4,7 +4,7 @@ class Trade
   include Mongoid::Document
   include Redis::Objects
   # Referenced
-  belongs_to :user, foreign_key: 'seller_nick'
+  belongs_to :user, foreign_key: 'seller_nick', index: true
   belongs_to :item, foreign_key: 'num_iid'
   has_one :refund, foreign_key: 'tid'  # 退款
   # Embedded
@@ -59,11 +59,13 @@ class Trade
   field :modified,          type: DateTime
   field :synced_at,         type: DateTime
   
-  key :tid
+  field :_id, type: String, default: -> { tid }
   
-  index [:seller_nick, :tid], unique: true
-  
-  # default_scope desc(:created, :modified) # 默认排序
+  index({ seller_nick: 1, tid: 1 }, { unique: true })
+  index pay_time: 1
+  index 'orders.oid' => 1
+
+  scope :recent, desc(:created, :modified)
 
   def member # 会员
     Member.where(seller_nick: seller_nick, buyer_nick: buyer_nick).last 
@@ -76,9 +78,13 @@ class Trade
   def modified_at
     modified.in_time_zone.strftime("%Y-%m-%d %H:%M:%S")
   end
+
+  def sent_at
+    consign_time.in_time_zone unless consign_time.nil?
+  end
   
   def paid_at
-    pay_time.in_time_zone
+    pay_time.in_time_zone unless pay_time.nil?
   end
 
   def parse_status
@@ -196,7 +202,7 @@ class Trade
            if trades.count > 0
              trades.each do |trade| # 循环交易
                # 已有交易
-               current_trade = where(tid: trade['tid']).last
+               current_trade = where(_id: trade['tid'].to_s).last
                case
                when current_trade.nil?
                   created << trade['tid'] # 新增

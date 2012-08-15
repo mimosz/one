@@ -34,7 +34,7 @@ class FilterList
   def cache_parents(ids = [], method = :add)
     ids ||= child_ids
     unless ids.empty?
-    FilterList.where(seller_nick: seller_nick).also_in(_id: ids).each do |child|
+    FilterList.where(seller_nick: seller_nick, :_id.in => ids).each do |child|
          unless child.parent_ids.include?(id.to_s)
           case method
           when :add
@@ -52,7 +52,7 @@ class FilterList
 
   def clean_child
     unless parent_ids.empty?
-        FilterList.where(seller_nick: seller_nick).also_in(_id: parent_ids).each do |parent|
+        FilterList.where(seller_nick: seller_nick, :_id.in => parent_ids).each do |parent|
            unless parent.child_ids.include?(id.to_s)
             parent.child_ids.delete(id.to_s) 
             parent.save
@@ -67,7 +67,7 @@ class FilterList
       checked_ids = []
       num_iids = []
       unknown_ids = []
-      Item.where(nick:seller_nick).also_in(outer_id: uncheck_ids).each do |item|
+      Item.where(nick: seller_nick, :outer_id.in => uncheck_ids).each do |item|
         if uncheck_ids.include?(item.outer_id)
           checked_ids << item.outer_id
           num_iids << item.num_iid

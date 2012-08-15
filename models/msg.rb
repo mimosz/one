@@ -11,7 +11,9 @@ class Msg # 聊天消息内容
   field :time,       type: DateTime # 消息日期
   field :content,    type: String   # 消息内容
   
-  # default_scope desc(:time) # 默认排序
+  index time: 1
+
+  default_scope desc(:time) # 默认排序
 
   def talk_at
    time.in_time_zone.strftime("%H时%M分") if time

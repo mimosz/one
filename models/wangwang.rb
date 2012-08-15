@@ -78,7 +78,7 @@ class Wangwang # 客服
           end
         end
        # 交易数据
-       wangwangs = where(date: start_at, seller_nick: user.nick).also_in(nick:subusers) # 已有记录
+       wangwangs = where(date: start_at, seller_nick: user.nick, :nick.in => subusers) # 已有记录
        unless wangwangs.empty?
         wangwangs.each do |wangwang|
           # 元数据
@@ -118,7 +118,7 @@ class Wangwang # 客服
               # 加权平均
               meta[:avg_waiting_times] = (meta[:avg_waiting_times] / meta[:reply_num].to_f).round
               # 通过接待的客人昵称，获取交易记录
-              trades = user.trades.where({pay_time:start_at..end_at}).also_in(buyer_nick: meta[:reply_nicks])
+              trades = user.trades.where( pay_time: start_at..end_at, :buyer_nick.in => meta[:reply_nicks])
             end
             buyers = trades_sum(trades) # 买家信息
             wangwang.update_attributes(buyers.merge(meta))

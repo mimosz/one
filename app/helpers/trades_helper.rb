@@ -2,10 +2,52 @@
 
 One.helpers do
 
-  def export_trades(trades, date_tag, file_tag)
+  def shipping(trade)
+  if trade.shipping.nil?
+    ['', '']
+  else
+    shipping = trade.shipping
+    [shipping.company_name, shipping.out_sid]
+  end
+end
+
+def export_rayban_trades(trades, date_tag, file_tag)
+  file_csv = File.join(PADRINO_ROOT, "public/files/trades/#{date_tag}-#{file_tag}.csv")
+  return file_csv if File.exist?(file_csv)
+  unless trades.empty?
+    require 'csv'
+    header_row = ['订购平台', '业务人员', '客户编号', '订单编号', '数量', '单价', '商品规格', '商品代码', '金额', '是否计入库存', '订购日期', '订购人', '订购人电话', '订购人发票地址', '收货人', '收货人电话', '收货人手机', '邮编', '收货地址', '运费', '省份', '城市', '活动名称', '发货日期', '快递方式', '快递单号']
+    CSV.open(file_csv, "wb:GB18030", :col_sep=>',') do |csv|
+      csv << header_row
+      trades.each do |trade|
+        trade.orders.each do |order|
+          csv << [ 
+            'Rayban', 'TB', 
+            trade.buyer_nick, 
+            trade.tid, 
+            order.num, '', 
+            order.price.round(2),
+            order.outer_iid, 
+            order.payment.round(2), 'Y', 
+            trade.paid_at.strftime("%y-%m-%d"), '', '', '',
+            trade.receiver_name, '', 
+            trade.receiver_mobile, 
+            trade.receiver_zip,
+            trade.receiver_address,
+            trade.post_fee.round(2),
+            trade.receiver_state,
+            trade.receiver_city, '', 
+            (trade.sent_at.strftime("%y-%m-%d") unless trade.sent_at.nil?)
+          ] + shipping(trade) if order.refund.nil?
+        end
+      end
+    end
+    return file_csv
+  end
+end
+
+def export_trades(trades, date_tag, file_tag)
     file_csv = File.join(PADRINO_ROOT, "public/files/trades/#{date_tag}-#{file_tag}.csv")
-    puts file_csv
-    puts "=================================="
     return file_csv if File.exist?(file_csv)
     unless trades.empty?
       require 'csv'
@@ -155,7 +197,7 @@ end
   end
 
   def get_items(item_ids)
-    Item.where(nick: user_id).also_in(num_iid: item_ids)
+    Item.where(nick: user_id, :num_iid.in => item_ids)
   end
 
   

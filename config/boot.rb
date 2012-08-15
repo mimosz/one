@@ -42,6 +42,7 @@ I18n.default_locale = :zh_cn
 # Add your before (RE)load hooks here
 #
 Padrino.before_load do
+  Mongoid.load!(Padrino.root('config/mongoid.yml'), Padrino.env)
 end
 
 ##

@@ -17,7 +17,7 @@ One.controllers :items, :parent => :users do
       # 导入数据
       @skus = items_import(params[:csv_file][:tempfile])
       # 匹配处理
-      @items = Item.where(nick: user_id).also_in(num_iid: @skus.keys)
+      @items = Item.where(nick: user_id, :num_iid.in => @skus.keys)
       render 'items/skus'
     else
       flash[:error] = '必须是，Excel的CSV文本格式。'

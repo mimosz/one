@@ -61,7 +61,7 @@ class User
   field :last_visit,                type: DateTime # 最近登陆时间
   field :birthday,                  type: DateTime # 生日
   
-  key :nick
+  field :_id, type: String, default: -> { nick }
   
   def wangwang_id # 旺旺昵称
   	"cntaobao#{nick}"
@@ -136,7 +136,7 @@ class User
   
   def trades_sync(start_at = nil, end_at = Date.today, limit = 1, expire_at = 90.day.ago.to_date) # 交易
     if start_at.nil?
-      trade = trades.first # 最新记录，日期倒序
+      trade = trades.recent.limit(1).first # 最新记录，日期倒序
       if trade
         start_at = trade.created.to_date # 新一天
       else
@@ -156,10 +156,10 @@ class User
   end
 
   def shippings_sync
-    send = trades.excludes(consign_time: nil)
+    send = trades.where(:consign_time.ne => nil)
     unless send.empty?
       start_at = 3.months.ago.beginning_of_day
-      sent = send.excludes(shipping: nil)
+      sent = send.where(:shipping.ne => nil)
       unless sent.empty?
         start_at = sent.last.shipping.modified
       end
@@ -184,7 +184,7 @@ class User
 
   def members_sync(start_at=nil, end_at=Date.today, grade=nil) # 卖家的会员
     unless members.empty?
-      start_at = members.first.last_trade_time if start_at.nil?
+      start_at = members.recent.limit(1).first.last_trade_time if start_at.nil?
       Member.sync_update(self, start_at.beginning_of_day, end_at.end_of_day, grade)
     else
       Member.sync_create(self)
@@ -195,10 +195,9 @@ class User
     start_at = 3.months.ago.beginning_of_day
     unless trades.empty?
       if refunds.empty?
-        trades = self.trades.excludes('orders.refund_id' => nil) # 有退款的交易
-        start_at = trades.last.created
+        start_at = trades.where(:'orders.refund_id' => nil).last.created # 有退款的交易
       else
-        start_at = refunds.first.modified
+        start_at = refunds.recent.first.modified
       end
     end
     Refund.sync_create(session, start_at, Time.now)

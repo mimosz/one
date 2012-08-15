@@ -31,7 +31,7 @@ One.controllers :filter_list, :parent => :users do
       @filter_list = FilterList.where( @conditions.merge( parent_ids: [] ) )
     else
       @list = params[:filter_list]
-      @filter_list = FilterList.where( @conditions ).also_in(_id: @list)
+      @filter_list = FilterList.where( @conditions.merge( :_id.in => @list ) )
     end
     
     @options.merge!( filter_list: @filter_list ) unless @filter_list.empty?

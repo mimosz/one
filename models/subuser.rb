@@ -16,7 +16,9 @@ class Subuser # 子账号基本信息
   field :seller_nick,  type: String  # 主账号昵称
   field :full_name,    type: String  # 子账号姓名
   
-  key :sub_id
+  field :_id, type: String, default: -> { sub_id }
+  
+  index seller_nick: 1, nick: 1
   
   def wangwang_id
     "cntaobao#{seller_nick}:#{nick}"

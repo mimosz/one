@@ -25,7 +25,7 @@ class Shipping # 訂單
   field :created,         type: Date # 运单创建时间
   field :modified,        type: Date # 运单修改时间
 
-  key :out_sid
+  field :_id, type: String, default: -> { out_sid }
   
   def modified_at
     modified.in_time_zone.strftime("%Y-%m-%d %H:%M:%S")

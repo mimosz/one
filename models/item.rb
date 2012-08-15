@@ -4,7 +4,7 @@ class Item # 商品
   include Mongoid::Document
   include Redis::Objects
   # Referenced
-  belongs_to :user, foreign_key: 'nick'
+  belongs_to :user, foreign_key: 'nick', index: true
   has_many :item_props, foreign_key: 'cid'  # 商品属性
   has_many :trades, foreign_key: 'num_iid' # 订单
   # Embedded
@@ -53,9 +53,9 @@ class Item # 商品
   field :modified,        type: DateTime # 商品修改时间
   field :synced_at,       type: DateTime
   
-  key :num_iid
-  
-  index [:nick, :num_iid]
+  field :_id, type: String, default: -> { num_iid }
+  index nick: 1, num_iid: 1
+  index 'skus.outer_id' => 1
   
   scope :onsale, where(approve_status: 'onsale')
   # default_scope desc(:seven_num, :prev_num)

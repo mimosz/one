@@ -11,7 +11,7 @@ One.helpers do
       node[key] = filter_meta(filter)
       if filter.child_ids.count > 0
         children = node[key][:children] = {}
-        FilterList.where(seller_nick: filter.seller_nick).also_in(_id: filter.child_ids).each do |child|
+        FilterList.where(seller_nick: filter.seller_nick, :_id.in => filter.child_ids).each do |child|
           filter_tree(child, children)
         end
       end

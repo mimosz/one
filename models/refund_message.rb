@@ -18,7 +18,7 @@ class RefundMessage
   
   field :created,       type: DateTime
   
-  key :id
+  field :_id, type: String, default: -> { id }
   
   class << self
     

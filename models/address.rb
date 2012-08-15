@@ -26,7 +26,8 @@ class Address # 訂單
   
   field :modify_date,     type: Date # 修改日期时间
   
-  key :contact_id
+  field :_id, type: String, default: -> { contact_id }
+
   
   def modified_at
     modify_date.strftime("%Y-%m-%d %H:%M:%S")
@@ -41,7 +42,7 @@ class Address # 訂單
         current_address = user.addresses.where(_id: address['contact_id'].to_s ).last
         if current_address.nil?
           user.addresses.create(address)
-        elsif address['modify_date'] > current_address.modified_at
+        elsif address.has_key?('modify_date') && address['modify_date'] > current_address.modified_at
           current_address.update_attributes!(address)
         end
       end

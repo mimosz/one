@@ -5,7 +5,7 @@ class Member
   include Redis::Objects
 
   # Referenced
-  belongs_to :user,   foreign_key: 'seller_nick'  # 店铺
+  belongs_to :user,   foreign_key: 'seller_nick', index: true  # 店铺
   # Embedded
   embeds_many :receivers
 
@@ -32,17 +32,19 @@ class Member
   field :last_trade_time,   type: DateTime
   field :synced_at,         type: DateTime
 
-  key :seller_id, :buyer_id
+  field :_id, type: String, default: -> { "#{seller_nick}:#{buyer_nick}" }
 
-  index :last_trade_time, Mongo::DESCENDING
+  index seller_nick: 1, buyer_nick: 1
+  index 'receivers.receiver_mobile' => 1
+  index last_trade_time: 1
 
-  default_scope desc(:last_trade_time) # 默认排序
+  scope :recent, desc(:last_trade_time) # 默认排序
 
-  # after_save :cache_receivers
+  after_save :cache_receivers
 
   def cache_receivers
     if synced_at.nil?
-      trade = Trade.where(tid: biz_order_id).last
+      trade = Trade.where(_id: biz_order_id).last
       if trade
         current_receiver = nil
         self.synced_at = Time.now

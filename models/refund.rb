@@ -3,8 +3,8 @@
 class Refund
   include Mongoid::Document
   # Referenced
-  belongs_to :trade,  foreign_key: 'tid'         # 交易
-  belongs_to :user,   foreign_key: 'seller_nick' # 店铺
+  belongs_to :trade,  foreign_key: 'tid', index: true # 交易
+  belongs_to :user,   foreign_key: 'seller_nick', index: true # 店铺
   
   field :refund_id,       type: Integer
   field :num,             type: Integer
@@ -34,9 +34,9 @@ class Refund
   field :created,         type: DateTime
   field :modified,        type: DateTime
   
-  key :refund_id
+  field :_id, type: String, default: -> { refund_id }
   
-  default_scope desc(:created, :modified) # 默认排序
+  scope :recent, desc(:created, :modified) # 默认排序
 
   after_save :order_update
 

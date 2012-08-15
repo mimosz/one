@@ -49,7 +49,7 @@ class Account
     
       # This method is for authentication purpose
       def authenticate(email, password)
-        account = first(:conditions => { :email => email }) if email.present?
+        account = where( email: email ).first if email.present?
         account && account.password_clean == password ? account : nil
       end
     

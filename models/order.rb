@@ -34,7 +34,7 @@ class Order # 訂單
   field :buyer_rate,          type: Boolean, default: false
   field :seller_rate,         type: Boolean, default: false
   
-  key :oid
+  field :_id, type: String, default: -> { oid }
 
   def to_hash
     return nil if sku_properties_name.nil?

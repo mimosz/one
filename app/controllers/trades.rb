@@ -54,7 +54,7 @@ One.controllers :trades, parent: :users do
           flash[:error] = '还没有交易呢，大伙加把劲吆～'
           redirect url(:trades, :index, user_id: user_id)
         else
-          send_file export_trades(@trades, date_tag(@range), user_id) 
+          send_file export_rayban_trades(@trades, date_tag(@range), 'rayban') # export_trades(@trades, date_tag(@range), user_id) 
         end
     end 
   end
