@@ -157,10 +157,10 @@ class User
 
   def shippings_sync
     send = trades.where(:consign_time.ne => nil)
-    unless send.empty?
+    if send.exists?
       start_at = 3.months.ago.beginning_of_day
       sent = send.where(:shipping.ne => nil)
-      unless sent.empty?
+      if sent.exists?
         start_at = sent.last.shipping.modified
       end
       Shipping.sync_create(session, start_at, Time.now)
@@ -183,7 +183,7 @@ class User
   end
 
   def members_sync(start_at=nil, end_at=Date.today, grade=nil) # 卖家的会员
-    unless members.empty?
+    if members.exists?
       start_at = members.recent.limit(1).first.last_trade_time if start_at.nil?
       Member.sync_update(self, start_at.beginning_of_day, end_at.end_of_day, grade)
     else
@@ -193,11 +193,11 @@ class User
 
   def refunds_sync # 退款
     start_at = 3.months.ago.beginning_of_day
-    unless trades.empty?
-      if refunds.empty?
-        start_at = trades.where(:'orders.refund_id' => nil).last.created # 有退款的交易
+     if trades.exists?
+      start_at = if refunds.exists?
+        refunds.recent.first.modified
       else
-        start_at = refunds.recent.first.modified
+        trades.where(:'orders.refund_id' => nil).last.created # 有退款的交易
       end
     end
     Refund.sync_create(session, start_at, Time.now)

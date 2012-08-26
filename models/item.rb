@@ -58,7 +58,6 @@ class Item # 商品
   index 'skus.outer_id' => 1
   
   scope :onsale, where(approve_status: 'onsale')
-  # default_scope desc(:seven_num, :prev_num)
   
   def item_url
     "http://item.taobao.com/item.htm?id=#{num_iid}"
@@ -201,7 +200,7 @@ class Item # 商品
           if items.count > 0
             items.each do |item|
               item['synced_at'] = Time.now
-              current_item = where(num_iid: item['num_iid']).last
+              current_item = where(_id: item['num_iid'].to_s).last
               if current_item.nil?
                 create!(item)
               else
@@ -241,7 +240,7 @@ class Item # 商品
             items = items['items']['item']
             if items.count > 0
               items.each do |item|
-                current_item = where(num_iid: item['num_iid']).last # 已有商品
+                current_item = where(_id: item['num_iid'].to_s).last # 已有商品
                 case
                  when current_item.nil?
                     created << item['num_iid'] # 新增

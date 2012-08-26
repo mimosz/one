@@ -3,7 +3,7 @@
 One.controllers :users do
 
   get :index, map: '/' do
-    @users = User.any_in(nick: current_account.user_ids)
+    @users = User.in(_id: current_account.user_ids)
     render 'users/index'
   end
   

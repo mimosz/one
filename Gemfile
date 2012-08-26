@@ -1,12 +1,9 @@
 source 'http://ruby.taobao.org/'
 
 # Server requirements
-group :development do
-  gem 'puma'
-end
+gem 'unicorn'
 
 group :production do
-  gem 'thin'
   gem 'padrino-csrf'
 end
 
@@ -38,4 +35,3 @@ end
 gem 'padrino', '0.10.7'
 gem 'padrino-rpm'
 gem 'grape'
-gem 'redmon', git: 'git://github.com/mimosa/redmon.git', require: 'redmon'

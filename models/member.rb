@@ -35,7 +35,8 @@ class Member
   field :_id, type: String, default: -> { "#{seller_nick}:#{buyer_nick}" }
 
   index seller_nick: 1, buyer_nick: 1
-  index 'receivers.receiver_mobile' => 1
+  index 'receivers.receiver_state' => 1
+  index({ 'receivers.receiver_mobile' => 1, 'receivers.receiver_name' => 1, 'receivers.receiver_address' => 1 }, { unique: true })
   index last_trade_time: 1
 
   scope :recent, desc(:last_trade_time) # 默认排序
@@ -48,7 +49,7 @@ class Member
       if trade
         current_receiver = nil
         self.synced_at = Time.now
-        unless receivers.empty?
+        if receivers.exists?
           current_receiver = receivers.where(
             receiver_mobile: trade.receiver_mobile,
             receiver_name: trade.receiver_name,
