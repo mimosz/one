@@ -18,7 +18,8 @@ One.controllers :subusers, :parent => :users do
         when :html
           render 'subusers/index'
         when :csv
-          send_file export_wangwangs(@wangwangs, date_tag(@range), user_id)
+          file_csv =  export_wangwangs(@wangwangs, date_tag(@range), user_id)
+          send_file file_csv, type: 'text/csv', filename: File.basename(file_csv)
       end
     else
       flash[:error] = '没有收到小弟。'

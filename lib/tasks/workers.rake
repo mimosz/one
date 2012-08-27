@@ -41,9 +41,14 @@ namespace :workers do
   task :start => :environment do
 
     # - CONFIGURATION ----
-    ENV['QUEUE']   ||= '*'
-    ENV['COUNT']   ||= '10'
+    ENV['TERM_CHILD'] ||= '1'
+    ENV['QUEUE']      ||= '*'
+    ENV['COUNT']      ||= '10'
     # --------------------
+
+    def term_child
+      ENV['TERM_CHILD']
+    end
 
     def queue
       ENV['QUEUE']

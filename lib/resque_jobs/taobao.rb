@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+require 'resque/errors'
 
 module ResqueJobs
   
@@ -23,6 +24,8 @@ module ResqueJobs
           user.members_sync # 卖家的会员
         puts "=================结束同步#{user_id}店铺信息=================="
       end
+    rescue Resque::TermException
+      puts "=================同步错误：店铺信息=================="
     end
   end
 
@@ -38,6 +41,8 @@ module ResqueJobs
           user.refunds_sync # 退款
         puts "=================结束同步#{user_id}交易信息=================="
       end
+    rescue Resque::TermException
+      puts "=================同步错误：交易信息=================="
     end
   end
   
@@ -51,6 +56,8 @@ module ResqueJobs
           user.items_sync  # 货品
         puts "=================结束同步#{user_id}货品信息=================="
       end
+    rescue Resque::TermException
+      puts "=================同步错误：货品信息=================="
     end
   end
 
@@ -64,6 +71,8 @@ module ResqueJobs
           user.shippings_sync  # 物流
         puts "=================结束同步#{user_id}物流信息=================="
       end
+    rescue Resque::TermException
+      puts "=================同步错误：物流信息=================="
     end
   end
 end

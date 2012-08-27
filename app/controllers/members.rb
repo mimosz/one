@@ -42,7 +42,10 @@ One.controllers :members, parent: :users do
       render 'members/index'
     when :csv
       @members = Member.where(@conditions)
-      unless @members.empty?
+      if @members.empty?
+          flash[:error] = '怎么可能，会员呢？'
+          redirect url(:members, :index, user_id: user_id)
+      else
         file_csv = export_members(@members, user_id)
         send_file file_csv, type: 'text/csv', filename: File.basename(file_csv)
       end

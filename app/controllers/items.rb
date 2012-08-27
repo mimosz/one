@@ -60,7 +60,8 @@ One.controllers :items, :parent => :users do
           flash[:error] = '怎么可能，货品呢？'
           redirect url(:items, :index, user_id: user_id)
         else
-          send_file items_export(@items, ['sku'], user_id)
+          file_csv = items_export(@items, ['sku'], user_id)
+          send_file file_csv, type: 'text/csv', filename: File.basename(file_csv)
         end
         
     end

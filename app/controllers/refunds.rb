@@ -21,7 +21,8 @@ One.controllers :refunds, :parent => :users do
           flash[:error] = '非常庆幸，没有退款~'
           redirect url(:refunds, :index, user_id: user_id)
         else
-          send_file export_refunds(@refunds, date_tag(@range), user_id) 
+          file_csv =  export_refunds(@refunds, date_tag(@range), user_id) 
+          send_file file_csv, type: 'text/csv', filename: File.basename(file_csv)
         end
     end 
   end
