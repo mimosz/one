@@ -57,4 +57,3 @@ Padrino.after_load do
 end
 
 Padrino.load!
-

@@ -5,6 +5,6 @@ development:
       username: howl
       password: '800622'
       hosts: 
-        - 58.215.160.212:27017
+        - db.innshine.com:27017
   options:
       skip_version_check: true
