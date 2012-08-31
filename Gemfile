@@ -35,3 +35,5 @@ end
 gem 'padrino', '0.10.7'
 gem 'padrino-rpm'
 gem 'grape'
+gem 'faye'
+gem 'faye-redis'

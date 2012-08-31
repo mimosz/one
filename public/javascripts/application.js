@@ -31,7 +31,7 @@
 		 $('[rel=popover]').popover({placement: 'bottom'});
 		 $('[rel=tooltip]').tooltip({});
 		 $('label.btn.active').each(function() {
-		        var label = $(this), inputId = label.attr('for');
+		    var label = $(this), inputId = label.attr('for');
 				$('#' + inputId).prop('checked', true);
 		 });
 	// fix sub nav on scroll
