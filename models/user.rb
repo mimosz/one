@@ -16,8 +16,6 @@ class User
   has_many :filter_lists, foreign_key: 'seller_nick' # 统计过滤表
   # Embedded
   embeds_many :addresses
-  embeds_one :location # 用户地址
-  embeds_one :buyer_credit,  class_name: 'UserCredit'  # 买家信用
   embeds_one :seller_credit, class_name: 'UserCredit' # 卖家信用
   
   # Validations
@@ -219,7 +217,7 @@ class User
   class << self
 
     def get_user(session)
-      options = { session: session , method: 'taobao.user.get', fields: user_fields }
+      options = { session: session , method: 'taobao.user.seller.get', fields: user_fields }
       seller = Topsdk.get_with(options)
       if seller.is_a?(Hash) && seller.has_key?('user')
         return seller['user']

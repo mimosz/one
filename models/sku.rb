@@ -37,6 +37,10 @@ class Sku # 产品
   def modified_at
     modified.in_time_zone.strftime("%Y-%m-%d %H:%M:%S")
   end
+
+  def prop_fields
+    to_hash.keys
+  end
   
   def to_hash
     return nil if properties_name.nil?
