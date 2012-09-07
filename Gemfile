@@ -37,6 +37,3 @@ gem 'padrino-rpm'
 gem 'grape'
 gem 'faye'
 gem 'faye-redis'
-
-gem 'omniauth'
-gem 'omniauth-taobao', github: 'ballantyne/omniauth-taobao'

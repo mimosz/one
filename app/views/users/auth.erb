@@ -1,1 +1,26 @@
-<%= auth.to_s %>
+
+<div class="span4 columns">
+<% form_tag 'https://oauth.taobao.com/token', method: 'post', class: '' do %>
+  <div class="control-group">
+    <div class="controls">
+      <input class="input" id="code" type="text" name="code" value="<%= @code %>" readonly='readonly' required='required' placeholder='授权码'>
+    </div>
+    <div class="controls">
+      <input class="input" id="grant_type" type="text" name="grant_type" value="authorization_code" readonly='readonly' required='required' placeholder='授权方式'>
+    </div>
+    <div class="controls">
+      <input class="input" id="client_id" type="text" name="client_id" value="21151322" readonly='readonly' required='required' placeholder='客户端ID'>
+    </div>
+    <div class="controls">
+      <input class="input" id="client_secret" type="text" name="client_secret" value="c9943af740cfb398471502e82002c7d4" readonly='readonly' required='required' placeholder='客户端密钥'>
+    </div>
+    <div class="controls">
+      <input class="input" id="scope" type="text" name="scope" value="item,promotion,usergrade" readonly='readonly' required='required' placeholder='请求的权限'>
+    </div>
+    <div class="controls">
+      <input class="input" id="redirect_uri" type="text" name="redirect_uri" value="http://db.innshine.com/auth/taobao/callback" readonly='readonly' required='required' placeholder='返回地址'>
+    </div>
+  </div>
+<div class="form-actions"><%= submit_tag '获取授权', class:'btn btn-primary' %></div>
+<% end %>
+</div>

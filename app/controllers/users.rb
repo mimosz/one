@@ -3,7 +3,7 @@
 One.controllers :users do
 
   get :auth, map: '/auth/:provider/callback' do
-    auth    = request.env["omniauth.auth"]
+    @code    = params[:code]
     render 'users/auth'
   end
 
