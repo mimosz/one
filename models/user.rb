@@ -5,15 +5,8 @@ class User
   # Referenced
   belongs_to :account # 店长
   
-  has_many :trades,       foreign_key: 'seller_nick' # 交易
-  has_many :refunds,      foreign_key: 'seller_nick' # 退款
-  has_many :items,        foreign_key: 'nick'        # 商品
-  has_many :subusers,     foreign_key: 'seller_nick' # 子账号
-  has_many :chatpeers,    foreign_key: 'seller_nick'
-  has_many :wangwangs,    foreign_key: 'seller_nick'
-  has_many :members,      foreign_key: 'seller_nick'
-  has_many :rates,        foreign_key: 'seller_nick'
-  has_many :filter_lists, foreign_key: 'seller_nick' # 统计过滤表
+  has_many :shops,  foreign_key: 'nick' # 店铺
+  
   # Embedded
   embeds_many :addresses
   embeds_one :seller_credit, class_name: 'UserCredit' # 卖家信用
@@ -230,7 +223,7 @@ class User
     private
     
     def user_fields
-     (['location', 'buyer_credit', 'seller_credit'] + self.fields.keys).join(',')
+     (['seller_credit'] + self.fields.keys).join(',')
     end
   end
   
@@ -252,32 +245,6 @@ class User
     items.where(synced_at: nil).distinct('num_iid')
   end
   
-  # 暂时没用
-  def get_user_ids(session, nicks, limit = 40) # 在售商品
-      options = { session: session, method: 'taobao.users.get', fields: 'user_id' }
-      user_ids = []
-      user_nicks = []
-      nicks.each_slice(limit).to_a.each do |nick| # 每40款商品，为一组
-        users = Topsdk.get_with(options.merge!(nicks: nick.join(',')))
-        if users.is_a?(Hash) && users.has_key?('users')
-          users = users['users']['user']
-          users.each do |user|
-            user_ids << user['user_id']
-            user_nicks << nick
-          end
-        else
-          puts "================================请求"
-          puts options
-          puts "================================结果"
-          puts nicks
-        end
-      end
-      if nicks.count != user_nicks.count
-        puts "User.get_user_ids============================错误"
-        puts (nicks - user_nicks)
-      end
-      return user_ids
-  end
   def get_buyer_ids(session, nicks) # 在售商品
       options = { session: session, method: 'taobao.crm.members.get', page_size: 100, current_page: 1 }
       buyer_ids = []

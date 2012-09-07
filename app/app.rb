@@ -29,6 +29,10 @@ class One < Padrino::Application
     role.project_module :users, '/users'
   end
 
+  use OmniAuth::Builder do
+    provider :taobao, '21151322', 'c9943af740cfb398471502e82002c7d4'
+  end
+
   ##
   # Caching support
   #

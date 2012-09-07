@@ -2,6 +2,11 @@
 
 One.controllers :users do
 
+  get :auth, map: '/auth/:provider/callback' do
+    auth    = request.env["omniauth.auth"]
+    render 'users/auth'
+  end
+
   get :index, map: '/' do
     @users = User.in(_id: current_account.user_ids)
     render 'users/index'

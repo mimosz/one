@@ -3,9 +3,11 @@ Grape::API.logger Padrino.logger
 
 module APIS
   module Entities
-    class Location < Grape::Entity
-      expose :address, documentation: { desc: '详细地址', type: 'String' }
-      expose :zip, documentation: { desc: '邮政编码', type: 'String' }
+    class SellerCredit < Grape::Entity
+      expose :level, documentation: { desc: '信用等级', type: 'Integer' }
+      expose :score, documentation: { desc: '信用总分', type: 'Integer' }
+      expose :total_num, documentation: { desc: '评价总数', type: 'Integer' }
+      expose :good_num, documentation: { desc: '好评总数', type: 'Integer' }
     end
     class Address < Grape::Entity
       expose :send_def, documentation: { desc: '是否默认发货地址', type: 'Boolean' }
@@ -14,7 +16,7 @@ module APIS
     end
     class User < Grape::Entity
       expose :nick, documentation: { desc: '店铺名称', type: 'String' }
-      expose :location, documentation: { desc: '所在', type: 'Hash' , fields: APIS::Entities::Location.documentation }, using: APIS::Entities::Location
+      expose :seller_credit, documentation: { desc: '卖家信用', type: 'Hash' , fields: APIS::Entities::SellerCredit.documentation }, using: APIS::Entities::SellerCredit
       expose :addresses, documentation: { desc: '地址', type: 'Array', fields: APIS::Entities::Address.documentation }, using: APIS::Entities::Address
     end
     class Order < Grape::Entity

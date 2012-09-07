@@ -13,22 +13,34 @@ class ShopCat
   field :_id, type: String, default: -> { cid }
 
   class << self
-    def sync_create()
-      options = { session: session, method: 'taobao.shop.get', fields: shop_cat_fields}
-        shop_cats = Topsdk.get_with(options)
-        if shop_cats.is_a?(Hash) && shop_cats.has_key?('shop_cats')
-          shop_cats = shop_cats['shop_cats']['shop_cat']
-        else
-          puts "ShopCat.sync_create============================错误"
-          puts "======请======求======"
-          puts options
-          puts "======结======果======"
-          puts shop_cats
+    def sync_create
+      options = { method: 'taobao.shopcats.list.get', fields: shop_cat_fields}
+      shop_cats = Topsdk.get_with(options)
+      if shop_cats.is_a?(Hash) && shop_cats.has_key?('shop_cats')
+        shop_cats = shop_cats['shop_cats']['shop_cat']
+        ids = shop_cat_ids
+        shop_cats.each do |shop_cat|
+          if ids.include?(shop_cat['cid'])
+            where(cid: shop_cat['cid']).update(shop_cat)
+          else
+            create(shop_cat)
+          end
         end
+      else
+        logger.error '////-- ShopCat.sync_create --////'
+        logger.error '/*'
+        logger.error options.to_s
+        logger.error '---------------------------------'
+        logger.error shop_cats.to_s
+        logger.error '*/'
       end
     end
 
     private
+
+    def shop_cat_ids
+      ShopCat.all.distinct('cid')
+    end
 
     def shop_cat_fields
      self.fields.keys.join(',')

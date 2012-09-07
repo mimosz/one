@@ -44,6 +44,7 @@ class Item # 商品
   field :type,            type: String   # 商品类型
   field :freight_payer,   type: String   # 运费承担方式
   field :approve_status,  type: String   # 商品上传后的状态
+  field :seller_cids,     type: Array    # 商所属的店铺内，自定义类目
 
   field :is_taobao,       type: Boolean  # 是否在淘宝显示
   
@@ -201,6 +202,10 @@ class Item # 商品
             items.each do |item|
               item['synced_at'] = Time.now
               current_item = where(_id: item['num_iid'].to_s).last
+              if item['seller_cids']
+                item['seller_cids'] = item['seller_cids'].split(',')
+                item['seller_cids'].delete("")
+              end
               if current_item.nil?
                 create!(item)
               else
