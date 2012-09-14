@@ -1,0 +1,4 @@
+<% form_for :account, url(:accounts, :create), class: '' do |f| %>
+  <%= partial "accounts/form", locals: { f: f } %>
+  <div class="form-actions"><%= f.submit '创建', class:'btn btn-primary' %></div>
+<% end %>

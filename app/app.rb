@@ -8,7 +8,8 @@ class One < Padrino::Application
   register Kaminari::Helpers::SinatraHelpers
 
   enable :sessions
-  
+  enable :authentication
+  enable :store_location
 
   set :login_page, '/sessions/new'
   
@@ -21,12 +22,12 @@ class One < Padrino::Application
   end
 
   access_control.roles_for :any do |role|
-    role.protect '/'
-    role.allow '/sessions'
+    # role.protect '/'
+    # role.allow '/sessions'
   end
 
   access_control.roles_for :admin do |role|
-    role.project_module :users, '/users'
+    # role.project_module :users, '/users'
   end
 
   ##

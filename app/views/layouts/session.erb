@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="MobileOptimized" content="width">
+    <meta name="HandheldFriendly" content="true">
+    <title>BEACON Project | Winter Is Coming</title>
+    <%= stylesheet_link_tag 'bootstrap.min', 'bootstrap-responsive.min' %>
+  </head>
+  <body style="background-color: #888; border: none;">
+    <div class="container">
+      <div class="modal">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>出入平安</h3>
+          </div>
+          <div class="modal-body">
+            <%= [:error, :warning, :notice].map { |type| flash_tag(type, class: "alert alert-block #{type}") }.join %>
+            <div class="row-fluid">
+              <div class="span8"><%= yield %></div>
+              <div class="span4">
+              <%= render_list class: 'nav nav-list' do |li|
+                li << link_to('<i class="icon-chevron-right"></i> 登录', url(:sessions, :new ))
+                li << link_to('<i class="icon-chevron-right"></i> 注册', url(:accounts, :new ))
+              end %>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer"></div>
+        </div>
+    </div>
+  </body>
+</html>

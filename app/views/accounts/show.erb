@@ -1,0 +1,32 @@
+<% content_for :header do %>
+  <p class="lead"><%= @account.name %>（<%=link_to '编辑', url(:accounts, :edit, account_id: @account) %>）</p>
+<% end %>
+<div class="span8 columns" style="overflow: auto;">
+  <ul class="nav nav-tabs">
+    <li class="active">
+      <a href="#">个人信息</a>
+    </li>
+    <li><a href="#">我的店铺</a></li>
+    <li><a href="#">其他店铺</a></li>
+  </ul>
+  <% @account.sellers.each do |seller| %>
+    <%= seller.nick %>
+  <% end %>
+  <div class="progress">
+  <div class="bar bar-success" style="width: 35%;">正常</div>
+  <div class="bar bar-warning" style="width: 20%;">特卖</div>
+  <div class="bar bar-danger" style="width: 10%;">超卖</div>
+</div>
+</div>
+<div class="span4 columns">
+  <dl>
+    <dt>手机</dt>
+    <dd><%= @account.mobile %></dd>
+    <dt>电邮</dt>
+    <dd><%= @account.email %></dd>
+    <dt>旺旺</dt>
+    <dd><%= @account.ali_wangwang %></dd>
+    <dt>QQ</dt>
+    <dd><%= @account.tencent_qq %></dd>
+  </dl>
+</div>

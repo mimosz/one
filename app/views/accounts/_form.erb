@@ -1,0 +1,52 @@
+<div class="control-group">
+  <%= f.label :name, caption: '姓名', class: 'control-label' %>
+  <div class="controls">
+    <%= f.text_field :name, placeholder: "" %>
+    <span class="help-inline"><%= f.error_message_on :name %></span>
+  </div>
+</div>
+<div class="control-group">
+  <%= f.label :email, caption: '电邮', class: 'control-label' %>
+  <div class="controls">
+    <%= f.text_field :email, placeholder: "" %>
+    <span class="help-inline"><%= f.error_message_on :email %></span>
+  </div>
+</div>
+<div class="control-group">
+  <%= f.label :password, caption: '密码', class: 'control-label' %>
+  <div class="controls">
+    <%= f.password_field :password, placeholder: "" %>
+    <span class="help-inline"><%= f.error_message_on :password %></span>
+  </div>
+</div>
+<div class="control-group">
+  <%= f.label :password_confirmation, caption: '确认密码', class: 'control-label' %>
+  <div class="controls">
+    <%= f.password_field :password_confirmation, placeholder: "" %>
+    <span class="help-inline"><%= f.error_message_on :password_confirmation %></span>
+  </div>
+</div>
+<details>
+  <summary>联系信息</summary>
+  <div class="control-group">
+    <%= f.label :mobile, caption: '手机', class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :mobile, placeholder: "" %>
+      <span class="help-inline"><%= f.error_message_on :mobile %></span>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :ali_wangwang, caption: '旺旺', class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :ali_wangwang, placeholder: "" %>
+      <span class="help-inline"><%= f.error_message_on :ali_wangwang %></span>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :tencent_qq, caption: 'QQ', class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :tencent_qq, placeholder: "" %>
+      <span class="help-inline"><%= f.error_message_on :tencent_qq %></span>
+    </div>
+  </div>
+</details>

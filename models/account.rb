@@ -1,14 +1,12 @@
 # -*- encoding: utf-8 -*-
-require 'digest/sha1'
+require 'securerandom'
 
 class Account
   include Mongoid::Document
   include Mongoid::Timestamps
   # Referenced
-  belongs_to :account, foreign_key: 'created_by' # 店长
   
-  has_many :users # 店铺
-  has_many :accounts, class_name: 'Account', foreign_key: 'created_by'  # 店员
+  has_many :sellers,  class_name: 'Taobao::User', as: :ownable # 淘宝卖家
   
   attr_accessor :password, :password_confirmation
 
@@ -20,33 +18,30 @@ class Account
   field :tencent_qq,       type: String
   field :ali_wangwang,     type: String
   
-  field :crypted_password, type:String
+  field :crypted_password, type: String
   field :salt,             type: String
   
   field :role,             type: String
-  field :created_by,       type: String
   
   field :created_at,       type: DateTime 
   field :updated_at,       type: DateTime 
-  field :disabled_at,      type: DateTime
-  
-  field :user_ids,         type: Array,   default: []
+  field :paused_at,        type: DateTime # 临时冻结
 
   # Validations
   validates_presence_of     :email, :name
   validates_presence_of     :password,                   :if => :password_required
   validates_presence_of     :password_confirmation,      :if => :password_required
-  validates_length_of       :password, :within => 4..40, :if => :password_required
+  validates_length_of       :password, within: 4..40,    :if => :password_required
   validates_confirmation_of :password,                   :if => :password_required
-  validates_length_of       :email,    :within => 3..100
-  validates_uniqueness_of   :email,    :case_sensitive => false
-  validates_format_of       :email,    :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i
+  validates_length_of       :email,    within: 3..100
+  validates_uniqueness_of   :email,    case_sensitive: false
+  validates_format_of       :email,    with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i
 
   # Callbacks
-  before_save :encrypt_password, :if => :password_required
+  before_save :encrypt_password, if: :password_required
 
   class << self
-    
+
       # This method is for authentication purpose
       def authenticate(email, password)
         account = where( email: email ).first if email.present?
@@ -68,13 +63,13 @@ class Account
   # Password setter generates salt and crypted_password
   def password=(val)
    return if val.blank?
-   update_attributes(salt: Digest::SHA1.hexdigest("--#{Time.now.to_s}--#{email}--")) if new?
+   update_attributes(salt: SecureRandom.hex ) if new_record?
    update_attributes(crypted_password: val.encrypt(self.salt))
   end
   
   private
 
   def password_required
-    crypted_password.blank? || self.password.present?
+    crypted_password.blank? || password.present?
   end
 end
