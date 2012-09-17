@@ -28,7 +28,7 @@
 								<%= link_to( icon, url(:users, :new), class: 'btn', rel: 'popover', 'data-original-title' => '店铺绑定', 'data-content' => '授权管理，新淘宝店铺') %>
 								<%= link_to( icon, 'https://oauth.taobao.com/authorize?response_type=code&amp;client_id=21151322&amp;scope=item,promotion,usergrade&amp;redirect_uri=http://db.innshine.com/auth/taobao/callback', class: 'btn', rel: 'popover', 'data-original-title' => '店铺绑定', 'data-content' => '授权管理，新淘宝店铺') %>
 								<% icon = content_tag(:i, nil, class: 'icon-cog') %>
-								<%= link_to( icon, url(:accounts, :show, id: current_account.id), class: 'btn', rel: 'popover', 'data-original-title' => '个人设置', 'data-content' => '修改个人信息') if current_account %>
+								<%= link_to( icon, url(:accounts, :show, account_id: current_account.id), class: 'btn', rel: 'popover', 'data-original-title' => '个人设置', 'data-content' => '修改个人信息') if current_account %>
 								<% icon = content_tag(:i, nil, class: 'icon-user') %>
 								<%= link_to( icon, url(:accounts, :new), class: 'btn', rel: 'popover', 'data-original-title' => '子账户管理', 'data-content' => '授权子帐号的访问权限') %>
 								<% icon = content_tag(:i, nil, class: 'icon-share') %>

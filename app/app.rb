@@ -6,28 +6,21 @@ class One < Padrino::Application
   register Padrino::Helpers
   register Padrino::Admin::AccessControl
   register Kaminari::Helpers::SinatraHelpers
-
-  enable :sessions
-  enable :authentication
-  enable :store_location
-
-  set :login_page, '/sessions/new'
   
   configure :production do
     register Padrino::CSRF
     enable :prevent_request_forgery
-
-    disable :raise_errors
-    disable :show_exceptions
   end
 
   access_control.roles_for :any do |role|
-    # role.protect '/'
-    # role.allow '/sessions'
+    role.protect '/'
+    role.allow '/sessions'
+    role.allow '/accounts/new'
+    role.allow '/accounts/create'
   end
 
   access_control.roles_for :admin do |role|
-    # role.project_module :users, '/users'
+    role.project_module :accounts, '/accounts'
   end
 
   ##

@@ -5,9 +5,14 @@
 # override these settings in the subapps as needed.
 #
 Padrino.configure_apps do
-  # enable :sessions
+  disable :sessions
+  enable  :authentication
+  # enable  :store_location
+  # disable :raise_errors
+  # disable :show_exceptions
   set :session_secret, APP_TOKEN
   set :session_id, 'padrino_one'.to_sym
+  set :login_page, '/sessions/new'
 end
 
 # Mounts the core application for this project

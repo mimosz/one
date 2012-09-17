@@ -9,6 +9,7 @@ One.controllers :accounts do
   end
 
   get :new do
+    redirect url(:accounts, :show, account_id: current_account.id) if logged_in?
     render 'accounts/new', nil, layout: :session
   end
 

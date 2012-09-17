@@ -1,0 +1,4 @@
+<% form_for @account, url(:accounts, :edit, account_id: @account.id), class: '' do |f| %>
+  <%= partial "accounts/form", locals: { f: f } %>
+  <div class="form-actions"><%= f.submit '修改', class:'btn btn-primary' %></div>
+<% end %>

@@ -1,22 +1,22 @@
 <% content_for :header do %>
-  <p class="lead"><%= @account.name %>（<%=link_to '编辑', url(:accounts, :edit, account_id: @account) %>）</p>
+  <p class="lead"><%= @account.name %><% if account_can %>（<%=link_to '编辑', url(:accounts, :edit, account_id: @account) %>）<% end %></p>
 <% end %>
 <div class="span8 columns" style="overflow: auto;">
   <ul class="nav nav-tabs">
     <li class="active">
       <a href="#">个人信息</a>
     </li>
-    <li><a href="#">我的店铺</a></li>
+    <li><a href="#">我的伙计</a></li>
     <li><a href="#">其他店铺</a></li>
   </ul>
   <% @account.sellers.each do |seller| %>
     <%= seller.nick %>
   <% end %>
   <div class="progress">
-  <div class="bar bar-success" style="width: 35%;">正常</div>
-  <div class="bar bar-warning" style="width: 20%;">特卖</div>
-  <div class="bar bar-danger" style="width: 10%;">超卖</div>
-</div>
+    <div class="bar bar-success" style="width: 35%;">正常</div>
+    <div class="bar bar-warning" style="width: 20%;">特卖</div>
+    <div class="bar bar-danger" style="width: 10%;">超卖</div>
+  </div>
 </div>
 <div class="span4 columns">
   <dl>
@@ -29,4 +29,14 @@
     <dt>QQ</dt>
     <dd><%= @account.tencent_qq %></dd>
   </dl>
+  <% if account_can %>
+  <div class="alert alert-error">
+    <h4>删除帐号</h4>
+    ...一切将化作浮云...
+    <% form_tag url(:accounts, :destroy, account_id: @account.id ), method:'post', class: '' do %>
+        <%= hidden_form_method_field('delete') %> 
+        <%= submit_tag '神马浮云，一定要删', class: 'btn btn-large btn-block btn-danger' %>
+    <% end %>
+  </div>
+  <% end %>
 </div>

@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+require 'rack/session/redis'
 
 # Defines our constants
 PADRINO_ENV  = ENV['PADRINO_ENV'] ||= ENV['RACK_ENV'] ||= 'development'  unless defined?(PADRINO_ENV)
@@ -40,13 +41,16 @@ I18n.default_locale = :zh_cn
 #   include Padrino::Helpers::TranslationHelpers
 # end
 
-Padrino.use Rack::Session::Cookie, secret: APP_TOKEN, expire_after: 86400   # In seconds
-
 ##
 # Add your before (RE)load hooks here
 #
 Padrino.before_load do
   Mongoid.load!(Padrino.root('config/mongoid.yml'), Padrino.env)
+  Padrino.use Rack::Session::Redis, {
+    url:          REDIS_URL,
+    namespace:    'rack:session',
+    expire_after: 600
+  }
 end
 
 ##
