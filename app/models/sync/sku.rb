@@ -31,7 +31,7 @@ module Sync
           skus_data[key] << sku
         end
         item_ids = skus_data.keys
-        Item.in(_id: item_ids).each do |item| # 商品
+        ::Item.in(_id: item_ids).each do |item| # 商品
           skus = skus_data[item.num_iid]
           updated   = [] # 更新
           unchanged = [] # 无变化

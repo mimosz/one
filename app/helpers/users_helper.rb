@@ -27,11 +27,11 @@ One.helpers do
     return nil unless params[:user_id]
     uid = params[:user_id].force_encoding('utf-8')
     return @user_id if defined?(@user_id) && @user_id == uid
-    if current_account.user_ids.include?(uid)
+    #if current_account.user_ids.include?(uid)
       @user_id = uid
-    else
-      redirect url(:dashboard, :index)
-    end
+    #else
+    #  redirect url(:dashboard, :index)
+    #end
   end
   
   def current_path?(uri)
@@ -64,8 +64,8 @@ One.helpers do
         item_class << item_options[:class]
       end
       link = item_content.match(/href=(["'])(.*?)(\1)/)[2] rescue nil
-      if link && current_path?(link)
-        item_class << "active"
+      if link  && current_path?(link)
+        item_class << "active" unless link == '#'
       end
       item_class = (item_class.empty?)? nil : item_class.join(" ")
       contents << content_tag(:li, item_content, class: item_class )

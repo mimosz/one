@@ -26,7 +26,7 @@ module Sync
               chatpeers = chatpeers['chatpeers']['chatpeer']
               chatpeers = [chatpeers] if chatpeers.is_a?(Hash) # 单记录
               chatpeers.each do |chatpeer| # 聊天对象
-                Msg.sync_create( current_chatpeer.merge(chatpeer), options.clone )
+                ::Msg.sync_create( current_chatpeer.merge(chatpeer), options.clone )
               end
             else
               puts "================================请求"

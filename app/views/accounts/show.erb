@@ -1,6 +1,4 @@
-<% content_for :header do %>
-  <p class="lead"><%= @account.name %><% if account_can %>（<%=link_to '编辑', url(:accounts, :edit, account_id: @account) %>）<% end %></p>
-<% end %>
+<% content_for :lead do %><%= @account.name %><% if account_can %>（<%=link_to '编辑', url(:accounts, :edit, account_id: @account) %>）<% end %><% end %>
 <div class="span8 columns" style="overflow: auto;">
   <ul class="nav nav-tabs">
     <li class="active">

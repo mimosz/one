@@ -1,9 +1,6 @@
-<% content_for :header do %>
-	<p class="lead"><%= image_tag type_img(@user.type) %> <%= image_tag rank_img(@user.seller_credit.level) %></p>
-<% end %>
+<% content_for :lead do %><%= image_tag type_img(@user.type) %> <%= image_tag rank_img(@user.seller_credit.level) %><% end %>
 <div class="span8 columns" style="overflow: auto;">
 <%= partial 'users/addresses' %>
 <%= partial 'users/rates' %>
-<% # partial 'users/service' %>
 </div>
 <% content_for :sidebar, partial("users/sidebar") %>

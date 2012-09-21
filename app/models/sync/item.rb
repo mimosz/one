@@ -153,7 +153,7 @@ module Sync
             puts items
           end
         end
-        Sku.sync_create(session, result) # 单品
+        ::Sku.sync_create(session, result) # 单品
       end
 
       private
@@ -181,9 +181,9 @@ module Sync
                    when current_item.nil?
                       created << item['num_iid'] # 新增
                       create(item)
-                      item_prop = ItemProp.where(cid: item['cid']).last
+                      item_prop = ::ItemProp.where(cid: item['cid']).last
                       unless item_prop
-                        ItemProp.sync_create(options[:session], item['cid'])
+                        ::ItemProp.sync_create(options[:session], item['cid'])
                       end
                    when item['modified'] > current_item.modified_at
                       updated << item['num_iid'] # 更新

@@ -34,6 +34,12 @@
 		    var label = $(this), inputId = label.attr('for');
 				$('#' + inputId).prop('checked', true);
 		 });
+
+		 $("a[data-remote=true]").live('click', function(e) {
+			  var el = $(this);
+			  el.tooltip('destroy');
+			  el.replaceWith('<img src=/img/spinner.gif />');
+			});
 	// fix sub nav on scroll
 	    var $win = $(window)
 	      , $nav = $('.subnav')

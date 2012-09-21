@@ -1,8 +1,6 @@
-<% content_for :header do %>
-  <p class="lead"> 当前货品数据（<%=link_to '导出', url(:items, :index, user_id: user_id, format: :csv), :target => '_blank' %>）</p>
-<% end %>
+<% content_for :lead do %>货品数据<% end %>
 <div class='columns'>
-<dl class='dl-horizontal'>
+<dl class='dl-horizontal pull-left'>
   <dt>商品周转</dt>
   <dd>根据７日内，上架天数，计算销量、售价区间。</dd>
   <dt>价格</dt>
@@ -12,6 +10,21 @@
   <dt>上/下架</dt>
   <dd><span class='label label-success'>在售</span>，<span class='label'>下架</span></dd>
 </dl>
+<% form_tag url(:items, :index, user_id: user_id), class: 'form-search pull-right', method: :get do %>
+  <div class="control-group">
+        <label class="control-label" for="level">格式：</label>
+        <div class="btn-group" >
+            <input type="radio" name="format" value="html" id="html" />
+            <label class="btn active" for="html">页面</label>
+            <input type="radio" name="format" value="csv" id="csv" />
+            <label class="btn" for="csv">导出CSV</label>
+        </div>
+  </div>
+  <div class="control-group">
+    <%= text_field_tag :outer_id, value: params[:outer_id], placeholder: "商品编码", class: 'search-query' %>
+    <button rel='tooltip' title='搜索' class='btn'><i class='icon-search'></i></button>
+  </div>
+<% end %>
 <table id="items" class="table table-bordered">
   <thead>
   <% if @items.total_count > @page_size %>

@@ -9,7 +9,7 @@ module Sync
         # chatpeer['uid'].gsub!('cntaobao','') # 去掉扩展
         chatpeer_id = "#{chatpeer[:sub_id]}-#{chatpeer['uid']}-#{chatpeer['date'].to_time.to_i}"
         chatpeer_id = Digest.bubblebabble(Digest::SHA1::hexdigest(chatpeer_id)[8..12]) 
-        if Chatpeer.where(_id: chatpeer_id).last
+        if ::Chatpeer.where(_id: chatpeer_id).last
           puts "Msg.sync_create============================提示"
           puts chatpeer
         else
@@ -28,7 +28,7 @@ module Sync
                msgs = msgs['msgs']['msg']
                msgs = [msgs] if msgs.is_a?(Hash) # 单记录
                chatpeer.merge!(parse_msgs(msgs))
-               Chatpeer.create(chatpeer.merge!(_id: chatpeer_id, msgs: msgs)) #
+               ::Chatpeer.create(chatpeer.merge!(_id: chatpeer_id, msgs: msgs)) #
             else
               puts "Msg.sync_create============================请求"
               puts options

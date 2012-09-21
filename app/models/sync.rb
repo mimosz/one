@@ -4,7 +4,7 @@ module Sync
   extend ActiveSupport::Concern
 
   def subusers_sync
-    Subuser.sync_create(session, nick)
+    ::Subuser.sync_create(session, nick)
   end
 
   def chatpeers_sync(start_at = nil, end_at = Date.yesterday, limit = 1, expire_at = 7.day.ago.to_date)
@@ -24,10 +24,10 @@ module Sync
         range = start_at..end_at # 时间区间
         range.each_slice(limit).each do | day |
           day = day.last
-          Chatpeer.sync_create(session, users, day.beginning_of_day, day.end_of_day)
+          ::Chatpeer.sync_create(session, users, day.beginning_of_day, day.end_of_day)
         end
       when duration == 0 # 单日
-       Chatpeer.sync_create(session, users, start_at.beginning_of_day, end_at.end_of_day)
+       ::Chatpeer.sync_create(session, users, start_at.beginning_of_day, end_at.end_of_day)
       else
          puts "从#{start_at}到#{end_at}。"
     end
@@ -49,10 +49,10 @@ module Sync
         range = start_at..end_at # 时间区间
         range.each_slice(limit).each do | day |
           day = day.last
-          Wangwang.sync_create(self, day.beginning_of_day, day.end_of_day)
+          ::Wangwang.sync_create(self, day.beginning_of_day, day.end_of_day)
         end
       when duration == 0 # 单日
-       Wangwang.sync_create(self, start_at.beginning_of_day, end_at.end_of_day)
+       ::Wangwang.sync_create(self, start_at.beginning_of_day, end_at.end_of_day)
      else
        puts "从#{start_at}到#{end_at}。"
     end
@@ -87,31 +87,31 @@ module Sync
       if sent.exists?
         start_at = sent.last.shipping.modified
       end
-      Shipping.sync_create(session, start_at, Time.now)
+      ::Shipping.sync_create(session, start_at, Time.now)
     end
   end
   
   def orders_sync
     Trade.sync_orders(session, trades.sync_ids)
-    Item.sync_update(self)
+    ::Item.sync_update(self)
   end
 
   def items_sync # 商品
-    Item.sync_create(session, :onsale)
-    Item.sync_create(session, :inventory)
-    Item.sync_items(session, items.sync_ids)
+    ::Item.sync_create(session, :onsale)
+    ::Item.sync_create(session, :inventory)
+    ::Item.sync_items(session, items.sync_ids)
   end
   
   def addresses_sync # 卖家地址
-    Address.sync_create(self)
+    ::Address.sync_create(self)
   end
 
   def members_sync(start_at=nil, end_at=Date.today, grade=nil) # 卖家的会员
     if members.exists?
-      start_at = members.recent.limit(1).first.last_trade_time if start_at.nil?
-      Member.sync_update(self, start_at.beginning_of_day, end_at.end_of_day, grade)
+      start_at = members.desc(:last_trade_time).limit(1).first.last_trade_time if start_at.nil?
+      ::Member.sync_update(self, start_at.beginning_of_day, end_at.end_of_day, grade)
     else
-      Member.sync_create(self)
+      ::Member.sync_create(self)
     end
   end
 
@@ -119,16 +119,16 @@ module Sync
     start_at = 3.months.ago.beginning_of_day
      if trades.exists?
       start_at = if refunds.exists?
-        refunds.recent.first.modified
+        refunds.desc(:created, :modified).limit(1).first.modified
       else
         trades.where(:'orders.refund_id' => nil).last.created # 有退款的交易
       end
     end
-    Refund.sync_create(session, start_at, Time.now)
+    ::Refund.sync_create(session, start_at, Time.now)
   end
   
   def rates_sync # 评价，每日更新
-    Rate.sync_create(self)
+    ::Rate.sync_create(self)
   end
 
   private

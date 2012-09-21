@@ -4,8 +4,12 @@ One.controllers :items, :parent => :users do
   before do
     @page = 1 
     @page_size = 20
-    @page = params[:page].to_i unless params[:page].nil?
-    @page_size = params[:page_size].to_i unless params[:page_size].nil?
+    @page = params[:page].to_i unless params[:page].blank?
+    @page_size = params[:page_size].to_i unless params[:page_size].blank?
+    @conditions = { nick: user_id }
+    unless params[:outer_id].blank?
+      @conditions.merge!( outer_id: /#{params[:outer_id]}/)
+    end
   end
 
   get :new do
@@ -52,10 +56,10 @@ One.controllers :items, :parent => :users do
 
     case content_type
       when :html
-        @items = Item.where(nick: user_id).desc(:duration).page(@page).per(@page_size)
+        @items = Item.where(@conditions).desc(:duration).page(@page).per(@page_size)
         render 'items/index'
       when :csv
-        @items = Item.where(nick: user_id)
+        @items = Item.where(@conditions)
         if @items.empty?
           flash[:error] = '怎么可能，货品呢？'
           redirect url(:items, :index, user_id: user_id)

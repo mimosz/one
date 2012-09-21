@@ -21,7 +21,7 @@ One.controllers :trades, parent: :users do
     @range = @start_at.beginning_of_day..@end_at.end_of_day
     @trades = Trade.where( @conditions.merge( @field.to_sym => @range) )
     unless params[:timeline].blank?
-      @timeline = { field: @field, unit: 'week'}
+      @timeline = { field: @field, unit: 'day'}
       @options.merge!(timeline: @timeline)
     end
     unless params[:sku].blank?
