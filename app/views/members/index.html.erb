@@ -1,6 +1,4 @@
-<% content_for :header do %>
-  <p class="lead"> <%= date_tag(@range, ' ～ ') if @range %>店铺会员</p>
-<% end %>
+<% content_for :lead do %><%= date_tag(@range, ' ～ ') if @range %>店铺会员<% end %>
 <div class="span8 columns" style="overflow: auto;">
 <table id="members" class="table table-bordered">
     

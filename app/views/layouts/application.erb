@@ -11,8 +11,8 @@
 		<!--[if lt IE 7]><link rel="stylesheet" href="/stylesheets/bootstrap-ie6.min.css"><![endif]-->
 		<!--[if lt IE 9]><script src="/javascripts/html5.js"></script><![endif]-->
 	</head>
-	<body data-spy="scroll" data-target=".subnav" data-offset="50">
-		<div id="navbar" class="navbar navbar-fixed-top">
+	<body data-spy="scroll" data-target=".subnav">
+		<div id="navbar" class="navbar navbar-inverse navbar-fixed-top">
 			<div class="navbar-inner">
 				<div class="container">
 					<%= link_to '店', url(:users, :index), class: 'brand' %>
@@ -38,8 +38,8 @@
 				</div>
 			</div>
 		</div>
-		<div class="container">
-			<header class="jumbotron subhead">
+			<div class="jumbotron subhead">
+				<div class="container">
 					<% 
 						menu = render_list class: 'dropdown-menu' do |li|
 							current_account.sellers.each do |uid|
@@ -54,11 +54,11 @@
 							<%= content_tag(:button, caret, class: 'btn dropdown-toggle', 'data-toggle' => 'dropdown') %>
 							<%= menu %>
 						</div>
-						<p class='lead pull-right'><%= yield_content :lead %></p>
+						<div class='lead pull-right'><%= yield_content :lead %></div>
 					</div>
 				<%= yield_content :header %>
 				<%  if user_id %>
-					<div class='subnav'>
+					<div class='subnav clearfix'>
 						<% sub_menu = render_list class: 'dropdown-menu' do |li|
 							li << link_to('数据同步', url(:resque, :index, user_id: user_id ))
 							li << link_to('过 滤 器', url(:filter_list, :index, user_id: user_id ))
@@ -75,8 +75,10 @@
 						%>
 					</div>
 				<% end %>
-				<%= [:error, :warning, :info, :success].map { |type| flash_tag(type, class: "alert alert-block #{type}") }.join %>  
-			</header>
+				<%= [:error, :warning, :info, :success].map { |type| flash_tag(type, class: "alert alert-block #{type}") }.join %> 
+				</div> 
+			</div>
+			<div class="container">
 			<section>
 				<div class="row">
 					<%= yield %>
@@ -85,7 +87,7 @@
 			</section>
 			<footer class="footer">
 				<p class="pull-right"><a href="#">升天啦～</a></p>
-				<p>&copy;当前时间： <%= Time.now.to_s %>， 基于 <a href="http://padrino.github.com" target="_blank">Padrino <%= Padrino.version %>版</a>开发.</p>
+				<p>&copy;当前时间： <%= Time.now.to_s %>， 基于 <a href="http://padrino.github.com" target="_blank">Padrino <%= Padrino.version %>版</a> 开发.</p>
 			</footer>
 		</div>
 		<%= javascript_include_tag 'jquery', 'jquery-ujs', 'bootstrap.min', 'jquery.graphup.pack',  'chosen.jquery.min',  'datepicker', 'application' %>

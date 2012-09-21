@@ -27,15 +27,10 @@ gem 'resque-scheduler', '>= 2.0.0.e', require: 'resque_scheduler'
 gem 'redis-objects', require: 'redis/objects'
 gem 'rack-session-redis'
 
-# Test requirements
-group :test do
-  gem 'minitest', '~>2.6.0', require: 'minitest/autorun'
-  gem 'rack-test', require: 'rack/test'
-end
-
 # Padrino Stable Gem
 gem 'padrino', '0.10.7'
 gem 'padrino-rpm'
-gem 'grape'
+gem 'grape' # API接口
+# 即时消息，待开发
 gem 'faye'
 gem 'faye-redis'
