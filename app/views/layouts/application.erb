@@ -41,8 +41,7 @@
 			<div class="jumbotron subhead">
 				<div class="container">
 					<% 
-						menu = render_list class: 'dropdown-menu' do |li|
-							li << link_to('店铺快速跳转', url(:accounts, :show, account_id: current_account.id))
+						menu = render_list class: 'dropdown-menu', role: 'button' do |li|
 							current_account.seller_ids.each do |sid|
 								li << link_to(sid, url(:users, :show, user_id: sid)) if user_id != sid
 							end
@@ -51,7 +50,7 @@
 					%>
 					<div class='btn-toolbar'>
 						<div class='btn-group'>
-							<%= content_tag(:button, user_id, class: 'btn') %>
+							<%= content_tag(:button, (user_id || '店铺快速切换'), class: 'btn') %>
 							<%= content_tag(:button, caret, class: 'btn dropdown-toggle', 'data-toggle' => 'dropdown') %>
 							<%= menu %>
 						</div>
