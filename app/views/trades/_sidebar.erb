@@ -16,15 +16,24 @@
 	</div>
 	<div class="control-group">
 		<div class="btn-group" >
-			<input type="radio" name="timeline" id="timeline" <%= 'checked' if @timeline %>  />
-			<label class="btn <%= 'active' if @timeline %>" for="timeline">时间轴</label>
-			<input type="radio" name="sku" id="sku" <%= 'checked' if @sku %>  />
-			<label class="btn <%= 'active' if @sku %>" for="sku">SKU</label>
-			<input type="radio" name="state" id="state" <%= 'checked' if @state %>  />
-			<label class="btn <%= 'active' if @state %>" for="state">区域</label>
+			<input type="radio" name="axis" value="timeline" id="axis_timeline"  />
+			<label class="btn <%= 'active' if @axis == 'timeline' %>" for="axis_timeline">时间轴</label>
+			<input type="radio" name="axis" value="sku" id="axis_sku"  />
+			<label class="btn <%= 'active' if @axis == 'sku' %>" for="axis_sku">SKU</label>
+			<input type="radio" name="axis" value="state" id="axis_state"  />
+			<label class="btn <%= 'active' if @axis == 'state' %>" for="axis_state">区域</label>
 		</div>
 	</div>
 	<%= partial('shared/form_calendar', locals: {label: '销售区间：'}) %>
+	<div class="control-group">
+        <label class="control-label" for="level">格式：</label>
+        <div class="btn-group" >
+            <input type="radio" name="format" value="html" id="html" />
+            <label class="btn active" for="html">页面</label>
+            <input type="radio" name="format" value="csv" id="csv" />
+            <label class="btn" for="csv">导出CSV</label>
+        </div>
+  </div>
 	<div class="form-actions">
 		<%= submit_tag '筛选', class:'btn btn-primary' %>
 	</div>

@@ -101,6 +101,11 @@ hr.soften {
   text-shadow: 0 0 10px rgba(255,255,255,.25);
 }
 
+.jumbotron .dropdown-menu a,
+.jumbotron .dropdown-menu a:hover {
+  color: #333;
+}
+
 /* Download button */
 .masthead .btn {
   padding: 14px 24px;
@@ -231,6 +236,7 @@ hr.soften {
 }
 .subnav .nav > .active > a,
 .subnav .nav > .active > a:hover {
+  color: #020031;
   padding-left: 13px;
   background-color: #e9e9e9;
   border-right-color: #ddd;

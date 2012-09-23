@@ -3,7 +3,7 @@
 One.controllers :trades, parent: :users do
   before do
     @conditions = { seller_nick: user_id }
-    @options = { item: true }
+    
     # 发货、创建
     @field = 'pay_time' # 按支付（默认）
     unless params[:field].blank?
@@ -20,33 +20,26 @@ One.controllers :trades, parent: :users do
     end
     @range = @start_at.beginning_of_day..@end_at.end_of_day
     @trades = Trade.where( @conditions.merge( @field.to_sym => @range) )
-    unless params[:timeline].blank?
-      @timeline = { field: @field, unit: 'day'}
-      @options.merge!(timeline: @timeline)
-    end
-    unless params[:sku].blank?
-      @sku = true
-      @options.merge!(sku: @sku)
-    end
-    unless params[:status].blank?
-      @status = true
-      @options.merge!(status: @status)
-    end
-    unless params[:state].blank?
-      @state = true
-      @options.merge!(state: @state)
+
+    @options = { item: true }
+    unless params[:axis].blank?
+      case params[:axis]
+      when 'timeline'
+        @options.merge!(timeline: { field: @field, unit: 'day'})
+      when 'sku'
+        @options.merge!(sku: true)
+      when 'status'
+        @options.merge!(status: true)
+      when 'state'
+        @options.merge!(state: true)
+      end
+      @axis = params[:axis]
     end
   end
 
   get :index, provides: [:html, :csv] do
     case content_type
       when :html
-        # item: true,
-        # sku: true,
-        # status: true,
-        # state: true,
-        # timeline: { field: @field, unit: 'week'},
-        # filter_list: @filter_list,
         @trades = group_by(@trades, @options)
         render 'trades/index'
       when :csv
@@ -55,7 +48,6 @@ One.controllers :trades, parent: :users do
           redirect url(:trades, :index, user_id: user_id)
         else
           file_csv = export_trades(@trades, date_tag(@range), user_id)
-          # export_rayban_trades(@trades, date_tag(@range), 'rayban')
           send_file file_csv, type: 'text/csv', filename: File.basename(file_csv)
         end
     end 

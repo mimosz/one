@@ -1,6 +1,15 @@
 <div class="span4 columns">
   <% form_tag url(:subusers, :index, user_id: user_id ), method: 'get', class: '' do %>
-<%= partial('shared/form_calendar') %>
-<div class="form-actions"><%= submit_tag '查詢', class:'btn btn-primary' %></div>
-<% end %>
+    <%= partial('shared/form_calendar') %>
+      <div class="control-group">
+        <label class="control-label" for="level">格式：</label>
+        <div class="btn-group" >
+            <input type="radio" name="format" value="html" id="html" />
+            <label class="btn active" for="html">页面</label>
+            <input type="radio" name="format" value="csv" id="csv" />
+            <label class="btn" for="csv">导出CSV</label>
+        </div>
+      </div>
+    <div class="form-actions"><%= submit_tag '查詢', class:'btn btn-primary' %></div>
+  <% end %>
 </div>

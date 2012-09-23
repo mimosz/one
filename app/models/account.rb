@@ -56,6 +56,10 @@ class Account
     
   end
 
+  def seller_ids
+    sellers.distinct('nick') + employer_sellers.distinct('seller_nick')
+  end
+
   def employees_by_seller
     result = {}
     employees.each do |e|

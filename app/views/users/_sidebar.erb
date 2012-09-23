@@ -1,14 +1,6 @@
 <div class="span4 columns">
   <% form_tag url(:users, :show, user_id: user_id ), method: 'get', class: '' do %>
-<%= partial('shared/form_calendar') %>
-<div class="form-actions"><%= submit_tag '店铺评价查询', class:'btn btn-primary' %></div>
-<% end %>
-<ul class="nav nav-list">
-  <li class="nav-header">
-    联系人
-  </li>
-  <li class="active">
-    <%= mail_to @user.email %>
-  </li>
-</ul>
+    <%= partial('shared/form_calendar') %>
+    <div class="form-actions"><%= submit_tag '店铺评价查询', class:'btn btn-primary' %></div>
+  <% end %>
 </div>

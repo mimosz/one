@@ -42,8 +42,8 @@
 				<div class="container">
 					<% 
 						menu = render_list class: 'dropdown-menu' do |li|
-							current_account.sellers.each do |uid|
-								li << link_to(uid, url(:users, :show, user_id: uid)) if user_id != uid
+							current_account.seller_ids.each do |sid|
+								li << link_to(sid, url(:users, :show, user_id: sid)) if user_id != sid
 							end
 				   	end
 				   	caret = content_tag(:b, nil, class: 'caret')

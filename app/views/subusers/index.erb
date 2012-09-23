@@ -1,8 +1,4 @@
-<% content_for :header do %>
-  <p class="lead">
-    <%= date_tag(@range, ' ～ ') %> 客服数据（<%=link_to '导出', url(:subusers, :index, user_id: user_id, start_at: @start_at, end_at: @end_at, :format => :csv), target:'_blank' %>）
-  </p>
-<% end %>
+<% content_for :lead do %><%= date_tag(@range, ' ～ ') %> 客服数据<% end %>
 <div class="span8 columns" style="overflow: auto;">
 
   <table id="subusers" class="table table-bordered">
@@ -61,7 +57,7 @@
     <% end %>
     </tbody>
     <% else %>
-      <tr><td colspan='11'>时机未到，请耐心等待...</td></tr>
+      <tr><td colspan='14'>时机未到，请耐心等待...</td></tr>
     <% end %>
   </table>
 </div>

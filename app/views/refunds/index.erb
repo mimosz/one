@@ -1,6 +1,4 @@
-<% content_for :header do %>
-	<p class="lead"><%= date_tag(@range, ' ～ ') %> 退款记录（<%=link_to '导出', url(:refunds, :index, :user_id => user_id, :start_at => @start_at,  :end_at => @end_at, :field => @field, :format => :csv), :target => '_blank' %>）</p>
-<% end %>
+<% content_for :lead do %><%= date_tag(@range, ' ～ ') %> 退款记录<% end %>
 <div class="span8 columns" style="overflow: auto;">
 <table id="refunds" class="table table-bordered">
 	<thead>
