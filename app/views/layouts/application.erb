@@ -42,6 +42,7 @@
 				<div class="container">
 					<% 
 						menu = render_list class: 'dropdown-menu' do |li|
+							li << link_to('店铺快速跳转', url(:accounts, :show, account_id: current_account.id))
 							current_account.seller_ids.each do |sid|
 								li << link_to(sid, url(:users, :show, user_id: sid)) if user_id != sid
 							end

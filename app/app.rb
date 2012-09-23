@@ -6,11 +6,6 @@ class One < Padrino::Application
   register Padrino::Helpers
   register Padrino::Admin::AccessControl
   register Kaminari::Helpers::SinatraHelpers
-  
-  configure :production do
-    register Padrino::CSRF
-    enable :prevent_request_forgery
-  end
 
   access_control.roles_for :any do |role|
     role.protect '/'

@@ -3,10 +3,6 @@ source 'http://ruby.taobao.org/'
 # Server requirements
 gem 'unicorn'
 
-group :production do
-  gem 'padrino-csrf'
-end
-
 # Project requirements
 gem 'rake'
 gem 'sinatra-flash', require: 'sinatra/flash'
