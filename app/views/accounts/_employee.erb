@@ -1,0 +1,27 @@
+<% form_for :employee, url(:employees, :create), class: '' do |f| %>
+  <div class="control-group">
+    <%= f.label :email, caption: '电邮：', class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :email, placeholder: "通过电邮，邀请伙计。" %>
+      <span class="help-inline"><%= f.error_message_on :email %></span>
+    </div>
+  </div>
+  <div class="control-group">
+      <%= f.label :seller_nick, caption: '店铺：', class: 'control-label' %>
+      <div class="controls">
+        <%= f.select :seller_nick, collection: @account.sellers, fields: [:nick, :nick], placeholder: '', multiple: false, class: 'chzn-select' %>
+      </div>
+  </div>
+  <div class="control-group">
+        <%= f.label :role, caption: '角色：', class: 'control-label' %>
+        <div class="btn-group" >
+            <%= f.radio_button :role, value: 'op' %>
+            <label class="btn" for="employee_role_op">运营</label>
+            <%= f.radio_button :role, value: 'cs' %>
+            <label class="btn" for="employee_role_cs">客服</label>
+            <%= f.radio_button :role, value: 'admin' %>
+            <label class="btn" for="employee_role_admin">店长</label>
+        </div>
+    </div>
+  <div class="form-actions"><%= f.submit '添加', class:'btn btn-primary' %></div>
+<% end %>

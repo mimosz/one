@@ -16,7 +16,7 @@ One.controllers :accounts do
   post :create do
     @account = Account.new(params[:account])
     if @account.save
-      flash[:notice] = '欢迎光临，.'
+      flash[:notice] = "欢迎光临，#{@account.name}."
       redirect url(:accounts, :show, account_id: @account.id)
     else
       flash[:error] = '帐号信息错误。'
@@ -31,6 +31,7 @@ One.controllers :accounts do
   
   get :show, :with => :account_id do
     @account = Account.find(params[:account_id])
+    @employees = @account.employees_by_seller
     render 'accounts/show'
   end
 

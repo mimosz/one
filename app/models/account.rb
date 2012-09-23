@@ -5,8 +5,9 @@ class Account
   include Mongoid::Document
   include Mongoid::Timestamps
   # Referenced
-  has_many    :sellers,  class_name: 'User', as: :ownable # 淘宝卖家
-  embeds_many :employees # 伙计
+  has_many :employees # 伙计
+  has_many :sellers,          class_name: 'User',              as: :ownable      # 自家店铺
+  has_many :employer_sellers, class_name: 'Employee', foreign_key: 'employee_id' # 老板店铺
   
   attr_accessor :password, :password_confirmation
 
@@ -53,6 +54,16 @@ class Account
         find(id) rescue nil
       end
     
+  end
+
+  def employees_by_seller
+    result = {}
+    employees.each do |e|
+      result[e.seller_nick] = {'运营'=>[],'客服'=>[],'店长'=>[]} unless result.has_key?(e.seller_nick)
+      seller = result[e.seller_nick]
+      seller[e.title] << { id: e.employee_id, name: e.employee_name }
+    end
+    result
   end
   
   # This method is used to retrieve the original password.

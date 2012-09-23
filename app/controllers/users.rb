@@ -7,7 +7,7 @@ One.controllers :users do
     render 'users/auth'
   end
 
-  get :index, map: '/' do
+  get :index do
     @users = User.in(_id: current_account.user_ids)
     render 'users/index'
   end
