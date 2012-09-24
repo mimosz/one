@@ -44,6 +44,7 @@ One.controllers :filter_list, :parent => :users do
           Item.sync_items(session, @trades[:unknown_ids])
           @items = Item.any_in(num_iid: @trades[:unknown_ids]) 
         end
+        flash[:warning] = '分类未覆盖，所有货品!' if @items
       end
     end
     render 'filter_list/show'

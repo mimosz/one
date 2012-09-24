@@ -51,6 +51,10 @@ module Store
     ('http://store.taobao.com/view_shop.htm?user_number_id=' + user_id.to_s) if user_id
   end
 
+  def rate_url
+    'http://rate.taobao.com/user-rate-' + uid + '.htm' if uid
+  end
+
   def get_uid(url=nil)
     url ||= store_url
     path = Nestful::Request.new(url).query_path.gsub('%25','%')

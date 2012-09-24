@@ -1,6 +1,4 @@
-<% content_for :header do %>
-  <p class="lead">聊天记录</p>
-<% end %>
+<% content_for :lead do %>聊天记录<% end %>
 <div class='span12' id='chatpeers'>
   <% unless @chatpeers.empty? %>
     <%= partial "chatpeers/msgs", locals: { chatpeers: @chatpeers } %>

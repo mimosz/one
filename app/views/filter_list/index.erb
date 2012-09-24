@@ -1,11 +1,9 @@
-<% content_for :header do %>
-  <p class="lead">交易过滤器（<%=link_to '来一个', url(:filter_list, :new, user_id: user_id), :target => '_blank' %>）</p>
-<% end %>
+<% content_for :lead do %>交易过滤器<% end %>
 <div class="span8 columns" style="overflow: auto;">
 <table id="filter_list" class="table table-bordered">
   <thead>
 	<tr>
-	    <th>名称</th>
+	    <th>名称<%=link_to '<i class="icon-filter"></i>', url(:filter_list, :new, user_id: user_id), rel: 'tooltip', title: '新增过滤器' %></th>
 	    <th colspan="2">价格区间</th>
       <th colspan="2">折扣区间</th>
 	    <th>商家编码</th>

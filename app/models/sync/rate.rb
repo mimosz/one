@@ -12,7 +12,7 @@ module Sync
           seller_nick: user.nick.to_s,
         }
         return false if where(conditions).last
-        rates = seller_rate(user.uid) 
+        rates = seller_rate(user.rate_url) 
         services = seller_serv(user.user_id) 
         conditions.merge!(rates) unless rates.nil?
         conditions.merge!(services)
@@ -21,8 +21,7 @@ module Sync
 
       private
 
-      def seller_rate(uid) # 店铺评分
-        url = "http://rate.taobao.com/user-rate-#{uid}.htm"
+      def seller_rate(url) # 店铺评分
         html =  Nestful.get(url).force_encoding("GBK").encode("UTF-8")
         dom = Nokogiri::HTML(html).at('div#sixmonth') # 解析成XPath
         unless dom.nil?

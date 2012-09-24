@@ -128,7 +128,7 @@ module Sync
   end
   
   def rates_sync # 评价，每日更新
-    ::Rate.sync_create(self)
+    ::Rate.sync_create(self) if user_id && uid
   end
 
   private

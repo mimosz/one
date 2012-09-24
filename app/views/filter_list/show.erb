@@ -1,8 +1,5 @@
-<% content_for :header do %>
-	<p class="lead"><%= date_tag(@range, ' ～ ') %> 交易汇总</p>
-<% end %>
+<% content_for :lead do %><%= date_tag(@range, ' ～ ') %> 交易汇总<% end %>
 <div class="span8 columns" style="overflow: auto;">
-<%= partial('filter_list/items') if @items %>
 <% unless @trades.empty? %>
 	<dl class="dl-horizontal">
 		<dt>店铺（吊牌价）折扣率</dt>
@@ -93,5 +90,6 @@
 	<% end %>
 	</table>
 <% end %>
+<%= partial('filter_list/items') if @items %>
 </div>
 <% content_for :sidebar, partial('filter_list/sidebar', locals: { filters: @filter_list})  %>
