@@ -40,7 +40,6 @@
   <table class="table table-bordered">
     <thead>
     <tr>
-      <th>&nbsp;</th>
       <th>店铺</th>
       <th>运营</th>
       <th>客服</th>
@@ -50,7 +49,6 @@
     <tbody>
     <% @account.employer_sellers.each do |seller| %>
     <tr>
-      <td><%= image_tag(seller.avatar, width:48, height:48) %></td>
       <td><%= link_to seller.seller_nick,   url(:users,    :show,    user_id: seller.seller_nick) %></td>
       <td><%= '<i class="icon-check"></i>' if seller.title == '运营' %></td>
       <td><%= '<i class="icon-check"></i>' if seller.title == '客服' %></td>

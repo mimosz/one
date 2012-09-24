@@ -13,7 +13,7 @@
           <% time = msg.talk_at %>
           <%= content_tag(:div, time, class: 'code', style: 'text-align: center;') %>
         <% end %>
-      <% unless msg.content.match('e-service.im.alisoft.coml') %>
+      <% unless msg.content.match('e-service.im.alisoft.com') %>
         <div class='box' style='background-color: #fff;'>
           <% if msg.direction > 0 # 过滤客服评价 %>
             <blockquote style='margin: 0px;'>
