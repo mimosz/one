@@ -25,7 +25,11 @@ One.controllers :trades, parent: :users do
     unless params[:axis].blank?
       case params[:axis]
       when 'timeline'
-        @options.merge!(timeline: { field: @field, unit: 'day'})
+        @unit = 'day'
+        if %w(day week month year).include?(params[:unit])
+          @unit = params[:unit]
+        end
+        @options.merge!(timeline: { field: @field, unit: @unit})
       when 'sku'
         @options.merge!(sku: true)
       when 'status'

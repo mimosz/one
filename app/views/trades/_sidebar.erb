@@ -1,6 +1,7 @@
 <div class="span4 columns">
 	<% form_tag url(:trades, :index, user_id: user_id ), method:'get', class:'form-inline' do %>
 	<div class="control-group">
+    <label class="control-label" for="axis">类型：（日期）</label>
 		<div class="btn-group" >
 			<input type="radio" name="field" value="pay_time" id="pay_time" />
 			<label class="btn <%= 'active' if @field == 'pay_time' %>" for="pay_time">支付</label>
@@ -15,6 +16,7 @@
 		</div>
 	</div>
 	<div class="control-group">
+    <label class="control-label" for="axis">纬度：</label>
 		<div class="btn-group" >
 			<input type="radio" name="axis" value="timeline" id="axis_timeline"  />
 			<label class="btn <%= 'active' if @axis == 'timeline' %>" for="axis_timeline">时间轴</label>
@@ -24,6 +26,19 @@
 			<label class="btn <%= 'active' if @axis == 'state' %>" for="axis_state">区域</label>
 		</div>
 	</div>
+  <div class="control-group">
+    <label class="control-label" for="unit">单位：（时间轴）</label>
+    <div class="btn-group" >
+      <input type="radio" name="unit" value="day" id="unit_day"  />
+      <label class="btn <%= 'active' if @unit == 'day' %>" for="unit_day">时段/label>
+      <input type="radio" name="unit" value="week" id="unit_week"  />
+      <label class="btn <%= 'active' if @unit == 'week' %>" for="unit_week">天</label>
+      <input type="radio" name="unit" value="month" id="unit_month"  />
+      <label class="btn <%= 'active' if @unit == 'month' %>" for="unit_month">周</label>
+      <input type="radio" name="unit" value="year" id="unit_year"  />
+      <label class="btn <%= 'active' if @unit == 'year' %>" for="unit_year">月</label>
+    </div>
+  </div>
 	<%= partial('shared/form_calendar', locals: {label: '销售区间：'}) %>
 	<div class="control-group">
         <label class="control-label" for="level">格式：</label>
