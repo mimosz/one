@@ -13,20 +13,22 @@
           <% time = msg.talk_at %>
           <%= content_tag(:div, time, class: 'code', style: 'text-align: center;') %>
         <% end %>
-      <div class='box' style='background-color: #fff;'>
-        <% if msg.direction > 0 %>
-          <blockquote style='margin: 0px;'>
-            <p style='font-size: 12px;'><%= msg.content %></p>
-            <% buyer_nick = chatpeer.buyer_nick %>
-            <small><%= ww_link(buyer_nick) %> <%= chatlog_link(buyer_nick) if @uid != buyer_nick %></small>
-          </blockquote>
-        <% else %>
-          <blockquote class="pull-right" style='margin: 0px;'>
-            <p style='font-size: 12px;'><%= msg.content %></p>
-            <small><%= chatpeer.nick %></small>
-          </blockquote>
-        <% end %>
-      </div>
+      <% unless msg.content.match('e-service.im.alisoft.coml') %>
+        <div class='box' style='background-color: #fff;'>
+          <% if msg.direction > 0 # 过滤客服评价 %>
+            <blockquote style='margin: 0px;'>
+              <p style='font-size: 12px;'><%= msg.content %></p>
+              <% buyer_nick = chatpeer.buyer_nick %>
+              <small><%= ww_link(buyer_nick) %> <%= chatlog_link(buyer_nick) if @uid != buyer_nick %></small>
+            </blockquote>
+          <% else %>
+            <blockquote class="pull-right" style='margin: 0px;'>
+              <p style='font-size: 12px;'><%= msg.content %></p>
+              <small><%= chatpeer.nick %></small>
+            </blockquote>
+          <% end %>
+        </div>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>
