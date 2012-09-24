@@ -104,6 +104,7 @@ hr.soften {
 .jumbotron .dropdown-menu a,
 .jumbotron .dropdown-menu a:hover {
   color: #333;
+  padding-left: 0;
 }
 
 /* Download button */

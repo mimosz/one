@@ -3,8 +3,9 @@ require 'rack/session/redis'
 
 # Defines our constants
 PADRINO_ENV  = ENV['PADRINO_ENV'] ||= ENV['RACK_ENV'] ||= 'development'  unless defined?(PADRINO_ENV)
-APP_TOKEN    = ENV['APP_TOKEN'] ||= 'e5204137af5bbdd7f9d87022d0df33f704add026180addc5957c01f6663da334'  unless defined?(APP_TOKEN)
-REDIS_URL    = ENV['REDIS_URL'] ||= 'redis://mimosa:86e010b0ed28206acb3ad2f44a19184b@clingfish.redistogo.com:9294'  unless defined?(REDIS_URL)
+APP_TOKEN    = ENV['APP_TOKEN']   ||= 'e5204137af5bbdd7f9d87022d0df33f704add026180addc5957c01f6663da334'     unless defined?(APP_TOKEN)
+REDIS_URL    = ENV['REDIS_URL']   ||= 'redis://mimosa:86e010b0ed28206acb3ad2f44a19184b@db.innshine.com:6379' unless defined?(REDIS_URL)
+
 PADRINO_ROOT = File.expand_path('../..', __FILE__) unless defined?(PADRINO_ROOT)
 
 # Load our dependencies
