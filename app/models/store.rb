@@ -48,18 +48,18 @@ module Store
   end
 
   def store_url
-    'http://store.taobao.com/view_shop.htm?user_number_id=' + user_id if user_id
+    ('http://store.taobao.com/view_shop.htm?user_number_id=' + user_id.to_s) if user_id
   end
 
-  def get_uid
-    url = store_url
+  def get_uid(url=nil)
+    url ||= store_url
     path = Nestful::Request.new(url).query_path.gsub('%25','%')
     res = Nestful::Connection.new(url).get(path)
     html = res.body.force_encoding("GBK").encode("UTF-8")
     dom = Nokogiri::HTML(html).at('p.shop-grade') # 评分节点标识
     unless dom.nil?
       uid = dom.css('a').first['href'][33..64] # 解析
-      update_attributes(seller) if uid
+      update_attributes(uid: uid) if uid
     end
   rescue Nestful::Redirection => error
     get_uid(error.response['Location'])

@@ -9,6 +9,7 @@ module Sync
         options = { session: session , method: 'taobao.user.seller.get', fields: seller_fields }
         seller = Topsdk.get_with(options)
         if seller.is_a?(Hash) && seller.has_key?('user')
+          seller['user']['session'] = session
           return seller['user']
         else
           puts "Seller.get_user============================错误"

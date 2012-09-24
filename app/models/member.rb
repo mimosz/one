@@ -59,7 +59,17 @@ class Member
         # 检测：手机号、姓名、地址，是否存在。
         if current_receiver.nil?
           specs = mobile_specs(trade.receiver_mobile)
-          self.receivers << Receiver.new( trade.merge(mobile_carrier: specs[:carrier], mobile_network: specs[:network]) )
+          self.receivers << Receiver.new( 
+             receiver_address: trade.receiver_address,
+                receiver_city: trade.receiver_city,
+            receiver_district: trade.receiver_district,
+              receiver_mobile: trade.receiver_mobile,
+                receiver_name: trade.receiver_name,
+               receiver_state: trade.receiver_state,
+                 receiver_zip: trade.receiver_zip,
+               mobile_carrier: specs[:carrier], 
+               mobile_network: specs[:network]
+          )
         end
         self.save
       end

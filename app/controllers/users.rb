@@ -3,7 +3,7 @@
 One.controllers :users do
 
   get :auth, map: '/auth/:provider/callback' do
-    @code    = params[:code]
+    @code = params[:code]
     render 'users/auth'
   end
 
@@ -21,9 +21,7 @@ One.controllers :users do
     rates = @user.rates.where(date: @range)
     # 解析评价
     @rates = parse_rates(rates)
-    @service = parse_rates(rates, 'service')
     @addresses = @user.addresses
-
     render 'users/show'
   end
 
@@ -37,19 +35,16 @@ One.controllers :users do
       redirect url(:sessions, :new)
     end
     if params[:top_session]
-      seller = User.get_user(params[:top_session]) 
+      seller = User.get_seller(params[:top_session]) 
       if seller
         user = User.where(_id: seller['nick']).last
          if user.nil?
-          seller['account_id'] = current_account.id
-          seller['session'] = params[:top_session]
-          @user = User.create(seller)
+          user = current_account.sellers.create(seller)
           flash[:notice] = '恭喜你，生意兴隆～'
-          redirect url(:users, :show, :user_id => @user.id)
          else
-          flash[:notice] = '小二，有重复铺店的，要罚不？'
-          redirect url(:users, :show, :user_id => user.id)
+          flash[:warning] = '小二，有重复铺店的，要罚不？'
          end
+         redirect url(:users, :show, user_id: user.id)
       else
         flash[:warning] = "淘宝，又作恶啦～～请重新授权。"
         redirect url(:users, :new)

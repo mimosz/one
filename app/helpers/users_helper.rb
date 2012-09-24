@@ -30,7 +30,8 @@ One.helpers do
     if current_account.seller_ids.include?(uid)
       @user_id = uid
     else
-      redirect url(:dashboard, :index)
+      flash[:warning] = "窃取别人数据，是不道德的～～"
+      redirect url(:accounts, :show, account_id: current_account.id)
     end
   end
   

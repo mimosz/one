@@ -48,7 +48,7 @@ module Sync
             # 交易记录
             trades = []
             # 聊天对象
-            chatpeers = Chatpeer.where(date: start_at, seller_nick: wangwang.seller_nick, nick: wangwang.nick)
+            chatpeers = ::Chatpeer.where(date: start_at, seller_nick: wangwang.seller_nick, nick: wangwang.nick)
             unless chatpeers.empty?
               chatpeers.each do |chatpeer|
                 meta[:answers_count] += chatpeer.answers_count
@@ -118,7 +118,7 @@ module Sync
         subuser_opt = get_subuser(result)
         current_wangwang = where({date:date}.merge(subuser_opt)).last # 已有记录
         if current_wangwang.nil?
-          Wangwang.create(result.merge!({date:date}.merge(subuser_opt)))
+          ::Wangwang.create(result.merge!({date:date}.merge(subuser_opt)))
         else
           current_wangwang.update_attributes(result)
         end

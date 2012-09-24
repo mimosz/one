@@ -75,11 +75,11 @@
 						%>
 					</div>
 				<% end %>
-				<%= [:error, :warning, :info, :success].map { |type| flash_tag(type, class: "alert alert-block #{type}") }.join %> 
 				</div> 
 			</div>
 			<div class="container">
 			<section>
+				<%= [:error, :warning, :info, :success].map { |type| flash_tag(type, class: "alert alert-block #{type}") }.join %> 
 				<div class="row">
 					<%= yield %>
 					<%= yield_content :sidebar %>
