@@ -49,6 +49,12 @@
             <label class="btn" for="csv">导出CSV</label>
         </div>
   </div>
+  <div class="control-group">
+        <label class="control-label" for="email">邮件投递：（导出CSV时，有效）</label>
+        <div class="controls">
+            <%= select_tag(:email, collection: @employees, fields: [:name, :email], placeholder: '可选', multiple: true, class: 'chzn-select') %>
+        </div>
+  </div>
 	<div class="form-actions">
 		<%= submit_tag '筛选', class:'btn btn-primary' %>
 	</div>

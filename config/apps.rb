@@ -13,6 +13,16 @@ Padrino.configure_apps do
   set :session_secret, APP_TOKEN
   set :session_id, 'padrino_one'.to_sym
   set :login_page, '/sessions/new'
+
+  set :delivery_method, smtp: { 
+    address: 'smtp.exmail.qq.com',
+    port: 25,
+    user_name: 'noreply@innshine.com',
+    password: 'feiming123',
+    authentication: :plain,
+    enable_starttls_auto: true  
+  }
+  set :mailer_defaults, from: '买它 <noreply@innshine.com>'
 end
 
 # Mounts the core application for this project

@@ -42,6 +42,8 @@ One.controllers :trades, parent: :users do
   end
 
   get :index, provides: [:html, :csv] do
+    seller = User.find(user_id)
+    @employees = Account.find(seller.employee_ids)
     case content_type
       when :html
         @trades = group_by(@trades, @options)
@@ -52,6 +54,9 @@ One.controllers :trades, parent: :users do
           redirect url(:trades, :index, user_id: user_id)
         else
           file_csv = export_trades(@trades, date_tag(@range), user_id)
+          if params[:email]
+            deliver(:notifier, :email_with_file, current_account, params[:email], file_csv) 
+          end
           send_file file_csv, type: 'text/csv', filename: File.basename(file_csv)
         end
     end 

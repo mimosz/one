@@ -43,7 +43,7 @@ namespace :workers do
     # - CONFIGURATION ----
     ENV['TERM_CHILD'] ||= '1'
     ENV['QUEUE']      ||= '*'
-    ENV['COUNT']      ||= '3'
+    ENV['COUNT']      ||= '20'
     # --------------------
 
     def term_child

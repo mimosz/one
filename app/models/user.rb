@@ -7,8 +7,9 @@ class User
   store_in collection: 'users'
 
   # Referenced
-  belongs_to :ownable, polymorphic: true, index: true # 店长
-  has_many   :shops,   foreign_key: 'nick' # 店铺
+  belongs_to :ownable,   polymorphic: true, index: true # 店长
+  has_many   :shops,     foreign_key: 'nick' # 店铺
+  has_many   :employees, foreign_key: 'seller_nick' # 店铺
   # Embedded
   embeds_many :addresses
   embeds_one  :seller_credit, class_name: 'UserCredit' # 卖家信用
@@ -49,6 +50,10 @@ class User
   field :created,                   type: DateTime # 用户注册时间
   field :last_visit,                type: DateTime # 最近登陆时间
   field :birthday,                  type: DateTime # 生日
+
+  def employee_ids
+    (employees.distinct('employee_id') << ownable_id).uniq
+  end
 
   include Sync
   include Sync::Seller
