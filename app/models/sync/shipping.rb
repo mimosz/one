@@ -50,10 +50,15 @@ module Sync
                 trade = Trade.where(_id: shipping['tid'].to_s).last
                 if trade.nil?
                   trade = Trade.sync_orders( options[:session], [shipping['tid']])
-                  puts "创建了交易：#{shipping['tid']}。"
+                  puts "补漏（交易）：#{shipping['tid']}。"
                 end
-                trade.shipping = new(shipping)
-                trade.save
+
+                if trade.shipping.nil? || (shipping['modified'] > trade.shipping.modified_at)
+                  trade.shipping = new(shipping)
+                  trade.save
+                else
+                  puts "提示：无变化。" 
+                end
               end
             end
             # 循环
