@@ -43,14 +43,18 @@ module Sync
             puts "此次抓取：共#{total_results}运单。\n正在执行：#{page_no}/#{total_page}。"
             shippings = shippings['shippings']['shipping'] # 运单
             shippings.each do |shipping| # 循环运单
-              # 交易
-              trade = Trade.where(_id: shipping['tid'].to_s).last
-              if trade.nil?
-                trade = Trade.sync_orders( options[:session], [shipping['tid']])
-                puts "创建了交易：#{shipping['tid']}。"
+              if shipping['out_sid'].nil?
+                puts "警告：无快递单号。"
+              else
+                # 交易
+                trade = Trade.where(_id: shipping['tid'].to_s).last
+                if trade.nil?
+                  trade = Trade.sync_orders( options[:session], [shipping['tid']])
+                  puts "创建了交易：#{shipping['tid']}。"
+                end
+                trade.shipping = new(shipping)
+                trade.save
               end
-              trade.shipping = new(shipping)
-              trade.save
             end
             # 循环
             if total_page > page_no
