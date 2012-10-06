@@ -32,35 +32,38 @@ module Sync
           # 判断记录数
           unless total_results > 0
              if total_page > 0 && page_no < total_page
-               sync_process(user, options.merge!({:page_no => page_no}))
-             else
-               puts "警告：无运单记录"
+               puts "警告：在同步 #{page_no}/#{total_page} 页时，出现异常。"
              end
           else
             # 总页数
-            total_page = (total_results / page_size)
-            total_page += 1 if (total_results % page_size) > 0
-            puts "此次抓取：共#{total_results}运单。\n正在执行：#{page_no}/#{total_page}。"
+            if total_page == 0
+              total_page = (total_results / page_size)
+              total_page += 1 if (total_results % page_size) > 0
+              puts "此次抓取：共#{total_results}运单，共：#{total_page}页。"
+            end
             shippings = shippings['shippings']['shipping'] # 运单
+            result = { total: shippings.count, fail: [], trade_fixed: [], unchanged: [], changed: [] }
             shippings.each do |shipping| # 循环运单
               if shipping['out_sid'].nil?
-                puts "警告：无快递单号。"
+                result[:fail] << shipping['order_code']
               else
                 # 交易
                 trade = Trade.where(_id: shipping['tid'].to_s).last
                 if trade.nil?
                   trade = Trade.sync_orders( options[:session], [shipping['tid']])
-                  puts "补漏（交易）：#{shipping['tid']}。"
+                  result[:trade_fixed] << shipping['tid']
                 end
-
+                puts 
                 if trade.shipping.nil? || (shipping['modified'] > trade.shipping.modified_at)
                   trade.shipping = new(shipping)
                   trade.save
+                  result[:changed] << shipping['order_code']
                 else
-                  puts "提示：无变化。" 
+                  result[:unchanged] << shipping['order_code'] 
                 end
               end
             end
+            puts "第#{page_no}/#{total_page}页：共#{result[:total]}单，其中：未发货（#{result[:fail].count}），创建/变更（#{result[:changed].count}），无变化（#{result[:unchanged].count}），交易记录“补漏”（#{result[:trade_fixed].count}）。"
             # 循环
             if total_page > page_no
               sync_process(options.merge!({:page_no => (page_no+1)}), total_page)

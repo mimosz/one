@@ -23,10 +23,10 @@ class Shipping # 运單
   field :status,          type: String # 物流订单状态
   field :type,            type: String # 物流方式
   
-  field :delivery_start,  type: Date # 预约取货开始时间
-  field :delivery_end	,   type: Date # 预约取货结束时间
-  field :created,         type: Date # 运单创建时间
-  field :modified,        type: Date # 运单修改时间
+  field :delivery_start,  type: DateTime # 预约取货开始时间
+  field :delivery_end	,   type: DateTime # 预约取货结束时间
+  field :created,         type: DateTime # 运单创建时间
+  field :modified,        type: DateTime # 运单修改时间
 
   field :_id,             type: String, default: -> { out_sid }
   
