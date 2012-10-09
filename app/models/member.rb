@@ -51,7 +51,7 @@ class Member
         self.synced_at = Time.now
         if receivers.exists?
           current_receiver = receivers.where(
-            receiver_mobile:  trade.receiver_mobile,
+            receiver_mobile:  trade.receiver_mobile.to_i,
             receiver_name:    trade.receiver_name,
             receiver_address: trade.receiver_address,
           ).last
@@ -63,7 +63,7 @@ class Member
              receiver_address: trade.receiver_address,
                 receiver_city: trade.receiver_city,
             receiver_district: trade.receiver_district,
-              receiver_mobile: trade.receiver_mobile,
+              receiver_mobile: trade.receiver_mobile.to_i,
                 receiver_name: trade.receiver_name,
                receiver_state: trade.receiver_state,
                  receiver_zip: trade.receiver_zip,

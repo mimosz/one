@@ -8,7 +8,8 @@ gem 'rake'
 gem 'sinatra-flash', require: 'sinatra/flash'
 gem 'yajl-ruby', require: 'yajl'
 gem 'nestful'
-gem 'nokogiri'
+gem 'nokogiri' # 解析HTML
+gem 'rkelly'   # 解析JS
 gem 'topsdk', '~> 0.0.9'
 
 # Component requirements

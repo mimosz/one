@@ -43,7 +43,9 @@ One.controllers :trades, parent: :users do
 
   get :index, provides: [:html, :csv] do
     seller = User.find(user_id)
-    @employees = Account.find(seller.employee_ids)
+    ids = seller.employee_ids
+    ids.delete(current_account.id) # 删除自己
+    @employees = Account.find(ids)
     case content_type
       when :html
         @trades = group_by(@trades, @options)
