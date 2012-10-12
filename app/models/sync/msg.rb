@@ -6,7 +6,6 @@ module Sync
     
     module ClassMethods
       def sync_create(chatpeer, options) # 賣家
-        chatpeer['uid'].gsub!('cntaobao','') # 去掉扩展
         chatpeer_id = "#{chatpeer[:sub_id]}-#{chatpeer['uid']}-#{chatpeer['date'].to_time.to_i}"
         chatpeer_id = Digest.bubblebabble(Digest::SHA1::hexdigest(chatpeer_id)[8..12]) 
         if ::Chatpeer.where(_id: chatpeer_id).last

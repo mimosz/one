@@ -5,7 +5,7 @@ require 'nestful'
 class Smsbao
 
   def initialize(login, passwd)
-    @login = login
+    @login  = login
     @passwd = Digest::MD5.hexdigest(passwd.to_s)
   end
 
@@ -16,8 +16,14 @@ class Smsbao
     if mobile.is_a?(Array) # 群发
       
       # 中断发送，禁止批量发送长短信
-      return { success: false, message: "警告：此内容群发，将产生 #{payment}倍 费用！" } if !force && payment > 1 
-
+      if payment > 1 
+        message = "警告：此内容群发，预计产生 #{mobile.count*payment}条 费用！"
+        if force
+          puts message
+        else
+          return { success: false, message: message } 
+        end
+      end
       # 粗略检测，手机号
       mobile = check_mobile(mobile)
       # 预计结果
@@ -48,6 +54,8 @@ class Smsbao
         return { success: false, message: '无效的手机号！' }.merge(result) # 验证错误
       end
     else # 单发
+      mobile = mobile.strip.to_i
+      
       if check?(mobile)
         response = client('send', { m: mobile, c: content })
         stat = status(response)
@@ -110,16 +118,18 @@ class Smsbao
   end
 
   def check_mobile(mobile_arr)
-    result = { approved: [], rejected: [] }
+    approved = []
+    rejected = []
+
     mobile_arr.each do |mobile|
-      mobile = mobile.to_i
+      mobile = mobile.strip.to_i
       if check?(mobile)
-        result[:approved] << mobile
+        approved << mobile
       else
-        result[:rejected] << mobile
+        rejected << mobile
       end
     end
-    return result
+    return { approved: approved.uniq, rejected: rejected.uniq }
   end
 
   def check?(mobile)
