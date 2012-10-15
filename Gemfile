@@ -9,7 +9,7 @@ gem 'sinatra-flash', require: 'sinatra/flash'
 gem 'yajl-ruby', require: 'yajl'
 gem 'nestful'
 gem 'nokogiri' # 解析HTML
-gem 'rkelly'   # 解析JS
+# gem 'rkelly'   # 解析JS
 gem 'topsdk', '~> 0.0.9'
 
 # Component requirements
@@ -22,7 +22,7 @@ gem 'resque', require: 'resque/server'
 gem 'resque-scheduler', '>= 2.0.0.e', require: 'resque_scheduler'
 
 gem 'redis-objects', require: 'redis/objects'
-gem 'rack-session-redis'
+# gem 'rack-session-redis'
 
 # Padrino Stable Gem
 gem 'padrino', '0.10.7'

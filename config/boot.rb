@@ -47,11 +47,6 @@ I18n.default_locale = :zh_cn
 #
 Padrino.before_load do
   Mongoid.load!(Padrino.root('config/mongoid.yml'), Padrino.env)
-  Padrino.use Rack::Session::Redis, {
-    url:          REDIS_URL,
-    namespace:    'rack:session',
-    expire_after: 600
-  }
 end
 
 ##

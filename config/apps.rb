@@ -5,7 +5,7 @@
 # override these settings in the subapps as needed.
 #
 Padrino.configure_apps do
-  disable :sessions
+  enable :sessions
   enable  :authentication
   # enable  :store_location
   # disable :raise_errors

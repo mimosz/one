@@ -3,8 +3,11 @@
 One.controllers :sessions do
 
   get :new do
-    redirect url(:accounts, :show, account_id: current_account.id) if logged_in?
-    render "sessions/new", nil, layout: :session
+    if logged_in?
+      redirect url(:accounts, :show, account_id: current_account.id) 
+    else
+      render "sessions/new", nil, layout: :session
+    end
   end
 
   post :create do
