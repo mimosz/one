@@ -17,7 +17,7 @@
 				<div class="container">
 					<%= link_to '店', url(:users, :index), class: 'brand' %>
 					<% form_tag url(:sessions, :destroy), class: 'form-delete', method: :delete do %>      
-					<div class='btn-toolbar pull-right' style='margin: 0;'>
+					<div class='pull-right' style='margin: 0;'>
 						<%= render_list class: 'nav' do |li|
 								li << [nil, class: 'divider-vertical']
 								li << content_tag(:a, '你好，' + (current_account ? current_account.name : '亲'), style: 'color: white;')
