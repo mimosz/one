@@ -16,24 +16,25 @@
 			<div class="navbar-inner">
 				<div class="container">
 					<%= link_to '店', url(:users, :index), class: 'brand' %>
-					<% form_tag url(:sessions, :destroy), class: 'form-delete', method: :delete do %>      
+					<% form_tag url(:sessions, :destroy), class: 'form-delete', method: :delete do %>
 					<div class='pull-right' style='margin: 0;'>
-						<%= render_list class: 'nav' do |li|
-								li << [nil, class: 'divider-vertical']
-								li << content_tag(:a, '你好，' + (current_account ? current_account.name : '亲'), style: 'color: white;')
-					    end
-						%>
-						<div id='user-toolbar' class="btn-group">
-							<% icon = content_tag(:i, nil, class: 'icon-edit') %>
-							<%= link_to( icon, url(:users, :new), class: 'btn', rel: 'popover', 'data-original-title' => '店铺绑定', 'data-content' => '授权管理，新淘宝店铺') %>
-							<%= link_to( icon, 'https://oauth.taobao.com/authorize?response_type=code&amp;client_id=21151322&amp;scope=item,promotion,usergrade&amp;redirect_uri=http://db.innshine.com/auth/taobao/callback', class: 'btn', rel: 'popover', 'data-original-title' => '店铺绑定', 'data-content' => '授权管理，新淘宝店铺') %>
-							<% icon = content_tag(:i, nil, class: 'icon-user') %>
-							<%= link_to( icon, url(:accounts, :show, account_id: current_account.id), class: 'btn', rel: 'popover', 'data-original-title' => '个人设置', 'data-content' => '修改个人信息') if current_account %>
-							<% icon = content_tag(:i, nil, class: 'icon-share') %>
-							<%= content_tag(:button, icon, class: 'btn', rel: 'popover', 'data-original-title' => '注销', 'data-content' => '退出或切换替他帐户登陆') %>
-	        	</div>
-	        	<%= hidden_field_tag :_method, value: :delete %>
+						<ul class='nav'>
+							<li class='divider-vertical'>&nbsp;</li>
+							<li><a style='color: white;'>你好，<%= (current_account ? current_account.name : '亲') %></a></li>
+							<li>
+								<div id='user-toolbar' class="btn-group">
+								<% icon = content_tag(:i, nil, class: 'icon-edit') %>
+								<%= link_to( icon, url(:users, :new), class: 'btn', rel: 'popover', 'data-original-title' => '店铺绑定', 'data-content' => '授权管理，新淘宝店铺') %>
+								<%= link_to( icon, 'https://oauth.taobao.com/authorize?response_type=code&amp;client_id=21151322&amp;scope=item,promotion,usergrade&amp;redirect_uri=http://db.innshine.com/auth/taobao/callback', class: 'btn', rel: 'popover', 'data-original-title' => '店铺绑定', 'data-content' => '授权管理，新淘宝店铺') %>
+								<% icon = content_tag(:i, nil, class: 'icon-user') %>
+								<%= link_to( icon, url(:accounts, :show, account_id: current_account.id), class: 'btn', rel: 'popover', 'data-original-title' => '个人设置', 'data-content' => '修改个人信息') if current_account %>
+								<% icon = content_tag(:i, nil, class: 'icon-share') %>
+								<%= content_tag(:button, icon, class: 'btn', rel: 'popover', 'data-original-title' => '注销', 'data-content' => '退出或切换替他帐户登陆') %>
+		        	</div>
+							</li>
+						</ul>	
       		</div>
+      		<%= hidden_field_tag :_method, value: :delete %>
       	<% end %>
 				</div>
 			</div>
