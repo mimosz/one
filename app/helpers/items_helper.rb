@@ -17,7 +17,6 @@ One.helpers do
     if items.headers.include?('宝贝ID')
       skus    = {}
       num_iid = nil
-      color   = nil
       items.each do |item|
         num_iid = item['宝贝ID'] if item['宝贝ID']
         skus[num_iid] = [] unless skus.has_key?(num_iid)
