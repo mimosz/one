@@ -22,7 +22,6 @@ gem 'resque', require: 'resque/server'
 gem 'resque-scheduler', '>= 2.0.0.e', require: 'resque_scheduler'
 
 gem 'redis-objects', require: 'redis/objects'
-# gem 'rack-session-redis'
 
 # Padrino Stable Gem
 gem 'padrino', '0.10.7'

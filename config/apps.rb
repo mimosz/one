@@ -6,7 +6,7 @@
 #
 Padrino.configure_apps do
   enable :sessions
-  enable  :authentication
+  enable :authentication
   # enable  :store_location
   # disable :raise_errors
   # disable :show_exceptions

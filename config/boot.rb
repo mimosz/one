@@ -1,5 +1,4 @@
 # -*- encoding: utf-8 -*-
-require 'rack/session/redis'
 
 # Defines our constants
 PADRINO_ENV  = ENV['PADRINO_ENV'] ||= ENV['RACK_ENV'] ||= 'development'  unless defined?(PADRINO_ENV)

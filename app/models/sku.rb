@@ -55,8 +55,8 @@ class Sku # 产品
 
    def check_by_props(props)
     props_name = to_hash
-      if props[:color] == props_name['颜色分类']
-        return case props[:size]
+      if props['颜色'] == props_name['颜色分类']
+        return case props['尺码']
         when props_name['尺码']
           props_name
         when props_name['鞋码']

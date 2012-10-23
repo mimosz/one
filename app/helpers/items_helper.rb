@@ -13,14 +13,19 @@ One.helpers do
   end
 
   def items_import(csv_file)
-    items = CSV.read(csv_file, 'rb:GB18030:UTF-8', headers: true, header_converters: :symbol, col_sep: ',')
-      skus = {}
+    items = CSV.read(csv_file, 'rb:GB18030:UTF-8', headers: true, col_sep: ',')
+    if items.headers.include?('宝贝ID')
+      skus    = {}
+      num_iid = nil
+      color   = nil
       items.each do |item|
-        key = item[:item_id]
-        skus[key] = [] unless skus.has_key?(key)
-        skus[key] << item
+        num_iid = item['宝贝ID'] if item['宝贝ID']
+        skus[num_iid] = [] unless skus.has_key?(num_iid)
+        skus[num_iid] << item
       end
-    return skus
+      return skus
+    end
+    nil
   end
 
   def items_export(items, fields, file_tag)

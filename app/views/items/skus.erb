@@ -16,7 +16,7 @@
 <div class="tab-pane <%= active %>" id="item-<%= item.num_iid %>">
 <% active = '' %>
 <% skus = @skus[item._id] %>
-<h3><%= item.title %>&nbsp;<%= link_to "<i class='icon-share'></i>", item.item_url, target:'_blank' %></h3>
+<h3><%= item.title %>&nbsp;<%= link_to "<i class='icon-share'></i>", item.edit_item_url, target:'_blank' %></h3>
  <table id='item-<%= item.num_iid %>-skus' class='table table-bordered span7'>
       <thead>
           <tr>
@@ -41,9 +41,9 @@
                 <td><%= value %></td>
               <% end %>
               <td><%= sku.outer_id %></td>
-              <th><%= text_field_tag "items[#{item.num_iid}][][outer_id]", value: data[:outer_id], class: 'span2' %></th>
+              <th><%= text_field_tag "items[#{item.num_iid}][][outer_id]", value: data['SKU'], class: 'span2' %></th>
               <td><%= sku.quantity %></td>
-              <th><%= text_field_tag "items[#{item.num_iid}][][quantity]", value: data[:quantity], class: 'span1' %></th>
+              <th><%= text_field_tag "items[#{item.num_iid}][][quantity]", value: data['库存'], class: 'span1' %></th>
             </tr>
             <% skus.delete(data) %>
           <% end %>
@@ -60,17 +60,17 @@
           </tr>
           <tr>
             <th>颜色</th>
-            <th>尺寸</th>
+            <th>尺码</th>
             <td>SKU</td>
             <td>库存</td>
           </tr>
         </thead>
         <% skus.each do |data| %>
           <tr style='color: #D14;'>
-            <td><%= data[:color] %></td>
-            <td><%= data[:size] %></td>
-            <td><%= data[:outer_id] %></td>
-            <td><%= data[:quantity] %></td>
+            <td><%= data['颜色'] %></td>
+            <td><%= data['尺码'] %></td>
+            <td><%= data['SKU'] %></td>
+            <td><%= data['库存'] %></td>
           </tr>
         <% end %>
          </table>

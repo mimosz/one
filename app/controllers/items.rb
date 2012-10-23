@@ -20,9 +20,14 @@ One.controllers :items, :parent => :users do
     if params[:csv_file][:type] == 'text/csv'
       # 导入数据
       @skus = items_import(params[:csv_file][:tempfile])
-      # 匹配处理
-      @items = Item.where(nick: user_id, :num_iid.in => @skus.keys)
-      render 'items/skus'
+      if @skus
+        # 匹配处理
+        @items = Item.where(nick: user_id, :_id.in => @skus.keys)
+        render 'items/skus'
+      else
+        flash[:error] = '模板错误，必须包含：淘宝ID、SKU、颜色、尺码、库存。'
+        redirect url(:items, :new, user_id: user_id)
+      end
     else
       flash[:error] = '必须是，Excel的CSV文本格式。'
       redirect url(:items, :new, user_id: user_id)
@@ -39,7 +44,8 @@ One.controllers :items, :parent => :users do
     items.each do |num_iid, skus|
       options.merge!(num_iid: num_iid)
       skus.each do |sku|
-          options.merge!(sku)
+          options['outer_id'] = sku['outer_id'] unless sku['outer_id'].blank?
+          options['quantity'] = sku['quantity'] unless sku['quantity'].blank?
           puts Topsdk.get_with(options)
       end
     end

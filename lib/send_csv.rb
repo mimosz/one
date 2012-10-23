@@ -17,7 +17,7 @@ class SendCsv < Smsbao
       lines.each do |line|
         if line[ labels[:m] ]
           if fields.empty? # 无自定义，可群发
-            if content && line[ labels[:c] ]
+            if content && line[ labels[:c] ] && content != line[ labels[:c] ]
               result << send(mobile, content) # 内容变动，发前一批次
               mobile.clear # 清空手机号
             end

@@ -65,6 +65,10 @@ class Item # 商品
     "http://item.taobao.com/item.htm?id=#{num_iid}"
   end
   
+  def edit_item_url
+    "http://upload.taobao.com/auction/publish/edit.htm?item_num_id=#{num_iid}"
+  end
+  
   def modified_at
     modified.in_time_zone.strftime("%Y-%m-%d %H:%M:%S")
   end
