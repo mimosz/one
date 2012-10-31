@@ -11,7 +11,7 @@ One.helpers do
       disk_total = diskinfo[0].to_f
       disk_free  = diskinfo[1].to_f
       disk_used  = disk_total - disk_free
-      disk_perc  = diskinfo[2].sub('%','').round
+      disk_perc  = diskinfo[2].sub('%','').to_i
 
       meminfo   = `cat /proc/meminfo | grep Mem | awk '{print $2}'`
 
@@ -20,7 +20,7 @@ One.helpers do
       mem_used  = mem_total - mem_free
       mem_perc  = ((100/mem_total)*mem_used).round
    
-      cpu_perc = `vmstat | awk '{print $13}'`.split("\n").last.round
+      cpu_perc = `vmstat | awk '{print $13}'`.split("\n").last.to_i
    
       uptime = `uptime`.chomp.to_s.gsub( /up|days|load average:/, 'up' => '已运行', 'days' => '天', 'load average:' => '系统负荷：')
 
