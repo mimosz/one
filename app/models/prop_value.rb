@@ -6,7 +6,11 @@ class PropValue
 
   # Fields
   field :vid,   type: Integer # 属性值ID
+  field :pid,   type: Integer # 属性ID
   field :name,  type: String  # 属性值
-  field :_id,   type: String, default: -> { vid }
+  field :_id,   type: String, default: -> { name }
   
+  def properties
+    "#{pid}:#{vid}"
+  end
 end

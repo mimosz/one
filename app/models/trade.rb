@@ -7,9 +7,9 @@ class Trade
   store_in collection: 'trades'
 
   # Referenced
-  belongs_to :user, foreign_key: 'seller_nick', index: true
-  belongs_to :item, foreign_key: 'num_iid'
-  has_one :refund,  foreign_key: 'tid'  # 退款
+  belongs_to :user,   foreign_key: 'seller_nick', index: true
+  belongs_to :item,   foreign_key: 'num_iid'
+  has_one    :refund, foreign_key: 'tid'  # 退款
   # Embedded
   embeds_many :orders   # 订单
   embeds_one  :shipping # 快递

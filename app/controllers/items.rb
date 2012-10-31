@@ -22,7 +22,7 @@ One.controllers :items, :parent => :users do
       @skus = items_import(params[:csv_file][:tempfile])
       if @skus
         # 匹配处理
-        @items = Item.where(nick: user_id, :_id.in => @skus.keys)
+        @items = Item.where(nick: user_id, :_id.in => @skus.keys).includes(:item_prop)
         render 'items/skus'
       else
         flash[:error] = '模板错误，必须包含：淘宝ID、SKU、颜色、尺码、库存。'
@@ -38,15 +38,20 @@ One.controllers :items, :parent => :users do
     @user = User.find(user_id)
     options = { # 基础参数
       session: @user.session, 
-      method: 'taobao.item.sku.update',
+      method: 'taobao.item.sku.update'
     }
     items = params[:items]
     items.each do |num_iid, skus|
-      options.merge!(num_iid: num_iid)
       skus.each do |sku|
-          options['outer_id'] = sku['outer_id'] unless sku['outer_id'].blank?
-          options['quantity'] = sku['quantity'] unless sku['quantity'].blank?
-          puts Topsdk.get_with(options)
+        if sku['properties']
+          opts = options.clone.merge!(num_iid: num_iid, properties: sku['properties'])
+          opts[:outer_id] = sku['outer_id'] unless sku['outer_id'].blank?
+          opts[:quantity] = sku['quantity'] unless sku['quantity'].blank?
+          opts[:price]    = sku['price']    unless sku['price'].blank?
+          puts Topsdk.get_with(opts)
+        else
+          puts '错误'
+        end
       end
     end
     flash[:notice] = '恭喜你，生意兴隆～'

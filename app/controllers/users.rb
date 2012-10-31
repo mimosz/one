@@ -8,7 +8,8 @@ One.controllers :users do
   end
 
   get :index do
-    @users = User.in(_id: current_account.seller_ids)
+    @users   = User.in(_id: current_account.seller_ids)
+    @sysinfo = get_sysinfo
     render 'users/index'
   end
   

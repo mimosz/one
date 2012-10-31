@@ -7,9 +7,9 @@ class Item # 商品
   store_in collection: 'items'
 
   # Referenced
-  belongs_to :user,     foreign_key: 'nick',  index: true
-  has_many :item_props, foreign_key: 'cid'     # 商品属性
-  has_many :trades,     foreign_key: 'num_iid' # 订单
+  belongs_to :user,       foreign_key: 'nick',  index: true
+  belongs_to :item_prop,  foreign_key: 'cid'     # 商品属性
+  has_many   :trades,     foreign_key: 'num_iid' # 订单
   # Embedded
   embeds_many :skus
 
@@ -60,6 +60,14 @@ class Item # 商品
   field :_id, type: String, default: -> { num_iid }
   index nick: 1, num_iid: 1
   index 'skus.outer_id' => 1
+
+  def to_props
+    props = {}
+    item_prop.prop_values.each do |prop|
+      props[prop.name] = prop.properties
+    end
+    return props
+  end
   
   def item_url
     "http://item.taobao.com/item.htm?id=#{num_iid}"

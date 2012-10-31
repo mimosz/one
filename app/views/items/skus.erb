@@ -56,21 +56,25 @@
        <table id='item-<%= item.num_iid %>-skus' class='table table-bordered span4'>
         <thead>
           <tr>
-            <th colspan='4'>未匹配到的SKU列表：</th>
+            <th colspan='4'>新增SKU列表：</th>
           </tr>
           <tr>
             <th>颜色</th>
             <th>尺码</th>
             <td>SKU</td>
+            <td>价格</td>
             <td>库存</td>
           </tr>
         </thead>
+        <% props = item.to_props %>
         <% skus.each do |data| %>
           <tr style='color: #D14;'>
+            <%= hidden_field_tag "items[#{item.num_iid}][][properties]", value: "#{props[data['颜色']]};#{props[data['尺码']]}" %>
             <td><%= data['颜色'] %></td>
             <td><%= data['尺码'] %></td>
-            <td><%= data['SKU'] %></td>
-            <td><%= data['库存'] %></td>
+            <th><%= text_field_tag "items[#{item.num_iid}][][outer_id]", value: data['SKU'], class: 'span2' %></th>
+            <th><%= text_field_tag "items[#{item.num_iid}][][price]",    value: data['价格'] || item.price, class: 'span1' %></th>
+            <th><%= text_field_tag "items[#{item.num_iid}][][quantity]", value: data['库存'] || 0, class: 'span1' %></th>
           </tr>
         <% end %>
          </table>
