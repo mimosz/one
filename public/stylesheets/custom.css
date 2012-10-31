@@ -975,3 +975,19 @@ background: url('http://a.tbcdn.cn/apps/tmall/mui/page/img/page.png') no-repeat 
   color: #3A87AD;
   background-color: #D9EDF7;
 }
+
+.sysinfo {
+  -webkit-box-shadow:0px 2px 2px 0px rgba(0,0,0,0.05);
+  box-shadow:0px 2px 2px 0px rgba(0,0,0,0.05);
+}
+
+div.sysinfo {
+  background-color:#000;
+  background-color:rgba(0,0,0,0.7);
+  color:#FFF;
+  padding:1em 1em 0 1em;
+  overflow:hidden;
+  width:auto;
+  border-radius:1em;
+  margin-bottom:18px;
+}

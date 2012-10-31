@@ -35,15 +35,15 @@
 <% unless @sysinfo.nil? %>
   <div class='sysinfo'>
     <p class='sysinfo-dsk'><strong>硬盘：</strong> <%= @sysinfo[:disk][:total] %>GB 中 <%= @sysinfo[:disk][:free] %>GB 可用</p>
-    <div class='progress progress-striped sysinfo-dsk active'>
+    <div class='progress sysinfo-dsk active'>
       <div class='bar' style='width: <%= @sysinfo[:disk][:perc] %>%;'></div>
     </div>
     <p class='sysinfo-mem'><strong>内存：</strong> <%= @sysinfo[:mem][:total] %>Mb 中 <%= @sysinfo[:mem][:free] %>Mb 空闲</p>
-    <div class='progress progress-striped progress-danger sysinfo-mem active'>
+    <div class='progress progress-danger sysinfo-mem active'>
       <div class='bar' style='width: <%= @sysinfo[:mem][:perc] %>%;'></div>
     </div>
     <p class='sysinfo-cpu'><strong>CPU：</strong> 使用 <%= @sysinfo[:cpu][:perc] %>%</p>
-    <div class='progress progress-striped progress-warning sysinfo-cpu active'>
+    <div class='progress progress-warning sysinfo-cpu active'>
       <div class='bar' style='width: <%= @sysinfo[:cpu][:perc] %>%;'></div>
     </div>
     <p class='uptime'><i class='icon icon-off icon-white'></i><span> <%= @sysinfo[:uptime] %></span></p>
