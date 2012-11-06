@@ -5,16 +5,16 @@ root_path = File.expand_path '../', File.dirname(__FILE__)
 log_file = root_path + '/log/unicorn.log'
 err_log  = root_path + '/log/unicorn_error.log'
 # 进程标识
-pid_file = '/tmp/unicorn_padrino.pid'
+pid_file = '/tmp/unicorn_one.pid'
 old_pid = pid_file + '.oldbin'
 # 通道
-socket_file = '/tmp/unicorn_padrino.sock'
+socket_file = '/tmp/unicorn_one.sock'
 
 worker_processes 6
 working_directory root_path
-timeout 30
+timeout 120
 # 侦听
-listen 8080, tcp_nopush: false
+# listen 8080, tcp_nopush: false
 listen socket_file, backlog: 1024
 
 pid pid_file
