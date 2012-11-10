@@ -1,12 +1,22 @@
+source :rubygems
 source 'http://ruby.taobao.org/'
 
-# Server requirements
-gem 'unicorn'
+platforms :ruby do
+  # Server requirements
+  gem 'thin'
+  # Project requirements
+  gem 'yajl-ruby', require: 'yajl'
+end
+
+platforms :jruby do
+  gem 'jruby-openssl'
+  gem 'jruby-rack'
+  gem 'warbler'
+end
 
 # Project requirements
 gem 'rake'
 gem 'sinatra-flash', require: 'sinatra/flash'
-gem 'yajl-ruby', require: 'yajl'
 gem 'nestful'
 gem 'nokogiri' # 解析HTML
 # gem 'rkelly'   # 解析JS
