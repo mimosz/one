@@ -52,7 +52,7 @@ class User
   field :birthday,                  type: DateTime # 生日
 
   def employee_ids
-    (employees.distinct('employee_id') << ownable_id).uniq
+    (employees.only(:employee_id).distinct(:employee_id) << ownable_id).uniq
   end
 
   include Sync

@@ -57,7 +57,7 @@ class Account
   end
 
   def seller_ids
-    (sellers.distinct('nick') + employer_sellers.distinct('seller_nick')).uniq
+    (sellers.only(:_id).distinct(:_id) + employer_sellers.only(:seller_nick).distinct(:seller_nick)).uniq
   end
 
   def employees_by_seller

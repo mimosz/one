@@ -32,7 +32,7 @@ module Sync
       private
 
       def seller_cat_ids(seller_nick)
-        where(seller_nick: seller_nick).distinct('cid')
+        where(seller_nick: seller_nick).only(:_id).distinct(:_id)
       end
     
     end # ClassMethods

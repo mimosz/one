@@ -15,7 +15,7 @@
         <th><%= total[:num]%></th>
       </tr>
     <% end %>
-    <% if @trades.has_key?(:total) %>
+    <% if @trades.has_key?(:sale) %>
       <tr>
         <th><% sale = @trades[:sale] %>品牌特卖</th>
         <th><%= sale[:price].round(2)%></th>

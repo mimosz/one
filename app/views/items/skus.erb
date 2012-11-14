@@ -6,18 +6,18 @@
 <ul class="nav nav-tabs">
 <%  active = 'active' %>
 <% @items.each do |item| %>
-  <li class='<%= active %>'><a href="#item-<%= item.num_iid %>" data-toggle="tab"><%= image_tag item.pic_url, width: 48, height: 48 %></a></li>
+  <li class='<%= active %>'><a href="#item-<%= item._id %>" data-toggle="tab"><%= image_tag item.pic_url, width: 48, height: 48 %></a></li>
   <%  active = '' %>
 <% end %>
 </ul>
 <div class="tab-content">
 <%  active = 'active' %>
 <% @items.each do |item| %>
-<div class="tab-pane <%= active %>" id="item-<%= item.num_iid %>">
+<div class="tab-pane <%= active %>" id="item-<%= item._id %>">
 <% active = '' %>
 <% skus = @skus[item._id] %>
 <h3><%= item.title %>&nbsp;<%= link_to "<i class='icon-share'></i>", item.edit_item_url, target:'_blank' %></h3>
- <table id='item-<%= item.num_iid %>-skus' class='table table-bordered span7'>
+ <table id='item-<%= item._id %>-skus' class='table table-bordered span7'>
       <thead>
           <tr>
             <th colspan='6'>数据更新对照表：</th>
@@ -35,15 +35,15 @@
         <% skus.each do |data| %>
           <% props = sku.check_by_props(data)  %>
           <% if props %>
-            <%= hidden_field_tag "items[#{item.num_iid}][][properties]", value: sku.properties %>
+            <%= hidden_field_tag "items[#{item._id}][][properties]", value: sku.properties %>
             <tr>
               <% props.each do |key, value| %>
                 <td><%= value %></td>
               <% end %>
               <td><%= sku.outer_id %></td>
-              <th><%= text_field_tag "items[#{item.num_iid}][][outer_id]", value: data['SKU'], class: 'span2' %></th>
+              <th><%= text_field_tag "items[#{item._id}][][outer_id]", value: data['SKU'], class: 'span2' %></th>
               <td><%= sku.quantity %></td>
-              <th><%= text_field_tag "items[#{item.num_iid}][][quantity]", value: data['库存'], class: 'span1' %></th>
+              <th><%= text_field_tag "items[#{item._id}][][quantity]", value: data['库存'], class: 'span1' %></th>
             </tr>
             <% skus.delete(data) %>
           <% end %>
@@ -51,9 +51,9 @@
       <% end %>
       </table>
         <% if skus.empty? %>
-        <% @skus.delete(item.num_iid) %>
+        <% @skus.delete(item._id) %>
       <% else %>
-       <table id='item-<%= item.num_iid %>-skus' class='table table-bordered span4'>
+       <table id='item-<%= item._id %>-skus' class='table table-bordered span4'>
         <thead>
           <tr>
             <th colspan='4'>新增SKU列表：</th>
@@ -69,12 +69,12 @@
         <% props = item.to_props %>
         <% skus.each do |data| %>
           <tr style='color: #D14;'>
-            <%= hidden_field_tag "items[#{item.num_iid}][][properties]", value: "#{props[data['颜色']]};#{props[data['尺码']]}" %>
+            <%= hidden_field_tag "items[#{item._id}][][properties]", value: "#{props[data['颜色']]};#{props[data['尺码']]}" %>
             <td><%= data['颜色'] %></td>
             <td><%= data['尺码'] %></td>
-            <th><%= text_field_tag "items[#{item.num_iid}][][outer_id]", value: data['SKU'], class: 'span2' %></th>
-            <th><%= text_field_tag "items[#{item.num_iid}][][price]",    value: data['价格'] || item.price, class: 'span1' %></th>
-            <th><%= text_field_tag "items[#{item.num_iid}][][quantity]", value: data['库存'] || 0, class: 'span1' %></th>
+            <th><%= text_field_tag "items[#{item._id}][][outer_id]", value: data['SKU'], class: 'span2' %></th>
+            <th><%= text_field_tag "items[#{item._id}][][price]",    value: data['价格'] || item.price, class: 'span1' %></th>
+            <th><%= text_field_tag "items[#{item._id}][][quantity]", value: data['库存'] || 0, class: 'span1' %></th>
           </tr>
         <% end %>
          </table>

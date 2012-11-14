@@ -24,7 +24,7 @@ def export_rayban_trades(trades, date_tag, file_tag)
           csv << [ 
             'Rayban', 'TB', 
             trade.buyer_nick, 
-            trade.tid, 
+            trade._id, 
             order.num, '', 
             order.price.round(2),
             order.outer_iid, 
@@ -124,7 +124,25 @@ def export_trades(trades, date_tag, file_tag)
     # options = {item: true, sku: true, status: false, timeline: {field: 'pay_time', unit: 'day'}}
 def group_by(trades, options={item: true})
   result = {} # 结果集
-  fixed_price(trades.distinct('orders.num_iid'))
+  tag_prices(trades.only('orders.num_iid').distinct('orders.num_iid'))
+  trades = trades.only(
+    :receiver_state, 
+    'orders.outer_iid', 
+    'orders.title',
+    'orders.outer_sku_id', 
+    'orders.sku_properties_name',
+    'orders.num_iid',
+    'orders.adjust_fee', 
+    'orders.discount_fee', 
+    'orders.refund_num', 
+    'orders.refund_fee', 
+    'orders.refund_fee', 
+    'orders.total_fee', 
+    'orders.price', 
+    'orders.payment', 
+    'orders.num',
+    'orders.is_oversold'
+  )
   if options.has_key?(:filter_list) # 过滤列表
     trades_item_ids = [] # 宝贝ID列表（售出的）
     filter_item_ids = [] # 宝贝ID列表（已知）
@@ -197,7 +215,7 @@ end
   end
 
   def get_items(item_ids)
-    Item.where(nick: user_id, :num_iid.in => item_ids)
+    Item.where(nick: user_id, :num_iid.in => item_ids).only(:tag_price)
   end
 
   
@@ -320,25 +338,25 @@ end
     set[:discount_fee] += order.discount_fee
     set[:refund_num] += order.refund_num
     set[:refund_fee] += order.refund_fee
-    if fixed_price[order.num_iid]
-      set[:fixed_price] += (fixed_price[order.num_iid] * order.num).to_f 
+    if tag_prices.has_key?(order.num_iid)
+      set[:tag_price] += (tag_prices[order.num_iid] * order.num).to_f 
     end
     trade_range(node, trade, order) if options.has_key?(:range)
     status_by(node, trade, order) if options.has_key?(:status)
   end
   
   def trade_meta
-    { price:0, payment:0, total_fee:0, discount_fee:0, adjust_fee:0, num:0, fixed_price:0, refund_num:0, refund_fee:0 }
+    { price:0, payment:0, total_fee:0, discount_fee:0, adjust_fee:0, num:0, tag_price:0, refund_num:0, refund_fee:0 }
   end
 
-  def fixed_price(item_ids=nil) # 吊牌价
-    return @fixed_price if defined?(@fixed_price)
-    fixed_price = {}
+  def tag_prices(item_ids=nil) # 吊牌价
+    return @tag_prices if defined?(@tag_prices)
+    tag_prices = {}
     items = get_items(item_ids)
     items.each do |item|
-      fixed_price[item.num_iid] = item.fixed_price if item.fixed_price > 0
+      tag_prices[item._id] = item.tag_price if item.tag_price > 0
     end
-    @fixed_price = fixed_price
+    @tag_prices = tag_prices
   end
   
 end

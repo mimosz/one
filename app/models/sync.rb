@@ -73,7 +73,8 @@ module Sync
       when duration >= limit # 多日
         Trade.sync_create(session, start_at.beginning_of_day, end_at.end_of_day)
       when duration == 0 # 单日
-        Trade.sync_update(session, start_at.beginning_of_day, end_at.end_of_day)
+        start_at = trade ? trade.modified : start_at.beginning_of_day
+        Trade.sync_update(session, start_at, end_at.end_of_day)
       else
        puts "从#{start_at}到#{end_at}。"
     end

@@ -40,14 +40,14 @@
         <% if member.receivers.empty? %>
           <span class='label label-warning'>暂无</span>
         <% else %>
-          <a class="btn btn-mini" data-toggle="collapse" data-parent="#members" href="#member-<%= member._id %>-receivers"><%= member.receivers.count %>笔</a>
+          <a class="btn btn-mini" data-toggle="collapse" data-parent="#members" href="#member-<%= member.buyer_id %>-receivers"><%= member.receivers.count %>笔</a>
         <% end %>
       </td>
     </tr>
     <% unless member.receivers.empty? %>
     <tr>
     <td colspan="10" style="height:0px;padding:0px;border-top:0px;">
-      <div id="member-<%= member._id %>-receivers" class="accordion-body collapse">
+      <div id="member-<%= member.buyer_id %>-receivers" class="accordion-body collapse">
         <div class="accordion-inner" style="line-height:25px;">
            <table class='table table-bordered'>
         <thead>

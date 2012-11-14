@@ -38,8 +38,8 @@ One.helpers do
          items.each do |item|
            if fields.include?('item')
              csv << [ 
-               "=HYPERLINK(\"#{item.item_url}\",\"#{item.num_iid}\")",
-               item.outer_id, item.approve_status, '', item.num, item.price, item.fixed_price, 
+               "=HYPERLINK(\"#{item.item_url}\",\"#{item._id}\")",
+               item.outer_id, item.approve_status, '', item.num, item.price, item.tag_price, 
                item.duration, item.range_num, item.range_max, item.range_min, 
                item.prev_num, item.prev_max, item.prev_min, 
                item.title
@@ -58,7 +58,7 @@ One.helpers do
                item.approve_status,
                sku.quantity,
                sku.price,
-               item.fixed_price,
+               item.tag_price,
                sku.duration,
                sku.range_num,
                sku.range_max,

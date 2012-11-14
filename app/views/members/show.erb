@@ -31,8 +31,8 @@
   <% unless @trades.empty? %>
   <div  id='trades'>
     <% @trades.each do |trade| %>
-    <code class='pull-right'><%= trade.tid %></code>
-    <table id='trade-<%= trade.tid %>' class='table table-bordered'>
+    <code class='pull-right'><%= trade._id %></code>
+    <table id='trade-<%= trade._id %>' class='table table-bordered'>
     <tbody> 
     <tr>
         <td colspan='6'>

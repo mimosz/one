@@ -31,7 +31,7 @@ module Sync
       private
 
       def shop_cat_ids
-        all.distinct('cid')
+        only(:_id).distinct(:_id)
       end
 
       def shop_cat_fields

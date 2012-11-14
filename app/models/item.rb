@@ -33,6 +33,7 @@ class Item # 商品
   field :prev_min,        type: Float,   default: 0
   # 吊牌价
   field :fixed_price,     type: Float,   default: 0
+  field :tag_price,       type: Float,   default: -> { price }
   
   field :price,           type: Float    # 商品价格 
   field :post_fee,        type: Float    # 平邮费用

@@ -70,7 +70,7 @@ class FilterList
       Item.where(nick: seller_nick, :outer_id.in => uncheck_ids).each do |item|
         if uncheck_ids.include?(item.outer_id)
           checked_ids << item.outer_id
-          num_iids << item.num_iid
+          num_iids << item._id
         end
       end    
       self.unknown_ids = (uncheck_ids - checked_ids) # 剩余的未知编码

@@ -1,3 +1,14 @@
+production:
+  sessions:
+    default:
+      database: mongoid
+      username: howl
+      password: '800622'
+      hosts: 
+        - 127.0.0.1:27017
+  options:
+      identity_map_enabled: true
+      skip_version_check: true
 development:
   sessions:
     default:
@@ -5,7 +16,7 @@ development:
       username: howl
       password: '800622'
       hosts: 
-        - db.innshine.com:27017
+        - 127.0.0.1:27017
   options:
       identity_map_enabled: true
       skip_version_check: true

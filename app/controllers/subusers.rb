@@ -11,7 +11,7 @@ One.controllers :subusers, :parent => :users do
   end
   
   get :index, :provides => [:html, :csv] do
-    @subusers = Subuser.where(seller_nick: user_id).distinct('nick')
+    @subusers = Subuser.where(seller_nick: user_id).only(:nick).distinct(:nick)
     unless @subusers.empty?
       @wangwangs = Wangwang.excludes(online_times: 0).where(date: @range, seller_nick: user_id, :nick.in => @subusers)  # 月评价
       case content_type

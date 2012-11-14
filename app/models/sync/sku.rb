@@ -32,7 +32,7 @@ module Sync
         end
         item_ids = skus_data.keys
         ::Item.in(_id: item_ids).each do |item| # 商品
-          skus = skus_data[item.num_iid]
+          skus = skus_data[item._id]
           updated   = [] # 更新
           unchanged = [] # 无变化
           item.skus.each do |sku|
@@ -53,9 +53,9 @@ module Sync
               item.skus.create(data)
             end
           end
-          puts "Sku.process_sync==============（#{item.num_iid}）==============提示"
+          puts "Sku.process_sync==============（#{item._id}）==============提示"
           puts "本次同步，共获取 #{skus.count} 单品，其中 新增 #{created.count}，更新 #{updated.count}，无变化 #{unchanged.count} 单品"
-          skus_data.delete(item.num_iid)
+          skus_data.delete(item._id)
         end
         unless skus_data.empty?
           puts "Sku.process_sync============================提示"

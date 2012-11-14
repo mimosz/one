@@ -69,6 +69,18 @@ class Trade
   index 'orders.oid' => 1
 
   scope :recent, desc(:created, :modified)
+  # 销售   
+  scope :sales, where(:status.in => ['WAIT_SELLER_SEND_GOODS', 'WAIT_BUYER_CONFIRM_GOODS', 'TRADE_BUYER_SIGNED', 'TRADE_FINISHED'])
+  # 废单
+  scope :trash, where(:status.in => ['TRADE_NO_CREATE_PAY', 'TRADE_CLOSED', 'TRADE_CLOSED_BY_TAOBAO'])
+  # 催付
+  scope :reminder, where(status: 'WAIT_BUYER_PAY')
+  # 待发货
+  scope :takeouting, where(status: 'WAIT_SELLER_SEND_GOODS')
+  # 未超买 
+  scope :sold, where('orders.is_oversold' => false)
+  # 未退款
+  scope :norefund, where('orders.refund_id' => nil)
 
   def member # 会员
     Member.where(seller_nick: seller_nick, buyer_nick: buyer_nick).last 

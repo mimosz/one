@@ -5,9 +5,14 @@
 <th>&nbsp;</th>
 <% labels.each do |label| # 循环单品 %>
 	<% if timelines.has_key?(label) %>
-		<th><%= timelines[label][:total][:num] if timelines[label][:total] %></th>
+		<th>
+			<% if timelines[label][:total] %>
+				<%= timelines[label][:total][:payment].round(2) %><br />
+				<small><%= timelines[label][:total][:num]%></small>
+			<% end %>
+		</th>
 	<% else %>
-		<th></th>
+		<th> &nbsp; </th>
 	<% end %>
 <% end %>
 <th><%= total[:num] %></th>
@@ -30,10 +35,10 @@
 <tbody>
 	<% @items.each do |item| # 循环单品 %>
 	<tr>
-		<td><%= item.num_iid %></td>
+		<td><%= item._id %></td>
 		<td><%= item.outer_id %></td>
-		<% if items[item.num_iid].has_key?(:timelines) %>
-			<% timeline = items[item.num_iid][:timelines] %>
+		<% if items[item._id].has_key?(:timelines) %>
+			<% timeline = items[item._id][:timelines] %>
 			<% labels.each do |label| # 循环单品 %>
 				<% if timeline.has_key?(label) %>
 					<td><%= parse_sales(timeline[label]) %></td>
@@ -42,15 +47,15 @@
 				<% end %>
 			<% end %>
 		<% end %>
-		<td><%= parse_sales(items[item.num_iid]) %></td>
-		<td><%= parse_sales(items[item.num_iid], :payment, 2) %></td>
+		<td><%= parse_sales(items[item._id]) %></td>
+		<td><%= parse_sales(items[item._id], :payment, 2) %></td>
 		<td><%= item.num %></td>
 	</tr>
-	<% if items[item.num_iid].has_key?(:skus) %>
-		<% skus = items[item.num_iid][:skus] %>
+	<% if items[item._id].has_key?(:skus) %>
+		<% skus = items[item._id][:skus] %>
 		<% skus.each do |id, sku| # 循环单品 %>
 			<tr>
-				<td><%= item.num_iid %></td>
+				<td><%= item._id %></td>
 				<td><%= sku[:name] %></td>
 				<% if sku.has_key?(:timelines) %>
 					<% timeline = sku[:timelines] %>

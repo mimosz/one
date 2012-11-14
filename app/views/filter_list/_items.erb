@@ -12,8 +12,8 @@
     </thead>
     <% @items.each do |item| %>
       <tbody> 
-        <tr id="item-<%= item.num_iid %>">
-          <td><%= item.num_iid %></td>
+        <tr id="item-<%= item._id %>">
+          <td><%= item._id %></td>
           <td>
             <% if item.outer_id.blank? %>
               <span class="label label-warning">二了吧~</span>

@@ -48,12 +48,12 @@ One.helpers do
   def filter_by_rate(node, trade, order, options = {})
     rate_range = node[:rate_min]..node[:rate_max]
     if rate_range.count > 1 # 折扣过滤
-      if fixed_price[order.num_iid]
-        rate = ( (order.total_fee/order.num).round(1) / fixed_price[order.num_iid].to_f * 100).round(1)
+      if tag_prices.has_key?(order.num_iid)
+        rate = ( (order.total_fee/order.num).round(1) / tag_prices[order.num_iid].to_f * 100).round(1)
         if rate_range.cover?(rate)
           process_filtered(node, trade, order, options)
         end
-        puts "二了吧：#{order.num_iid}，#{order.price}大于#{fixed_price[order.num_iid]}？？？" if rate > 100
+        puts "二了吧：#{order.num_iid}，#{order.price}大于#{tag_prices[order.num_iid]}？？？" if rate > 100
       else
         puts "二了吧：#{order.num_iid}没有吊牌价？？？"
       end

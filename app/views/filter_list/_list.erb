@@ -9,7 +9,7 @@
 			<td><%= filter[:num] %></td>
 			<td><%= (filter[:num].to_f / num_total.to_f * 100).round(1) %></td>
 			<th><%= (filter[:payment] / filter[:price] * 100).round(1) %></th>
-			<th><%= (filter[:payment].to_f / filter[:fixed_price].to_f * 100).round(1) %></th>
+			<th><%= (filter[:payment].to_f / filter[:tag_price].to_f * 100).round(1) %></th>
 		<% else %>
 			<th colspan='6'>&nbsp;</th>
 		<% end %>

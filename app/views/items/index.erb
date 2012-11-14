@@ -52,8 +52,8 @@
   <% unless @items.empty? %>
     <% @items.each do |item| %>
 <tbody class="accordion-group"> 
-    <tr id="item-<%= item.num_iid %>" class="accordion-heading">
-      <td><%= item.num_iid %></td>
+    <tr id="item-<%= item._id %>" class="accordion-heading">
+      <td><%= item._id %></td>
 	  <td>
           <% if item.outer_id.blank? %>
             <span class="label label-warning">可以吗？</span>
@@ -84,14 +84,14 @@
 	<% if item.skus.empty? %>
 		<span class='label label-warning'>无单品</span>
 	<% else %>
-	<a class="btn btn-mini" data-toggle="collapse" data-parent="#items" href="#skus-<%= item.num_iid %>">单品（<%= item.skus.count %>）</a>
+	<a class="btn btn-mini" data-toggle="collapse" data-parent="#items" href="#skus-<%= item._id %>">单品（<%= item.skus.count %>）</a>
 	<% end %>
 	</td>
     </tr>
 <% unless item.skus.empty? %>
     <tr>
       <td colspan="14" style="height:0px;padding:0px;border-top:0px;">
-	     <div id="skus-<%= item.num_iid %>" class="accordion-body collapse">
+	     <div id="skus-<%= item._id %>" class="accordion-body collapse">
         <%= partial "items/skus", locals: { skus: item.skus } %>
       </div>
       </td>

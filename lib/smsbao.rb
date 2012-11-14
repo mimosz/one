@@ -122,7 +122,7 @@ class Smsbao
     rejected = []
 
     mobile_arr.each do |mobile|
-      mobile = mobile.strip.to_i
+      mobile = mobile.to_s.strip.to_i
       if check?(mobile)
         approved << mobile
       else

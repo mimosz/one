@@ -12,7 +12,7 @@ module Store
     # 店铺关系
     has_many :trades,       foreign_key: 'seller_nick' do # 交易
       def sync_ids
-        where(synced_at: nil).distinct('_id')
+        where(synced_at: nil).only(:_id).distinct(:_id)
       end
     end
     has_many :refunds,      foreign_key: 'seller_nick' do # 退款
@@ -22,7 +22,7 @@ module Store
     end
     has_many :items,        foreign_key: 'nick' do   # 商品
       def sync_ids
-        where(synced_at: nil).distinct('_id')
+        where(synced_at: nil).only(:_id).distinct(:_id)
       end
       def onsale
         where(approve_status: 'onsale')
@@ -30,7 +30,7 @@ module Store
     end
     has_many :subusers,     foreign_key: 'seller_nick' do # 子账号
       def sync_nicks
-        where(status:1).distinct('nick') # 客服
+        where(status:1).only(:_id).distinct(:_id) # 客服
       end
     end
     has_many :chatpeers,    foreign_key: 'seller_nick' # 聊天记录

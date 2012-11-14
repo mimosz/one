@@ -34,7 +34,7 @@ class Report # 报表
 
   field :discount_fee,  type: Float,  default: 0
   field :adjust_fee,    type: Float,  default: 0
-  field :fixed_price,   type: Float,  default: 0 # 吊牌价 
+  field :tag_price,   type: Float,  default: 0 # 吊牌价 
   field :refund_fee,    type: Float,  default: 0 # 退货金额
 
   field :date,          type: Date # 时间
@@ -80,7 +80,7 @@ class Report # 报表
       new_hash
     end
 
-    def order_sum(report, order, fixed_price=0)
+    def order_sum(report, order, tag_price=0)
       # 订单
       report[:num]          += order[:num]
       report[:price]        += (order[:price] * order[:num]).to_f
@@ -90,7 +90,7 @@ class Report # 报表
       report[:discount_fee] += order[:discount_fee]
       report[:refund_num]   += order[:refund_num]
       report[:refund_fee]   += order[:refund_fee]
-      report[:fixed_price]  += (fixed_price * order[:num]).to_f
+      report[:tag_price]    += (tag_price * order[:num]).to_f
       report[:total_fee_max] = order.total_avg   if order.total_avg   > report[:total_fee_max] # 最大应付
       report[:payment_max]   = order.payment_avg if order.payment_avg > report[:payment_max] # 最大实付
       report[:price_max]     = order[:price]       if order[:price]      > report[:price_max]    # 最大售价

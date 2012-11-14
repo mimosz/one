@@ -23,7 +23,7 @@ module Sync
         unknown_items = [] # 未知产品
         # 预处理，商品起始值
         items.each do |item| 
-          items_res[item.num_iid] = metadata unless items_res.has_key?(item.num_iid)
+          items_res[item._id] = metadata unless items_res.has_key?(item._id)
           date_range = start_at..end_at
           if item.list_time.nil? || item.delist_time.nil?
             date_range = nil
@@ -45,7 +45,7 @@ module Sync
             end
           end
 
-          items_res[item.num_iid][:range] = date_range
+          items_res[item._id][:range] = date_range
           # 单品
           item.skus.each do |sku|
             skus_res[sku.sku_id] = metadata unless skus_res.has_key?(sku.sku_id)
@@ -83,8 +83,8 @@ module Sync
         
         # 回传商品表
         items.each do |item|
-          if items_res.has_key?(item.num_iid)
-            item_res = items_res[item.num_iid]
+          if items_res.has_key?(item._id)
+            item_res = items_res[item._id]
             item_res[:duration] = if item_res[:range].is_a?(Range)
               item_res[:range].count
             else
@@ -101,9 +101,9 @@ module Sync
                 skus_res.delete(sku.sku_id)
               end
             end
-            items_res.delete(item.num_iid)
+            items_res.delete(item._id)
           else
-            puts "缺少商品：#{item.num_iid}"
+            puts "缺少商品：#{item._id}"
           end
         end
         if items_res.count > 0

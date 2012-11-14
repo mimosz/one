@@ -9,11 +9,11 @@
 		<%= 
 			case 
 				when @trades.has_key?(:sale) && @trades.has_key?(:total) 
-					((@trades[:total][:price] + @trades[:sale][:price] ) / ( @trades[:total][:fixed_price] + @trades[:sale][:fixed_price]) * 100).round(1)
+					((@trades[:total][:price] + @trades[:sale][:price] ) / ( @trades[:total][:tag_price] + @trades[:sale][:tag_price]) * 100).round(1)
 				when @trades.has_key?(:total)
-					(@trades[:total][:price] / @trades[:total][:fixed_price] * 100).round(1)
+					(@trades[:total][:price] / @trades[:total][:tag_price] * 100).round(1)
 				when @trades.has_key?(:sale) 
-					(@trades[:sale][:price]  / @trades[:sale][:fixed_price]  * 100).round(1)
+					(@trades[:sale][:price]  / @trades[:sale][:tag_price]  * 100).round(1)
 			end
 		%>
 		</dd>
@@ -22,11 +22,11 @@
 		<%= 
 			case 
 				when @trades.has_key?(:sale) && @trades.has_key?(:total) 
-					((@trades[:total][:payment] + @trades[:sale][:payment] ) / ( @trades[:total][:fixed_price] + @trades[:sale][:fixed_price]) * 100).round(1)
+					((@trades[:total][:payment] + @trades[:sale][:payment] ) / ( @trades[:total][:tag_price] + @trades[:sale][:tag_price]) * 100).round(1)
 				when @trades.has_key?(:total)
-					(@trades[:total][:payment] / @trades[:total][:fixed_price] * 100).round(1)
+					(@trades[:total][:payment] / @trades[:total][:tag_price] * 100).round(1)
 				when @trades.has_key?(:sale) 
-					(@trades[:sale][:payment]  / @trades[:sale][:fixed_price]  * 100).round(1)
+					(@trades[:sale][:payment]  / @trades[:sale][:tag_price]  * 100).round(1)
 			end
 		%>
 		</dd>
@@ -42,7 +42,7 @@
 		<th><%= num_total = total[:num] %></th>
 		<th>&nbsp;</th>
 		<th><%= discount_total = (total[:payment] / total[:price] * 100).round(1) %></th>
-		<th><%= fixed_discount_total = (total[:payment] / total[:fixed_price] * 100 ).round(1) %></th>
+		<th><%= fixed_discount_total = (total[:payment] / total[:tag_price] * 100 ).round(1) %></th>
 		</tr>
 		<% end %>
 		<tr>
@@ -72,7 +72,7 @@
 			<th><%= num_total = total[:num]%></th>
 			<th>&nbsp;</th>
 			<th><%= discount_total = (total[:payment] / total[:price] * 100).round(1)  %></th>
-			<th><%= fixed_discount_total = (total[:payment] / total[:fixed_price] * 100 ).round(1) %></th>
+			<th><%= fixed_discount_total = (total[:payment] / total[:tag_price] * 100 ).round(1) %></th>
 			</tr>
 		<% end %>
 		<tr>
