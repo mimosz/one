@@ -25,12 +25,13 @@ gem 'topsdk', '~> 0.0.9'
 # Component requirements
 gem 'erubis', '~> 2.7.0'
 gem 'mongoid', '~> 3.0.0'
+gem 'mongoid_auto_increment_id', '~> 0.5.0'
 gem 'kaminari', git: 'git://github.com/mimosa/kaminari.git', require: 'kaminari/sinatra'
 
 # Jobs requirements
 gem 'resque', require: 'resque/server'
-gem 'resque-scheduler', '>= 2.0.0.e', require: 'resque_scheduler'
-
+gem 'resque-scheduler', '~> 2.0.0.e', require: 'resque_scheduler'
+gem 'redis-namespace',  '~> 1.2.1' # Redis 命名空间
 gem 'redis-objects', require: 'redis/objects'
 
 # Padrino Stable Gem
