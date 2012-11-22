@@ -10,6 +10,14 @@ One.controllers :members, parent: :users do
     @conditions = {seller_nick: user_id}
   end
 
+  get :new do
+    render 'members/new'
+  end
+
+  post :create do
+    render 'members/edit'
+  end
+
   get :index, provides: [:html, :csv] do
     # 时间区间
     unless ( params[:start_at].blank? && params[:end_at].blank? )
