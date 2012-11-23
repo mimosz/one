@@ -25,7 +25,6 @@ gem 'topsdk', '~> 0.0.9'
 # Component requirements
 gem 'erubis', '~> 2.7.0'
 gem 'mongoid', '~> 3.0.0'
-gem 'mongoid_auto_increment_id', '~> 0.5.0'
 gem 'kaminari', git: 'git://github.com/mimosa/kaminari.git', require: 'kaminari/sinatra'
 
 # Jobs requirements

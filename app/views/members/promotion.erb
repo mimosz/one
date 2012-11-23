@@ -1,0 +1,10 @@
+<% @member_ids.each_slice( 600 ).to_a.each do |batch| # 最大支持500为一组进行发送。%>
+  <% form_tag 'http://ecrm.taobao.com/membermarketing/promotion_home.htm', method: 'post', 'accept-charset' => 'GBK', class: 'remote', target: '_blank' do %>
+    <%= hidden_field_tag 'action', value: 'membermarketing/member_promotion_action' %>
+    <%= hidden_field_tag 'event_submit_do_send_from_member_list', value: 'anything' %>
+    <%= hidden_field_tag 'members', value: batch.join(',') %>
+    <%= hidden_field_tag 'filterParam', value: @value %>
+    <%= hidden_field_tag 'parambin', value: 'currentPage=1' %>
+    <%= submit_tag "发送店铺优惠券", class: 'btn btn-primary' %>
+  <% end %>
+<% end %>

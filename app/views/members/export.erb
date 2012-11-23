@@ -1,0 +1,29 @@
+<% form_tag url(:members, :export, user_id: user_id ), method:'get' do %>
+  <div class="control-group">
+    <label class="control-label" for="field">类型：（日期）</label>
+    <div class="btn-group" >
+      <input type="radio" name="field" value="pay_time" id="pay_time" />
+      <label class="btn" for="pay_time">支付</label>
+      <input type="radio" name="field" value="consign_time" id="consign_time" />
+      <label class="btn" for="consign_time">发货</label>
+      <input type="radio" name="field" value="created" id="created" />
+      <label class="btn" for="created">下单</label>
+      <input type="radio" name="field" value="modified" id="modified" />
+      <label class="btn" for="modified">更新</label>
+      <input type="radio" name="field" value="end_time" id="end_time" />
+      <label class="btn" for="end_time">结束</label>
+    </div>
+  </div>
+  <%= partial('shared/form_calendar', locals: { label: '日期区间：' }) %>
+  <div class="control-group">
+    <label class="control-label" for="count">时间区间：</label>
+    <div class="controls" id='count'>
+        <input class="input-small" id="start_time" type="text" name="start_time" value="00:00:00"> ~
+        <input class="input-small" id="end_time" type="text" name="end_time" value="23:59:59">
+    </div>
+  </div>
+  <div class="form-actions">
+    <%= hidden_field_tag 'format', value: 'csv' %>
+    <%= submit_tag '导出', class:'btn btn-primary' %>
+  </div>
+<% end %>

@@ -2,7 +2,7 @@
 
 One.helpers do
   def account_can
-    logged_in? && (current_account.role == 'admin' || @account == current_account.id)
+    logged_in? && (current_account.role == 'admin' || @account._id == current_account._id)
   end
 
   def each_employees(employees)

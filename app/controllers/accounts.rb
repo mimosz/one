@@ -1,6 +1,9 @@
 # -*- encoding: utf-8 -*-
 
 One.controllers :accounts do
+  before do
+    puts "当前会话：#{session[settings.session_id]}。"
+  end
 
   get :index do
     @teaming  = current_account.teaming
@@ -9,7 +12,7 @@ One.controllers :accounts do
   end
 
   get :new do
-    redirect url(:accounts, :show, account_id: current_account.id) if logged_in?
+    redirect url(:accounts, :show, account_id: current_account._id) if logged_in?
     render 'accounts/new', nil, layout: :session
   end
 
@@ -17,7 +20,7 @@ One.controllers :accounts do
     @account = Account.new(params[:account])
     if @account.save
       flash[:notice] = "欢迎光临，#{@account.name}."
-      redirect url(:accounts, :show, account_id: @account.id)
+      redirect url(:accounts, :show, account_id: @account._id)
     else
       flash[:error] = '帐号信息错误。'
       render 'accounts/new', nil, layout: :session

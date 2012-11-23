@@ -10,12 +10,74 @@ One.controllers :members, parent: :users do
     @conditions = {seller_nick: user_id}
   end
 
-  get :new do
+  get :export, provides: [:html, :csv] do
+    case content_type
+    when :html
+      render 'members/export'
+    when :csv
+      # 发货、创建
+      field = 'pay_time' # 按支付（默认）
+      unless params[:field].blank?
+        if %w(consign_time created end_time modified).include?(params[:field])
+          field = params[:field]
+        end
+      end
+      # 时间区间
+      start_at = Date.today
+      end_at   = Date.today
+      unless ( params[:start_at].blank? && params[:end_at].blank? )
+        start_at = params[:start_at].to_date.beginning_of_day
+        end_at   = params[:end_at].to_date.end_of_day
+      end
+      unless ( params[:start_time].blank? && params[:end_time].blank? )
+        start_at = Time.parse( "#{params[:start_at]} #{params[:start_time]}"  )
+        end_at   = Time.parse( "#{params[:end_at]} #{params[:end_time]}" )
+      end
+      range    = start_at..end_at
+      buyer_nicks = Trade.where( @conditions.merge( field.to_sym => range) ).only(:buyer_nick).distinct(:buyer_nick)
+      unless buyer_nicks.empty?
+        members = Member.where( @conditions ).in( buyer_nick: buyer_nicks ).only(:buyer_id, :buyer_nick)
+        unless members.empty?
+          file_csv = user_id + '-' + field + '-' + start_at.in_time_zone.strftime("%Y-%m-%d") + '-' +  end_at.in_time_zone.strftime("%Y-%m-%d") + '会员信息.csv'
+          header_row = ["会员ID", "昵称"]
+          CSV.open(file_csv, "wb:GB18030", col_sep: ',') do |csv|
+            csv << header_row
+            members.each do |member|
+              csv << [ member.buyer_id, member.buyer_nick ]
+            end 
+          end
+          send_file file_csv, type: 'text/csv', filename: File.basename(file_csv)
+        end
+      end
+    end
+  end
+
+  get :promotion do
     render 'members/new'
   end
 
-  post :create do
-    render 'members/edit'
+  post :promotion do
+    if params[:csv_file][:type] == 'text/csv'
+      @member_ids = []
+      @value = "sendShopBonus=1&amp;shopBonusDiscount=#{params[:discount]}&amp;shopBonusEndtime=#{params[:end_at]}"
+      # 导入数据
+      rows = CSV.read(params[:csv_file][:tempfile], 'rb:GB18030:UTF-8', headers: true, col_sep: ',')
+      if rows.headers.include?('会员ID')
+        rows.each do |row|
+          @member_ids << row['会员ID'] if row['会员ID']
+        end
+      end
+      if @member_ids.empty?
+        flash[:error] = '模板错误，必须包含：会员ID。'
+        redirect url(:members, :promotion, user_id: user_id)
+      else
+        # 匹配处理
+        render 'members/promotion'
+      end
+    else
+      flash[:error] = '必须是，Excel的CSV文本格式。'
+      redirect url(:members, :promotion, user_id: user_id)
+    end
   end
 
   get :index, provides: [:html, :csv] do

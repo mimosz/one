@@ -17,7 +17,7 @@
             <h3>出入平安</h3>
           </div>
           <div class="modal-body">
-            <%= [:error, :warning, :notice].map { |type| flash_tag(type, class: "alert alert-block #{type}") }.join %>
+            <%= [:error, :warning, :info, :success].map { |type| flash_tag(type, class: "alert alert-block #{type}") }.join %> 
             <div class="row-fluid">
               <div class="span8"><%= yield %></div>
               <div class="span4">

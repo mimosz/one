@@ -1,7 +1,7 @@
 <div class="control-group">
-  <%= content_tag(:label, label, {class: 'control-label', for: 'calendar'}) if defined?(label) %>
+  <%= content_tag(:label, label, {class: 'control-label', for: 'calendars'}) if defined?(label) %>
   <div class="controls">
-    <div class='calendar'></div>
+    <div class='calendars'></div>
     <div class="input-append">
       <input style='width: 145px;margin-left: 3px;' name="start_at" value='<%= @start_at %>' readonly='readonly' required='required' placeholder='开始时间' />
       <span style='margin: 0 1px;'>～</span>

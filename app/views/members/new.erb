@@ -1,38 +1,53 @@
-<% form_tag 'https://login.taobao.com/member/login.jhtml', method: 'post', 'accept-charset' => 'GBK', target: '_blank') do %>
-  <div class="control-group">
-    <label class="control-label">帐号</label>
-    <div class="controls"><%= text_field_tag 'TPL_username', placeholder: "必填项" %></div>
+
+<div id='taobao_login' class='modal hide fade' tabindex='-1' role='dialog' aria-hidden='true'>
+  <div class='modal-header'>
+    <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
+    <h3>淘宝快速登录</h3>
   </div>
-  <div class="control-group">
-    <label class="control-label">密码</label>
-    <div class="controls"><%= password_field_tag 'TPL_password', placeholder: "必填项" %></div>
+  <div class='modal-body'>
+      <% form_tag 'https://login.taobao.com/member/login.jhtml', method: 'post', 'accept-charset' => 'GBK', target: '_blank' do %>
+      <div class="control-group">
+        <label class="control-label">帐号</label>
+        <div class="controls"><%= text_field_tag 'TPL_username', value: user_id, placeholder: "必填项" %></div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">密码</label>
+        <div class="controls"><%= password_field_tag 'TPL_password', placeholder: "必填项" %></div>
+      </div>
+      <div class="form-actions">
+        <%= hidden_field_tag 'action', value: 'Authenticator' %>
+        <%= hidden_field_tag 'event_submit_do_login', value: 'anything' %>
+        <%= submit_tag "登录", class: 'btn btn-primary' %>
+      </div>
+    <% end %>
   </div>
-  <div class="form-actions">
-    <%= hidden_field_tag 'action', value: 'Authenticator' %>
-    <%= hidden_field_tag 'event_submit_do_login', value: 'anything' %>
-    <%= submit_tag "登录", :class => 'btn btn-primary' %>
-  </div>
-<% end %>
-<% form_tag 'http://ecrm.taobao.com/membermarketing/promotion_home.htm', method: 'post', 'accept-charset' => 'GBK', target: '_blank') do %>
+  <div class='modal-footer'>新窗口登录后，返回并关闭窗口。</div>
+</div>
+<h3>第一步，登录淘宝</h3>
+<p><a class='btn btn-warning' role='button' data-toggle='modal' href='#taobao_login'>发放优惠卷前，需要使用主帐号登录。</a></p>
+<h3>第二步、生成发放页面</h3>
+<% form_tag url(:members, :promotion, user_id: user_id ), method: 'post', multipart: true, class: 'form-horizontal' do %>
   <div class="control-group">
     <label class="control-label">优惠卷</label>
     <div class="controls">
-      <%= select_tag 'filterParam[shopBonusDiscount]', options: [['3元', 3], ['5元', 5], ['10元', 10], ['20元', 20], ['50元', 50], ['100元', 100]], include_blank: '请选择额度' %>
+      <%= select_tag :discount, options: [['3元', 3], ['5元', 5], ['10元', 10], ['20元', 20], ['50元', 50], ['100元', 100]], include_blank: '请选择额度' %>
     </div>
   </div>
   <div class="control-group">
     <label class="control-label">有效期至</label>
-    <div class="controls"><%= text_field_tag 'filterParam[shopBonusEndtime]', placeholder: "必填项" %></div>
+    <div class="controls">
+      <div class='calendar'></div>
+      <div class="input-append">
+        <input style='width: 145px;margin-left: 4px;' name="end_at" value='<%= 10.days.from_now.to_date %>' readonly='readonly' required='required' placeholder='结束时间' />
+      </div>
+    </div>
   </div>
   <div class="control-group">
-    <label class="control-label">会员</label>
-    <div class="controls"><%= text_area_tag :members %></div>
+    <%= label_tag :csv_file, caption: 'CSV文件：', class: 'control-label' %>
+    <div class="controls">
+      <%= file_field_tag :csv_file, class: 'input-file' %>
+    </div>
   </div>
-  <div class="form-actions">
-    <%= hidden_field_tag 'action', value: 'membermarketing/member_promotion_action' %>
-    <%= hidden_field_tag 'event_submit_do_send_from_member_list', value: 'anything' %>
-    <%= hidden_field_tag 'filterParam[sendShopBonus]', value: 1 %>
-    <%= hidden_field_tag 'parambin', value: 'currentPage=1' %>
-    <%= submit_tag "发送店铺优惠券", :class => 'btn btn-primary' %>
-  </div>
+  <div class="form-actions"><%= submit_tag "生成发放页面", :class => 'btn btn-primary' %></div>
+  <h3>最后、发放优惠卷</h3>
 <% end %>

@@ -91,7 +91,7 @@ class Trade
   end
 
   def modified_at
-    modified.in_time_zone.strftime("%Y-%m-%d %H:%M:%S")
+    modified.in_time_zone.strftime("%Y-%m-%d %H:%M:%S") || "1970-01-01 00:00:00"
   end
 
   def sent_at

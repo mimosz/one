@@ -1,7 +1,7 @@
 <div class="span4 columns">
 	<% form_tag url(:trades, :index, user_id: user_id ), method:'get' do %>
 	<div class="control-group">
-    <label class="control-label" for="axis">类型：（日期）</label>
+    <label class="control-label" for="field">类型：（日期）</label>
 		<div class="btn-group" >
 			<input type="radio" name="field" value="pay_time" id="pay_time" />
 			<label class="btn <%= 'active' if @field == 'pay_time' %>" for="pay_time">支付</label>

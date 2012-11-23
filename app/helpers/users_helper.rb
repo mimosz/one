@@ -31,6 +31,7 @@ One.helpers do
       @user_id = uid
     else
       flash[:warning] = "窃取别人数据，是不道德的～～"
+      puts flash[:warning]
       redirect url(:accounts, :show, account_id: current_account.id)
     end
   end

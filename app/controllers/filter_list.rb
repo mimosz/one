@@ -40,8 +40,8 @@ One.controllers :filter_list, :parent => :users do
       unless @trades[:unknown_ids].empty?
         @items = Item.any_in(num_iid: @trades[:unknown_ids]) 
         if @items.empty?
-          session = User.find(user_id).session
-          Item.sync_items(session, @trades[:unknown_ids])
+          session_key = User.find(user_id).session
+          Item.sync_items(session_key, @trades[:unknown_ids])
           @items = Item.any_in(num_iid: @trades[:unknown_ids]) 
         end
         flash[:warning] = '分类未覆盖，所有货品!' if @items

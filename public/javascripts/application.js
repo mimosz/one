@@ -3,7 +3,7 @@
 		// 日期多选
 		var start_at = $('input[name="start_at"]');
 		var end_at   = $('input[name="end_at"]');
-		$('.calendar').DatePicker({
+		$('.calendars').DatePicker({
 			date: [ start_at.val(), end_at.val() ],
 			current: end_at.val(),
 			calendars: 2,
@@ -13,6 +13,16 @@
 				end_at.val(formated[1]);
 			}
 		});
+		$('.calendar').DatePicker({
+			date: [ end_at.val() ],
+			current: end_at.val(),
+			calendars: 1,
+			starts: 1,
+			onChange: function(formated, dates){
+				end_at.val(formated[0]);
+			}
+		});
+		// $('.modal').modal('toggle')
 		// 多选框
 		$('.chzn-select').chosen();
 		$(".chzn-select-deselect").chosen({allow_single_deselect:true});
@@ -31,6 +41,10 @@
 		 $("a[data-remote=true]").live('click', function(e) {
 			  var el = $(this);
 			  el.tooltip('destroy'); // 修复tooltip
+			  el.replaceWith('<img src=/img/spinner.gif />');
+			});
+		 $("form.remote").live('submit', function(e) {
+			  var el = $(this);
 			  el.replaceWith('<img src=/img/spinner.gif />');
 			});
 		 // 浮动菜单效果
