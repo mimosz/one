@@ -32,7 +32,7 @@ module Sync
         end
         item_ids = skus_data.keys
         ::Item.in(_id: item_ids).each do |item| # 商品
-          skus = skus_data[item._id]
+          skus = skus_data[item._id.to_i]
           updated   = [] # 更新
           unchanged = [] # 无变化
           item.skus.each do |sku|
